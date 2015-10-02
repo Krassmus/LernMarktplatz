@@ -17,7 +17,6 @@ class ProtocolEndpointsController extends PluginController {
         }
 
         if (get_config("LEHRMARKTPLATZ_SHOW_KNOWN_HOSTS")) {
-
             foreach (MarketHosts::findAll() as $host) {
                 if (!$host->isMe() && $host['active']) {
                     $output['hosts'][] = array(
