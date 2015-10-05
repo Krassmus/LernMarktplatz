@@ -44,7 +44,6 @@ class AdminController extends PluginController {
                 if (!$host) {
                     $host = new MarketHost();
                     $host['url'] = $host_data['url'];
-                    $host['name'] = $host_data['name'];
                     $host->fetchPublicKey();
                     if ($host['public_key']) {
                         $added++;

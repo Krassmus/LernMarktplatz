@@ -5,19 +5,20 @@ class InitPlugin extends Migration {
     function up() {
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `lehrmarktplatz_hosts` (
-                `host_id` varchar(32) NOT NULL,
+                `host_id` varchar(32) NOT NULL PRIMARY KEY,
                 `name` varchar(64) NOT NULL,
                 `url` varchar(64) NOT NULL,
                 `public_key` text NOT NULL,
                 `private_key` text NULL,
                 `active` tinyint(4) NOT NULL DEFAULT '1',
+                `index_server` TINYINT NOT NULL DEFAULT '0',
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` bigint(20) NOT NULL
             ) ENGINE=InnoDB
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `lehrmarktplatz_material` (
-                `material_id` varchar(32) NOT NULL,
+                `material_id` varchar(32) NOT NULL PRIMARY KEY,
                 `name` varchar(64) NOT NULL,
                 `short_description` VARCHAR(100) NULL,
                 `description` text NOT NULL,
@@ -25,6 +26,7 @@ class InitPlugin extends Migration {
                 `content_type` varchar(64) NOT NULL,
                 `structure` text NOT NULL,
                 `host` varchar(32) NOT NULL,
+                `foreign_material_id` VARCHAR( 32 ) NULL,
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL
             ) ENGINE=InnoDB

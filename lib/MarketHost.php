@@ -10,7 +10,7 @@ class MarketHost extends MarketIdentity {
         } else {
             $host = new MarketHost();
             $host['name'] = $GLOBALS['UNI_NAME_CLEAN'];
-            $host['url'] = $GLOBALS['ABSOLUTE_URI_STUDIP'];
+            $host['url'] = $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'];
             $host->store();
             return $host;
         }
@@ -41,6 +41,7 @@ class MarketHost extends MarketIdentity {
 
                 $this['name'] = $host_data['name'];
                 $this['public_key'] = $host_data['public_key'];
+                $this['url'] = $host_data['url'];
                 if ($this->isNew()) {
                     $host['active'] = get_config("LEHRMARKTPLATZ_ACTIVATE_NEW_HOSTS") ? 1 : 0;
                 }

@@ -58,7 +58,9 @@ class ProtocolEndpointsController extends PluginController {
         $host = MarketHost::thisOne();
         $this->render_json(array(
             'name' => $GLOBALS['UNI_NAME_CLEAN'],
-            'public_key' => $host['public_key']
+            'public_key' => $host['public_key'],
+            'url' => $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'],
+            'index_server' => $host['index_server']
         ));
     }
 
