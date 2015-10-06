@@ -9,4 +9,12 @@ class MarketController extends PluginController {
         $this->materialien = MarketMaterial::findAll();
     }
 
+
+    public function edit_action($material_id = null) {
+        $this->material = new MarketMaterial($material_id);
+        if ($this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
+            throw new AccessDeniedException();
+        }
+    }
+
 }

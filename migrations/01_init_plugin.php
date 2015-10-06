@@ -12,6 +12,7 @@ class InitPlugin extends Migration {
                 `private_key` text NULL,
                 `active` tinyint(4) NOT NULL DEFAULT '1',
                 `index_server` TINYINT NOT NULL DEFAULT '0',
+                `last_updated` bigint(20) NOT NULL,
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` bigint(20) NOT NULL
             ) ENGINE=InnoDB
@@ -25,7 +26,7 @@ class InitPlugin extends Migration {
                 `user_id` varchar(32) NOT NULL,
                 `content_type` varchar(64) NOT NULL,
                 `structure` text NOT NULL,
-                `host` varchar(32) NOT NULL,
+                `host_id` varchar(32) NOT NULL,
                 `foreign_material_id` VARCHAR( 32 ) NULL,
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL
