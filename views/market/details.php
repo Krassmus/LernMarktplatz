@@ -1,8 +1,4 @@
-<ul class="material_overview">
-    <? foreach ($materialien as $material) : ?>
-        <?= $this->render_partial("market/_material_short.php", compact("material", "plugin")) ?>
-    <? endforeach ?>
-</ul>
+<h1><?= htmlReady($material['name']) ?></h1>
 
 
 <?

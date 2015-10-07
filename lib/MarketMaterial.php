@@ -38,4 +38,9 @@ class MarketMaterial extends SimpleORMap {
         @unlink($this->getFilePath());
         return $success;
     }
+
+    public function getLogoURL()
+    {
+        return Assets::image_path("icons/blue/file.svg");
+    }
 }

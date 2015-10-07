@@ -41,5 +41,10 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
         );
         Sidebar::Get()->addWidget($links);
     }
+
+    public function perform($unconsumed_path) {
+        $this->addStylesheet("assets/lehrmarktplatz.less");
+        parent::perform($unconsumed_path);
+    }
     
 }

@@ -26,7 +26,7 @@ class InitPlugin extends Migration {
                 `user_id` varchar(32) NOT NULL,
                 `content_type` varchar(64) NOT NULL,
                 `structure` text NOT NULL,
-                `host_id` varchar(32) NOT NULL,
+                `host_id` varchar(32) NULL,
                 `foreign_material_id` VARCHAR( 32 ) NULL,
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL

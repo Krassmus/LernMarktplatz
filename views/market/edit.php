@@ -1,4 +1,4 @@
-<form action="<?= PluginEngine::getLink($plugin, array(), 'market/edit/'.$material->getId()) ?>" method="post" class="studip_form">
+<form action="<?= PluginEngine::getLink($plugin, array(), 'market/edit/'.$material->getId()) ?>" method="post" class="studip_form" enctype="multipart/form-data">
     <label>
         <?= _("Name") ?>
         <input type="text" name="data[name]" value="<?= htmlReady($material['name']) ?>">

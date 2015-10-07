@@ -6,13 +6,12 @@
         <tr>
             <th><?= _("Name") ?></th>
             <th><?= _("Adresse") ?></th>
-            <th title="<?= _("Ein Hash des Publik-Keys des Servers.") ?>"><?= _("Key-Hash") ?></th>
+            <th title="<?= _("Ein Hash des Public-Keys des Servers.") ?>"><?= _("Key-Hash") ?></th>
             <th><?= _("Index-Server") ?></th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <? $hosts = MarketHost::findAll() ?>
         <? foreach ($hosts as $host) : ?>
             <tr id="host_<?= $host->getId() ?>">
                 <td>

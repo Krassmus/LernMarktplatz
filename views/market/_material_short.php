@@ -1,9 +1,9 @@
 <article class="contentbox">
-    <a href="<?= $controller->url_for('presenting/details/' . $material->getId()) ?>">
+    <a href="<?= $controller->url_for('market/details/' . $material->getId()) ?>">
         <header>
             <h1><?= htmlReady($material['name']) ?></h1>
         </header>
-        <div class="image" style="background-image: url(<?= $marketplugin->getLogoURL() ?>);"></div>
+        <div class="image" style="background-image: url(<?= $material->getLogoURL() ?>);"></div>
         <p class="shortdescription">
             <?= htmlReady($material['description']) ?>
         </p>

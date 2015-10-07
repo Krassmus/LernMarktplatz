@@ -15,9 +15,23 @@ class AdminController extends PluginController {
     {
         //init
         MarketHost::thisOne();
+        $this->hosts = MarketHost::findAll();
+
+        //zufällig einen Host nach Neuigkeiten fragen:
+        if (count($this->hosts) > 1) {
+            $index = rand(0, count($this->hosts) - 1);
+            while($this->hosts[$index]->isMe()) {
+                $index++;
+                if ($index >= count($this->hosts)) {
+                    $index = 0;
+                }
+            }
+            $this->askForHosts($this->hosts[$index]);
+        }
     }
 
     public function add_new_host_action() {
+        PageLayout::setTitle(_("Neue Lehrmaterialien einstellen"));
         if (Request::isPost()) {
             $host = MarketHost::findByUrl(Request::get("url"));
             if (!$host) {
@@ -36,6 +50,16 @@ class AdminController extends PluginController {
 
     public function ask_for_hosts_action($host_id) {
         $host = new MarketHost($host_id);
+        $added = $this->askForHosts($host);
+        if ($added > 0) {
+            PageLayout::postMessage(MessageBox::success(sprintf(_("%s neue Server hinzugefügt."), $added)));
+        } else {
+            PageLayout::postMessage(MessageBox::info(_("Keine neuen Server gefunden.")));
+        }
+        $this->redirect("admin/hosts");
+    }
+
+    protected function askForHosts($host) {
         $data = $host->askKnownHosts();
         $added = 0;
         if ($data['hosts']) {
@@ -52,12 +76,7 @@ class AdminController extends PluginController {
                 }
             }
         }
-        if ($added > 0) {
-            PageLayout::postMessage(MessageBox::success(sprintf(_("%s neue Server hinzugefügt."), $added)));
-        } else {
-            PageLayout::postMessage(MessageBox::info(_("Keine neuen Server gefunden.")));
-        }
-        $this->redirect("admin/hosts");
+        return $added;
     }
 
 }
