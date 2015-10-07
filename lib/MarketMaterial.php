@@ -61,9 +61,18 @@ class MarketMaterial extends SimpleORMap {
         return $success;
     }
 
-    public function getLogoURL()
+    public function getLogoURL($color = "blue")
     {
-        return Assets::image_path("icons/blue/file.svg");
+        if ($this->isFolder()) {
+            return Assets::image_path("icons/$color/folder-full.svg");
+        } elseif($this->isImage()) {
+            return Assets::image_path("icons/$color/file-pic.svg");
+        } elseif($this->isStudipQuestionnaire()) {
+            return Assets::image_path("icons/$color/vote.svg");
+        } else {
+            return Assets::image_path("icons/$color/file.svg");
+        }
+
     }
 
     public function isFolder() {

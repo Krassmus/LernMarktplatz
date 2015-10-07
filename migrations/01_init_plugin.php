@@ -33,6 +33,23 @@ class InitPlugin extends Migration {
                 `mkdate` int(11) NOT NULL
             ) ENGINE=InnoDB
         ");
+
+        DBManager::get()->exec("
+            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_tags_material` (
+                `material_id` varchar(32) NOT NULL,
+                `tag_hash` varchar(32) NOT NULL,
+                UNIQUE KEY `unique_tags` (`material_id`,`tag_hash`),
+                KEY `tag_hash` (`tag_hash`),
+                KEY `material_id` (`material_id`)
+            ) ENGINE=InnoDB
+        ");
+        DBManager::get()->exec("
+            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_tags` (
+                `tag_hash` varchar(32) NOT NULL,
+                `name` varchar(64) NOT NULL,
+                PRIMARY KEY (`tag_hash`)
+            ) ENGINE=InnoDB
+        ");
     }
 
     function down() {

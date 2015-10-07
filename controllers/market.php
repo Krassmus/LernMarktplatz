@@ -4,9 +4,17 @@ require_once 'app/controllers/plugin_controller.php';
 
 class MarketController extends PluginController {
 
+    function before_filter(&$action, &$args)
+    {
+        parent::before_filter($action, $args);
+        PageLayout::setTitle(_("Lehrmaterialien"));
+    }
+
     public function overview_action() {
         Navigation::activateItem("/lehrmarktplatz/overview");
         $this->materialien = MarketMaterial::findAll();
+
+        $this->best_nine_tags = MarketTag::findBest(9);
     }
 
     public function details_action($material_id)
@@ -16,11 +24,11 @@ class MarketController extends PluginController {
     }
 
 
-    public function download_action($material_id)
+    public function download_action($material_id, $disposition = "inline")
     {
         $this->material = new MarketMaterial($material_id);
         $this->set_content_type($this->material['content_type']);
-        $this->response->add_header('Content-Disposition', 'attachment;filename="' . addslashes($this->material['name']) . '"');
+        $this->response->add_header('Content-Disposition', $disposition.';filename="' . addslashes($this->material['filename']) . '"');
         $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
         $this->render_text(file_get_contents($this->material->getFilePath()));
     }

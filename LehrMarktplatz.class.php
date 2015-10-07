@@ -4,13 +4,14 @@ require_once __DIR__."/lib/MarketIdentity.php";
 require_once __DIR__."/lib/MarketHost.php";
 require_once __DIR__."/lib/MarketUser.php";
 require_once __DIR__."/lib/MarketMaterial.php";
+require_once __DIR__."/lib/MarketTag.php";
 
 class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
 
     public function __construct() {
         parent::__construct();
         if ($GLOBALS['perm']->have_perm("tutor")) {
-            $topicon = new Navigation(_("Lehrmarktplatz"), PluginEngine::getURL($this, array(), "market/overview"));
+            $topicon = new Navigation(_("Lehrmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
             $topicon->setImage(Assets::image_path("icons/lightblue/service.svg"));
             Navigation::addItem("/lehrmarktplatz", $topicon);
             Navigation::addItem("/lehrmarktplatz/overview", new Navigation(_("Lehrmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
