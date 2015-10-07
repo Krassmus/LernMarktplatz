@@ -66,3 +66,24 @@
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffffff', GradientType=0);
 }
+.lehrmarktplatz.structure {
+  list-style-type: none;
+  padding-left: 0px;
+  padding-right: 5px;
+}
+.lehrmarktplatz.structure li {
+  padding: 5px;
+  border-top: thin solid #d1d1d1;
+  padding-right: 0px;
+}
+.lehrmarktplatz.structure li.folder {
+  padding-bottom: 0px;
+}
+.lehrmarktplatz.structure ol {
+  margin-top: 6px;
+  padding-left: 40px;
+  list-style-type: none;
+}
+.lehrmarktplatz.structure > li:last-child {
+  border-bottom: thin solid #d1d1d1;
+}

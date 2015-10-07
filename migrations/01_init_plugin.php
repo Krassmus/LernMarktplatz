@@ -21,11 +21,12 @@ class InitPlugin extends Migration {
             CREATE TABLE IF NOT EXISTS `lehrmarktplatz_material` (
                 `material_id` varchar(32) NOT NULL PRIMARY KEY,
                 `name` varchar(64) NOT NULL,
+                `filename` varchar(64) NOT NULL,
                 `short_description` VARCHAR(100) NULL,
                 `description` text NOT NULL,
                 `user_id` varchar(32) NOT NULL,
                 `content_type` varchar(64) NOT NULL,
-                `structure` text NOT NULL,
+                `structure` text NULL,
                 `host_id` varchar(32) NULL,
                 `foreign_material_id` VARCHAR( 32 ) NULL,
                 `chdate` bigint(20) NOT NULL,

@@ -14,7 +14,29 @@ class MarketMaterial extends SimpleORMap {
     protected static function configure($config = array())
     {
         $config['db_table'] = 'lehrmarktplatz_material';
+
         parent::configure($config);
+    }
+
+    function __construct($id = null)
+    {
+        $this->registerCallback('before_store', 'cbSerializeData');
+        $this->registerCallback('after_store after_initialize', 'cbUnserializeData');
+        parent::__construct($id);
+    }
+
+    function cbSerializeData()
+    {
+        $this->content['structure'] = json_encode(studip_utf8encode($this->content['structure']));
+        $this->content_db['structure'] = json_encode(studip_utf8encode($this->content_db['structure']));
+        return true;
+    }
+
+    function cbUnserializeData()
+    {
+        $this->content['structure'] = (array) studip_utf8decode(json_decode($this->content['structure'], true));
+        $this->content_db['structure'] = (array) studip_utf8decode(json_decode($this->content_db['structure'], true));
+        return true;
     }
 
     public function getTopics()
@@ -42,5 +64,19 @@ class MarketMaterial extends SimpleORMap {
     public function getLogoURL()
     {
         return Assets::image_path("icons/blue/file.svg");
+    }
+
+    public function isFolder() {
+        return (bool) $this['structure'];
+    }
+
+    public function isImage()
+    {
+        return stripos($this['content_type'], "image") === 0;
+    }
+
+    public function isStudipQuestionnaire()
+    {
+        return $this['content_type'] === "application/json+studipquestionnaire";
     }
 }

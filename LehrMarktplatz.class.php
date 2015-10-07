@@ -20,11 +20,11 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
             Navigation::addItem("/admin/config/lehrmarktplatz", $tab);
         }
         if ($GLOBALS['i_page'] === "folder.php" && $GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
-            NotificationCenter::addObserver($this, "addToSidebar", "SidebarWillRender");
+            NotificationCenter::addObserver($this, "addToFolderSidebar", "SidebarWillRender");
         }
     }
 
-    public function addToSidebar() {
+    public function addToFolderSidebar() {
         $links = new LinksWidget();
         $links->setTitle(_("Lehrmarktplatz"));
         $links->addLink(
@@ -45,6 +45,50 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
     public function perform($unconsumed_path) {
         $this->addStylesheet("assets/lehrmarktplatz.less");
         parent::perform($unconsumed_path);
+    }
+
+
+    public function get_file_icon($ext) {
+        $extension = strtolower($ext);
+        //Icon auswaehlen
+        switch ($extension){
+            case 'rtf':
+            case 'doc':
+            case 'docx':
+            case 'odt':
+                $icon = 'icons/20/black/file-text.png';
+                break;
+            case 'xls':
+            case 'xlsx':
+            case 'ods':
+            case 'csv':
+            case 'ppt':
+            case 'pptx':
+            case 'odp':
+                $icon = 'icons/20/black/file-office.png';
+                break;
+            case 'zip':
+            case 'tgz':
+            case 'gz':
+            case 'bz2':
+                $icon = 'icons/20/black/file-archive.png';
+                break;
+            case 'pdf':
+                $icon = 'icons/20/black/file-pdf.png';
+                break;
+            case 'gif':
+            case 'jpg':
+            case 'jpe':
+            case 'jpeg':
+            case 'png':
+            case 'bmp':
+                $icon = 'icons/20/black/file-pic.png';
+                break;
+            default:
+                $icon = 'icons/20/black/file-generic.png';
+                break;
+        }
+        return $icon;
     }
     
 }
