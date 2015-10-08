@@ -7,6 +7,32 @@ class MarketMaterial extends SimpleORMap {
         return self::findBySQL("1=1");
     }
 
+    static public function findByText($text)
+    {
+        $statement = DBManager::get()->prepare("
+            SELECT lehrmarktplatz_material.*
+            FROM lehrmarktplatz_material
+                LEFT JOIN lehrmarktplatz_tags_material USING (material_id)
+                LEFT JOIN lehrmarktplatz_tags USING (tag_hash)
+            WHERE lehrmarktplatz_material.name LIKE :text
+                OR description LIKE :text
+                OR short_description LIKE :text
+                OR lehrmarktplatz_tags.name LIKE :text
+        ");
+        $statement->execute(array('text' => $text));
+        $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $materials = array();
+        foreach ($material_data as $data) {
+            $materials[] = MarketMaterial::buildExisting($data);
+        }
+        return $materials;
+    }
+
+    static public function findByTagHash($tag_hash)
+    {
+        return self::findBySQL("INNER JOIN lehrmarktplatz_tags_material USING (material_id) WHERE lehrmarktplatz_tags_material.tag_hash = ?", array($tag));
+    }
+
     static public function getFileDataPath() {
         return $GLOBALS['STUDIP_BASE_PATH'] . "/data/lehrmarktplatz";
     }

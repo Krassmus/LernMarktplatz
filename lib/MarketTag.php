@@ -2,7 +2,7 @@
 
 class MarketTag extends SimpleORMap {
 
-    static public function findBest($number = 9)
+    static public function findBest($number = 9, $raw = false)
     {
         $statement = DBManager::get()->prepare("
             SELECT lehrmarktplatz_tags.*
@@ -17,14 +17,18 @@ class MarketTag extends SimpleORMap {
         ");
         $statement->execute();
         $best = $statement->fetchAll(PDO::FETCH_ASSOC);
-        $tags = array();
-        foreach ($best as $tag_data) {
-            $tags[] = self::buildExisting($tag_data);
+        if ($raw) {
+            return $best;
+        } else {
+            $tags = array();
+            foreach ($best as $tag_data) {
+                $tags[] = self::buildExisting($tag_data);
+            }
+            return $tags;
         }
-        return $tags;
     }
 
-    static public function findRelated($tag_hash, $but_not = array(), $limit = 6) {
+    static public function findRelated($tag_hash, $but_not = array(), $limit = 6, $raw = false) {
         $statement = DBManager::get()->prepare("
             SELECT lehrmarktplatz_tags.*
             FROM (
@@ -44,11 +48,15 @@ class MarketTag extends SimpleORMap {
             'excluded_tags' => $but_not
         ));
         $best = $statement->fetchAll(PDO::FETCH_ASSOC);
-        $tags = array();
-        foreach ($best as $tag_data) {
-            $tags[] = self::buildExisting($tag_data);
+        if ($raw) {
+            return $best;
+        } else {
+            $tags = array();
+            foreach ($best as $tag_data) {
+                $tags[] = self::buildExisting($tag_data);
+            }
+            return $tags;
         }
-        return $tags;
     }
 
     protected static function configure($config = array())

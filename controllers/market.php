@@ -12,9 +12,28 @@ class MarketController extends PluginController {
 
     public function overview_action() {
         Navigation::activateItem("/lehrmarktplatz/overview");
-        $this->materialien = MarketMaterial::findAll();
+        $tag_matrix_entries_number = 9;
+        $tag_subtags_number = 6;
 
-        $this->best_nine_tags = MarketTag::findBest(9);
+        if (Request::get("tags")) {
+            $tags = explode(",", Request::get("tags"));
+            $this->without_tags = MarketTag::findBest($tag_matrix_entries_number, true);
+            $tag_to_search_for = array_pop($tags);
+            foreach ($tags as $tag) {
+                $this->without_tags = array_merge(
+                    $this->without_tags,
+                    MarketTag::findRelated($tag, $this->without_tags, $tag_subtags_number, true)
+                );
+            }
+            $this->more_tags = MarketTag::findRelated($tag_to_search_for, $this->without_tags, $tag_subtags_number);
+            $this->materialien = MarketMaterial::findByTagHash($tag_to_search_for);
+        } elseif(Request::get("search")) {
+            $this->materialien = MarketMaterial::findByText(Request::get("search"));
+        } elseif(Request::get("tag")) {
+            $this->materialien = MarketMaterial::findByTagHash(Request::get("tag"));
+        } else {
+            $this->best_nine_tags = MarketTag::findBest($tag_matrix_entries_number);
+        }
     }
 
     public function details_action($material_id)
