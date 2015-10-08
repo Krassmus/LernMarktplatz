@@ -114,4 +114,23 @@ class MarketMaterial extends SimpleORMap {
     {
         return $this['content_type'] === "application/json+studipquestionnaire";
     }
+
+    public function addTag($tag_name) {
+        $tag_hash = md5($tag_name);
+        if (!MarketTag::find($tag_hash)) {
+            $tag = new MarketTag();
+            $tag->setId($tag_hash);
+            $tag['name'] = $tag_name;
+            $tag->store();
+        }
+        $statement = DBManager::get()->prepare("
+            INSERT IGNORE INTO lehrmarktplatz_tags_material
+            SET tag_hash = :tag_hash,
+                material_id = :material_id
+        ");
+        return $statement->execute(array(
+            'tag_hash' => $tag_hash,
+            'material_id' => $this->getId()
+        ));
+    }
 }

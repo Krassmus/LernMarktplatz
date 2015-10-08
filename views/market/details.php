@@ -32,5 +32,13 @@ $actions->addLink(
     Assets::image_path("icons/blue/add"),
     array('data-dialog' => "1")
 );
+if ($material['user_id'] === $GLOBALS['user']->id) {
+    $actions->addLink(
+        _("Schlagworte oder Themen hinzufügen"),
+        PluginEngine::getURL($plugin, array(), "mymaterial/add_tags"),
+        Assets::image_path("icons/blue/add"),
+        array('data-dialog' => "1")
+    );
+}
 
 Sidebar::Get()->addWidget($actions);
