@@ -13,6 +13,18 @@
     </ol>
 <? endif ?>
 
+<? $tags = $material->getTags() ?>
+<? if (count($tags) > 0) : ?>
+    <div class="tags">
+        <h2><?= _("Themen") ?></h2>
+        <ul class="clean">
+            <? foreach ($tags as $tag) : ?>
+                <li><?= htmlReady($tag['name']) ?></li>
+            <? endforeach ?>
+        </ul>
+    </div>
+<? endif ?>
+
 <div class="license" style="text-align: center;">
     <?= _("Lizenz:") ?>
     <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
@@ -35,7 +47,7 @@ $actions->addLink(
 if ($material['user_id'] === $GLOBALS['user']->id) {
     $actions->addLink(
         _("Schlagworte oder Themen hinzufügen"),
-        PluginEngine::getURL($plugin, array(), "mymaterial/add_tags"),
+        PluginEngine::getURL($plugin, array('material_id' => $material->getId()), "mymaterial/add_tags"),
         Assets::image_path("icons/blue/add"),
         array('data-dialog' => "1")
     );

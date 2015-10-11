@@ -65,9 +65,17 @@ class MarketMaterial extends SimpleORMap {
         return true;
     }
 
-    public function getTopics()
+    public function getTags()
     {
-        return array();
+        $statement = DBManager::get()->prepare("
+            SELECT lehrmarktplatz_tags.*
+            FROM lehrmarktplatz_tags
+                INNER JOIN lehrmarktplatz_tags_material ON (lehrmarktplatz_tags_material.tag_hash = lehrmarktplatz_tags.tag_hash)
+            WHERE lehrmarktplatz_tags_material.material_id = :material_id
+            ORDER BY lehrmarktplatz_tags.name ASC
+        ");
+        $statement->execute(array('material_id' => $this->getId()));
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getFilePath() {

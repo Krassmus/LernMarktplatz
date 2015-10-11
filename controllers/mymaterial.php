@@ -69,13 +69,22 @@ class MymaterialController extends PluginController {
         return $structure;
     }
 
+    public function add_tags_action()
+    {
+        $this->material = new MarketMaterial(Request::option("material_id"));
+        if (Request::isPost()) {
+            $this->material->addTag(Request::get("tag"));
+            PageLayout::postMessage(MessageBox::success(_("Thema hinzugefügt")));
+            $this->redirect("market/details/".$this->material->getId());
+        }
+     }
+
     public function add_tag_action()
     {
         if (!Request::isPost()) {
             throw new AccessDeniedException();
         }
         $this->material = new MarketMaterial(Request::option("material_id"));
-        $this->material->addTag(Request::get("tag"));
         $this->render_nothing();
     }
 
