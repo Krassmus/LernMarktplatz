@@ -18,23 +18,59 @@
     </form>
 
     <? if ($best_nine_tags[0]['name']) : ?>
-        <table>
+        <table class="default nohover">
             <caption><?= _("Schlagwortsuche") ?></caption>
             <tbody>
             <tr>
-                <td><?= htmlReady($best_nine_tags[0]['name']) ?></td>
-                <td><?= htmlReady($best_nine_tags[1]['name']) ?></td>
-                <td><?= htmlReady($best_nine_tags[2]['name']) ?></td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[0]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[0]['name']) ?>
+                    </a>
+                </td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[1]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[1]['name']) ?>
+                    </a>
+                </td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[2]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[2]['name']) ?>
+                    </a>
+                </td>
             </tr>
             <tr>
-                <td><?= htmlReady($best_nine_tags[3]['name']) ?></td>
-                <td><?= htmlReady($best_nine_tags[4]['name']) ?></td>
-                <td><?= htmlReady($best_nine_tags[5]['name']) ?></td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[3]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[3]['name']) ?>
+                    </a>
+                </td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[4]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[4]['name']) ?>
+                    </a>
+                </td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[5]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[5]['name']) ?>
+                    </a>
+                </td>
             </tr>
             <tr>
-                <td><?= htmlReady($best_nine_tags[6]['name']) ?></td>
-                <td><?= htmlReady($best_nine_tags[7]['name']) ?></td>
-                <td><?= htmlReady($best_nine_tags[8]['name']) ?></td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[6]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[6]['name']) ?>
+                    </a>
+                </td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[7]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[7]['name']) ?>
+                    </a>
+                </td>
+                <td>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[8]['name']), "market/overview") ?>">
+                        <?= htmlReady($best_nine_tags[8]['name']) ?>
+                    </a>
+                </td>
             </tr>
             </tbody>
         </table>

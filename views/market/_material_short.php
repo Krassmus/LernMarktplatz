@@ -8,12 +8,12 @@
             <?= htmlReady($material['description']) ?>
         </p>
     </a>
-<? $tags = $material->getTopics(); ?>
+<? $tags = $material->getTags(); ?>
 <? if (count($tags)) : ?>
     <footer class="tags">
     <? foreach ($tags as $tag): ?>
-        <a href="<?= $controller->url_for('presenting/all', compact('tag')) ?>">
-            <?= htmlReady($tag) ?>
+        <a href="<?= PluginEngine::getLink($plugin, array('tag' => $tag['name']), 'market/overview') ?>">
+            <?= htmlReady($tag['name']) ?>
         </a>
     <? endforeach; ?>
     </footer>

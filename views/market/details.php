@@ -30,9 +30,6 @@
     <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
         <img src="<?= $plugin->getPluginURL()."/assets/cc-by.png" ?>">
     </a>
-    <div>
-        <?= _("Frei zum Benutzen, Weitergeben, Verändern und Wiederveröffentlichen, wenn der Autor jeweils genannt wird.") ?>
-    </div>
 </div>
 
 <?

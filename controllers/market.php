@@ -30,7 +30,7 @@ class MarketController extends PluginController {
         } elseif(Request::get("search")) {
             $this->materialien = MarketMaterial::findByText(Request::get("search"));
         } elseif(Request::get("tag")) {
-            $this->materialien = MarketMaterial::findByTagHash(Request::get("tag"));
+            $this->materialien = MarketMaterial::findByTag(Request::get("tag"));
         } else {
             $this->best_nine_tags = MarketTag::findBest($tag_matrix_entries_number);
         }

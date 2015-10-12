@@ -7,7 +7,7 @@ class MarketMaterial extends SimpleORMap {
         return self::findBySQL("1=1");
     }
 
-    static public function findByText($text)
+    static public function findByTag($text)
     {
         $statement = DBManager::get()->prepare("
             SELECT lehrmarktplatz_material.*
