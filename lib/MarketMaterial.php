@@ -15,8 +15,9 @@ class MarketMaterial extends SimpleORMap {
                 INNER JOIN lehrmarktplatz_tags_material USING (material_id)
                 INNER JOIN lehrmarktplatz_tags USING (tag_hash)
             WHERE lehrmarktplatz_tags.name = :tag
+            GROUP BY lehrmarktplatz_material.material_id
         ");
-        $statement->execute(array('text' => $tag_name));
+        $statement->execute(array('tag' => $tag_name));
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
         $materials = array();
         foreach ($material_data as $data) {
@@ -36,6 +37,7 @@ class MarketMaterial extends SimpleORMap {
                 OR description LIKE :text
                 OR short_description LIKE :text
                 OR lehrmarktplatz_tags.name LIKE :text
+            GROUP BY lehrmarktplatz_material.material_id
         ");
         $statement->execute(array('text' => $text));
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
