@@ -47,7 +47,7 @@ class MymaterialController extends PluginController {
             }
             $this->material->store();
             PageLayout::postMessage(MessageBox::success(_("Lehrmaterial erfolgreich gespeichert.")));
-            $this->redirect("market/overview");
+            $this->redirect("market/details/".$this->material->getId());
         }
     }
 

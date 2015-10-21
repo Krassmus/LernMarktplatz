@@ -16,15 +16,16 @@ class MarketController extends PluginController {
         $tag_subtags_number = 6;
 
         if (Request::get("tags")) {
-            $this->tag_history = $tags = explode(",", Request::get("tags"));
+            $tags = $this->tag_history = explode(",", Request::get("tags"));
             $this->without_tags = array();
+            $tag_to_search_for = array_pop($tags);
             foreach (MarketTag::findBest($tag_matrix_entries_number, true) as $related_tag) {
-                if (!$related_tag['tag_hash'] === $this->tag_history[0]) {
+                if ($related_tag['tag_hash'] !== $this->tag_history[0]) {
                     $this->without_tags[] = $related_tag['tag_hash'];
                 }
             }
-            foreach ($this->tag_history as $tag) {
-                $tag_to_search_for = $tag;
+            //array_shift($this->tag_history);
+            foreach ($tags as $tag) {
                 foreach (MarketTag::findRelated($tag, $this->without_tags, $tag_subtags_number, true) as $related_tag) {
                     $this->without_tags[] = $related_tag['tag_hash'];
                 }

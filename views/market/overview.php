@@ -3,11 +3,15 @@
     <div>
         <ol class="breadcrumb">
             <? $breadcrump_tags = array() ?>
+            <li>
+                <a href="<?= PluginEngine::getLink($plugin, array(), "market/overview") ?>">
+                    <?= _("Zum Anfang") ?>
+                </a>
+            </li>
             <? foreach ($tag_history as $key => $tag) : ?>
                 <li>
                     <? $breadcrump_tags[] = $tag ?>
                     <a href="<?= PluginEngine::getLink($plugin, array('tags' => implode(",", $breadcrump_tags)), "market/overview") ?>">
-                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady(MarketTag::find($tag)->name) ?>
                     </a>
                 </li>
@@ -17,7 +21,10 @@
         <ul>
             <? foreach ($more_tags as $tag) : ?>
                 <li>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => implode(",", array_push($breadcrump_tags, $tag))), "market/overview") ?>">
+                    <? $new_breadcrump_tags = $breadcrump_tags;
+                    $new_breadcrump_tags[] = $tag['tag_hash'];
+                    ?>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => implode(",", $new_breadcrump_tags)), "market/overview") ?>">
                         <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($tag['name']) ?>
                     </a>

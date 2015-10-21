@@ -37,6 +37,7 @@ class MarketTag extends SimpleORMap {
                     INNER JOIN lehrmarktplatz_tags_material AS tags2 ON (tags1.material_id = tags2.material_id AND tags1.tag_hash != tags2.tag_hash)
                 WHERE tags2.tag_hash NOT IN (:excluded_tags)
                     AND tags2.tag_hash = :tag_hash
+                    AND tags1.tag_hash NOT IN (:excluded_tags)
                 GROUP BY tags1.tag_hash
                 ) AS best_tags
                 INNER JOIN lehrmarktplatz_tags ON (best_tags.tag_hash = lehrmarktplatz_tags.tag_hash)
