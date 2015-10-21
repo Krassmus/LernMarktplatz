@@ -1,4 +1,40 @@
-<? if ($more_tags) : ?>
+<? if (Request::get("tags")) : ?>
+
+    <div>
+        <ol class="breadcrumb">
+            <? $breadcrump_tags = array() ?>
+            <? foreach ($tag_history as $key => $tag) : ?>
+                <li>
+                    <? $breadcrump_tags[] = $tag ?>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => implode(",", $breadcrump_tags)), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
+                        <?= htmlReady(MarketTag::find($tag)->name) ?>
+                    </a>
+                </li>
+            <? endforeach ?>
+        </ol>
+
+        <ul>
+            <? foreach ($more_tags as $tag) : ?>
+                <li>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => implode(",", array_push($breadcrump_tags, $tag))), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
+                        <?= htmlReady($tag['name']) ?>
+                    </a>
+                </li>
+            <? endforeach ?>
+        </ul>
+    </div>
+
+    <? if ($materialien) : ?>
+    <ul class="material_overview">
+        <? foreach ($materialien as $material) : ?>
+            <?= $this->render_partial("market/_material_short.php", compact("material", "plugin")) ?>
+        <? endforeach ?>
+    </ul>
+    <? else : ?>
+        <?= MessageBox::info(_("Keine Materialien gefunden")) ?>
+    <? endif ?>
 <? elseif ($materialien) : ?>
     <ul class="material_overview">
         <? foreach ($materialien as $material) : ?>
@@ -23,51 +59,60 @@
             <tbody>
             <tr>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[0]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[0]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[0]['name']) ?>
                     </a>
                 </td>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[1]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[1]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[1]['name']) ?>
                     </a>
                 </td>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[2]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[2]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[2]['name']) ?>
                     </a>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[3]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[3]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[3]['name']) ?>
                     </a>
                 </td>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[4]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[4]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[4]['name']) ?>
                     </a>
                 </td>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[5]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[5]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[5]['name']) ?>
                     </a>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[6]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[6]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[6]['name']) ?>
                     </a>
                 </td>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[7]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[7]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[7]['name']) ?>
                     </a>
                 </td>
                 <td>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $best_nine_tags[8]['name']), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tags' => $best_nine_tags[8]['tag_hash']), "market/overview") ?>">
+                        <?= Assets::img("icons/16/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($best_nine_tags[8]['name']) ?>
                     </a>
                 </td>
