@@ -35,7 +35,7 @@ class MarketTag extends SimpleORMap {
                 SELECT tags1.tag_hash, COUNT(*) AS position
                 FROM lehrmarktplatz_tags_material AS tags1
                     INNER JOIN lehrmarktplatz_tags_material AS tags2 ON (tags1.material_id = tags2.material_id AND tags1.tag_hash != tags2.tag_hash)
-                WHERE lehrmarktplatz_tags.tag_hash NOT IN (:excluded_tags)
+                WHERE tags2.tag_hash NOT IN (:excluded_tags)
                     AND tags2.tag_hash = :tag_hash
                 GROUP BY tags1.tag_hash
                 ) AS best_tags

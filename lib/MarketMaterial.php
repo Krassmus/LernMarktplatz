@@ -30,7 +30,7 @@ class MarketMaterial extends SimpleORMap {
 
     static public function findByTagHash($tag_hash)
     {
-        return self::findBySQL("INNER JOIN lehrmarktplatz_tags_material USING (material_id) WHERE lehrmarktplatz_tags_material.tag_hash = ?", array($tag));
+        return self::findBySQL("INNER JOIN lehrmarktplatz_tags_material USING (material_id) WHERE lehrmarktplatz_tags_material.tag_hash = ?", array($tag_hash));
     }
 
     static public function getFileDataPath() {
