@@ -66,7 +66,20 @@ class EndpointsController extends PluginController {
 
     public function search_items_action() {
         $host = MarketHost::thisOne();
+        if (Request::get("search")) {
+            $this->materialien = MarketMaterial::findByTag(Request::get("search"));
+        }
 
+        $output = array('results' => array());
+        foreach ($this->materialien as $material) {
+            $data['data'] = $material->toArray();
+            $data['user'] = array(
+                'user_id' => $material['user_id'],
+                'name' => get_fullname($material['user_id'])
+            );
+            $output['results'][] = $data;
+        }
+        $this->render_json($output);
     }
 
     /**
