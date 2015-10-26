@@ -2,7 +2,7 @@
 
 require_once 'app/controllers/plugin_controller.php';
 
-class ProtocolEndpointsController extends PluginController {
+class EndpointsController extends PluginController {
 
     /**
      * Returns a json with all known hosts.
@@ -32,7 +32,7 @@ class ProtocolEndpointsController extends PluginController {
 
     protected function refreshHost($url)
     {
-        $host_data = file_get_contents($url."/plugins.php/lehrmarktplatz/protocol_endpoints/fetch_public_host_key");
+        $host_data = file_get_contents($url."fetch_public_host_key");
         if ($host_data) {
             $host_data = studip_utf8decode(json_decode($host_data));
             if ($host_data) {
@@ -59,7 +59,7 @@ class ProtocolEndpointsController extends PluginController {
         $this->render_json(array(
             'name' => $GLOBALS['UNI_NAME_CLEAN'],
             'public_key' => $host['public_key'],
-            'url' => $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'],
+            'url' => $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/",
             'index_server' => $host['index_server']
         ));
     }
@@ -92,7 +92,7 @@ class ProtocolEndpointsController extends PluginController {
             ));
         } else {
             $host = new MarketHost($material['host_id']);
-            header("Location: ".$host['url']."/plugins.php/lehrmarktplatz/protocol_endpoints/get_item_data/".$item_id);
+            header("Location: ".$host['url']."get_item_data/".$item_id);
             return;
         }
     }
