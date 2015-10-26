@@ -7,7 +7,26 @@ class MarketMaterial extends SimpleORMap {
         return self::findBySQL("1=1");
     }
 
-    static public function findByTag($text)
+    static public function findByTag($tag_name)
+    {
+        $statement = DBManager::get()->prepare("
+            SELECT lehrmarktplatz_material.*
+            FROM lehrmarktplatz_material
+                INNER JOIN lehrmarktplatz_tags_material USING (material_id)
+                INNER JOIN lehrmarktplatz_tags USING (tag_hash)
+            WHERE lehrmarktplatz_tags.name = :tag
+            GROUP BY lehrmarktplatz_material.material_id
+        ");
+        $statement->execute(array('tag' => $tag_name));
+        $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $materials = array();
+        foreach ($material_data as $data) {
+            $materials[] = MarketMaterial::buildExisting($data);
+        }
+        return $materials;
+    }
+
+    static public function findByText($text)
     {
         $statement = DBManager::get()->prepare("
             SELECT lehrmarktplatz_material.*
@@ -18,6 +37,7 @@ class MarketMaterial extends SimpleORMap {
                 OR description LIKE :text
                 OR short_description LIKE :text
                 OR lehrmarktplatz_tags.name LIKE :text
+            GROUP BY lehrmarktplatz_material.material_id
         ");
         $statement->execute(array('text' => $text));
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -101,6 +121,8 @@ class MarketMaterial extends SimpleORMap {
             return Assets::image_path("icons/$color/folder-full.svg");
         } elseif($this->isImage()) {
             return Assets::image_path("icons/$color/file-pic.svg");
+        } elseif($this->isPresentation()) {
+            return Assets::image_path("icons/$color/file-ppt.svg");
         } elseif($this->isStudipQuestionnaire()) {
             return Assets::image_path("icons/$color/vote.svg");
         } else {
@@ -116,6 +138,22 @@ class MarketMaterial extends SimpleORMap {
     public function isImage()
     {
         return stripos($this['content_type'], "image") === 0;
+    }
+
+    protected function getFileEnding()
+    {
+        if (strpos(".", $this['filename']) !== false) {
+            return strtolower(substr($this['filename'], strpos(".", $this['filename'])));
+        } else {
+            return "";
+        }
+    }
+
+    public function isPresentation()
+    {
+        return in_array($this->getFileEnding(), array(
+            "odp", "keynote", "ppt", "pptx"
+        ));
     }
 
     public function isStudipQuestionnaire()
