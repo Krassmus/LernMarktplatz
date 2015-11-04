@@ -13,7 +13,7 @@ class EndpointsController extends PluginController {
         $output = array();
 
         if (Request::get("from")) {
-            $this->refreshHost(Request::get("from"));
+            $this->refreshHost(studip_utf8decode(Request::get("from")));
         }
 
         if (get_config("LEHRMARKTPLATZ_SHOW_KNOWN_HOSTS")) {
@@ -66,13 +66,22 @@ class EndpointsController extends PluginController {
 
     public function search_items_action() {
         $host = MarketHost::thisOne();
-        if (Request::get("search")) {
-            $this->materialien = MarketMaterial::findByTag(Request::get("search"));
+        if (Request::get("text")) {
+            $this->materialien = MarketMaterial::findByText(studip_utf8decode(Request::get("text")));
+        } elseif (Request::get("tag")) {
+            $this->materialien = MarketMaterial::findByTag(studip_utf8decode(Request::get("tag")));
         }
 
         $output = array('results' => array());
         foreach ($this->materialien as $material) {
+            $data = array();
+            $data['host'] = array(
+                'name' => $host['name'],
+                'url' => $host['url'],
+                'public_key' => $host['public_key']
+            );
             $data['data'] = $material->toArray();
+            unset($data['data']['material_id']);
             $data['user'] = array(
                 'user_id' => $material['user_id'],
                 'name' => get_fullname($material['user_id'])
@@ -107,6 +116,34 @@ class EndpointsController extends PluginController {
             $host = new MarketHost($material['host_id']);
             header("Location: ".$host['url']."get_item_data/".$item_id);
             return;
+        }
+    }
+
+    public function push_data_action()
+    {
+        if (Request::isPost()) {
+            $public_key_hash = $_SERVER['HTTP_X_HOST_PUBLIC_KEY_HASH'];
+            $signature = $_SERVER['HTTP_X_SIGNATURE'];
+            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            if ($host && !$host->isMe()) {
+                if ($host->verifySignature(json_encode($_POST), $signature)) {
+                    $data = Request::getArray("data");
+                    $material = MarketMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
+                        $host->getId(),
+                        $data['foreign_material_id']
+                    ));
+                    if (!$material) {
+                        $material = new MarketMaterial();
+                        $material['host_id'] = $host->getId();
+                    }
+                    $material->setData($data['data']);
+                    $material->store();
+                } else {
+                    throw new Exception("Wrong signature, sorry.");
+                }
+            }
+        } else {
+            throw new Exception("USE POST TO PUSH.");
         }
     }
 

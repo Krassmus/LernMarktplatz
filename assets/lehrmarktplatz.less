@@ -7,10 +7,10 @@
     .flex-wrap(wrap);
     .flex-justify-content(center);
     .flex-align-items(stretch);
+
     > article {
         display: inline-block;
         margin: 7px;
-
         width: 250px;
         max-width: 250px;
 
@@ -50,6 +50,40 @@
     }
 }
 
+article.contentbox {
+    border: solid 1px @base-color-60;
+    border-style: solid;
+    border-width: 1px;
+    .transition(all 300ms ease 0s);
+    position: relative;
+
+    header {
+        width: 100%;
+        background-color: @content-color-20;
+        color: 	@brand-color-dark;
+        font-size: 12pt;
+        font-weight: bold;
+        text-align: left;
+        line-height: 2em;
+    }
+    h1 {
+        padding: 5px;
+        margin: 0px;
+        color: @base-color;
+        border-bottom: medium none;
+        font-size: medium;
+    }
+    footer {
+        background-color: white;
+        border-top: 1px solid @content-color-40;
+
+        &.tags a {
+            .icon-before('blue/tag.png');
+            white-space: nowrap;
+        }
+    }
+}
+
 .lehrmarktplatz.structure {
     list-style-type: none;
     padding-left: 0px;
@@ -71,5 +105,21 @@
     }
     > li:last-child {
         border-bottom: thin solid @table-header-color;
+    }
+}
+
+.material_navigation {
+    .breadcrumb {
+        display: flex;
+        list-style-type: none;
+        > li {
+            margin-right: 10px;
+        }
+        > li:not(:first-child) {
+            .icon-before('grey/arr_2right.png');
+        }
+    }
+    .matrix {
+        list-style-type: none;
     }
 }
