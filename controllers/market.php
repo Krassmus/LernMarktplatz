@@ -86,6 +86,8 @@ class MarketController extends PluginController {
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
             }
             $this->material->store();
+            $this->material->pushDataToIndexServers();
+
             PageLayout::postMessage(MessageBox::success(_("Lehrmaterial erfolgreich gespeichert.")));
             $this->redirect("market/overview");
         }

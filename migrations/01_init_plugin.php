@@ -12,6 +12,7 @@ class InitPlugin extends Migration {
                 `private_key` text NULL,
                 `active` tinyint(4) NOT NULL DEFAULT '1',
                 `index_server` TINYINT NOT NULL DEFAULT '0',
+                `allowed_as_index_server` TINYINT NOT NULL DEFAULT '1',
                 `last_updated` bigint(20) NOT NULL,
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` bigint(20) NOT NULL
@@ -20,6 +21,8 @@ class InitPlugin extends Migration {
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `lehrmarktplatz_material` (
                 `material_id` varchar(32) NOT NULL PRIMARY KEY,
+                `foreign_material_id` VARCHAR( 32 ) NULL,
+                `host_id` varchar(32) NULL,
                 `name` varchar(64) NOT NULL,
                 `filename` varchar(64) NOT NULL,
                 `short_description` VARCHAR(100) NULL,
@@ -27,8 +30,6 @@ class InitPlugin extends Migration {
                 `user_id` varchar(32) NOT NULL,
                 `content_type` varchar(64) NOT NULL,
                 `structure` text NULL,
-                `host_id` varchar(32) NULL,
-                `foreign_material_id` VARCHAR( 32 ) NULL,
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL
             ) ENGINE=InnoDB

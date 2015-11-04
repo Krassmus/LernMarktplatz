@@ -1,6 +1,6 @@
 <? if (Request::get("tags")) : ?>
 
-    <div>
+    <div class="material_navigation">
         <ol class="breadcrumb">
             <? $breadcrump_tags = array() ?>
             <li>
@@ -18,7 +18,7 @@
             <? endforeach ?>
         </ol>
 
-        <ul>
+        <ul class="matrix">
             <? foreach ($more_tags as $tag) : ?>
                 <li>
                     <? $new_breadcrump_tags = $breadcrump_tags;
@@ -62,7 +62,7 @@
 
     <? if ($best_nine_tags[0]['name']) : ?>
         <table class="default nohover">
-            <caption><?= _("Schlagwortsuche") ?></caption>
+            <caption><?= _("Themenmatrix") ?></caption>
             <tbody>
             <tr>
                 <td>

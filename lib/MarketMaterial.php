@@ -9,6 +9,7 @@ class MarketMaterial extends SimpleORMap {
 
     static public function findByTag($tag_name)
     {
+        self::fetchRemoteSearch($tag_name, true);
         $statement = DBManager::get()->prepare("
             SELECT lehrmarktplatz_material.*
             FROM lehrmarktplatz_material
@@ -28,6 +29,7 @@ class MarketMaterial extends SimpleORMap {
 
     static public function findByText($text)
     {
+        self::fetchRemoteSearch($text);
         $statement = DBManager::get()->prepare("
             SELECT lehrmarktplatz_material.*
             FROM lehrmarktplatz_material
@@ -50,11 +52,32 @@ class MarketMaterial extends SimpleORMap {
 
     static public function findByTagHash($tag_hash)
     {
+        $tag = MarketTag::find($tag_hash);
+        if ($tag) {
+            self::fetchRemoteSearch($tag['name'], true);
+        }
         return self::findBySQL("INNER JOIN lehrmarktplatz_tags_material USING (material_id) WHERE lehrmarktplatz_tags_material.tag_hash = ?", array($tag_hash));
     }
 
     static public function getFileDataPath() {
         return $GLOBALS['STUDIP_BASE_PATH'] . "/data/lehrmarktplatz";
+    }
+
+    /**
+     * Searches on remote hosts for the text.
+     * @param $text
+     * @param bool|false $tag
+     */
+    static protected function fetchRemoteSearch($text, $tag = false) {
+        $cache_name = "Lehrmarktplatz_remote_searched_for_".md5($text)."_".($tag ? 1 : 0);
+        $already_searched = (bool) StudipCacheFactory::getCache()->read($cache_name);
+        if (!$already_searched) {
+            $host = MarketHost::findOneBySQL("index_server = '1' AND allowed_as_index_server = '1'  ORDER BY RAND()");
+            if ($host) {
+                $host->fetchRemoteSearch($text, $tag);
+            }
+            StudipCacheFactory::getCache()->read($cache_name, "1", 60);
+        }
     }
 
     protected static function configure($config = array())
@@ -178,5 +201,28 @@ class MarketMaterial extends SimpleORMap {
             'tag_hash' => $tag_hash,
             'material_id' => $this->getId()
         ));
+    }
+
+    public function pushDataToIndexServers()
+    {
+        $myHost = MarketHost::thisOne();
+        $data = array();
+        $data['host'] = array(
+            'name' => $myHost['name'],
+            'url' => $myHost['url'],
+            'public_key' => $myHost['public_key']
+        );
+        $data['data'] = $this->toArray();
+        unset($data['data']['material_id']);
+        $data['user'] = array(
+            'user_id' => $this['user_id'],
+            'name' => get_fullname($this['user_id'])
+        );
+
+        foreach (MarketHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
+            if (!$index_server->isMe()) {
+                $index_server->pushDataToIndex($data);
+            }
+        }
     }
 }
