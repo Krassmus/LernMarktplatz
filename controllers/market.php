@@ -68,7 +68,7 @@ class MarketController extends PluginController {
             throw new AccessDeniedException();
         }
         if (Request::isPost()) {
-            $this->material->setData(Request::getArray("data"));
+            $was_new = $this->material->setData(Request::getArray("data"));
             $this->material['user_id'] = $GLOBALS['user']->id;
             $this->material['host_id'] = null;
             if ($_FILES['file']['tmp_name']) {
@@ -86,10 +86,14 @@ class MarketController extends PluginController {
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
             }
             $this->material->store();
+
+            //Topics:
+            $this->material->setTags(Request::getArray("tags"));
+
             $this->material->pushDataToIndexServers();
 
             PageLayout::postMessage(MessageBox::success(_("Lehrmaterial erfolgreich gespeichert.")));
-            $this->redirect("market/overview");
+            $this->redirect("market/details/".$this->material->getId());
         }
     }
 

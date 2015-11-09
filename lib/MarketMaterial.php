@@ -121,6 +121,33 @@ class MarketMaterial extends SimpleORMap {
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function setTags($tags) {
+        $statement = DBManager::get()->prepare("
+            DELETE FROM lehrmarktplatz_tags_material
+            WHERE material_id = :material_id
+        ");
+        $statement->execute(array('material_id' => $this->getId()));
+        $insert_tag = DBManager::get()->prepare("
+            INSERT IGNORE INTO lehrmarktplatz_tags
+            SET name = :tag,
+                tag_hash = MD5(:tag)
+        ");
+        $add_tag = DBManager::get()->prepare("
+            INSERT IGNORE INTO lehrmarktplatz_tags_material
+            SET tag_hash = MD5(:tag),
+                material_id = :material_id
+        ");
+        foreach ($tags as $tag) {
+            $insert_tag->execute(array(
+                'tag' => $tag
+            ));
+            $add_tag->execute(array(
+                'tag' => $tag,
+                'material_id' => $this->getId()
+            ));
+        }
+    }
+
     public function getFilePath() {
         if (!file_exists(self::getFileDataPath())) {
             mkdir(self::getFileDataPath());

@@ -54,6 +54,17 @@ class InitPlugin extends Migration {
     }
 
     function down() {
-
+        DBManager::get()->exec("
+            DROP TABLE IF EXISTS `lehrmarktplatz_hosts`;
+        ");
+        DBManager::get()->exec("
+            DROP TABLE IF EXISTS `lehrmarktplatz_material`;
+        ");
+        DBManager::get()->exec("
+            DROP TABLE IF EXISTS `lehrmarktplatz_tags_material`;
+        ");
+        DBManager::get()->exec("
+            DROP TABLE IF EXISTS `lehrmarktplatz_tags`;
+        ");
     }
 }

@@ -46,6 +46,13 @@ class MymaterialController extends PluginController {
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
             }
             $this->material->store();
+
+
+            //Topics:
+            $this->material->setTags(Request::getArray("tags"));
+
+            $this->material->pushDataToIndexServers();
+
             PageLayout::postMessage(MessageBox::success(_("Lehrmaterial erfolgreich gespeichert.")));
             $this->redirect("market/details/".$this->material->getId());
         }
