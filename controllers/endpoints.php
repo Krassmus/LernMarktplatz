@@ -60,6 +60,9 @@ class EndpointsController extends PluginController {
      */
     public function fetch_public_host_key_action() {
         $host = MarketHost::thisOne();
+        if (Request::get("from")) {
+            $this->refreshHost(studip_utf8decode(Request::get("from")));
+        }
         $this->render_json(array(
             'name' => $GLOBALS['UNI_NAME_CLEAN'],
             'public_key' => $host['public_key'],

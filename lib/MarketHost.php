@@ -40,6 +40,9 @@ class MarketHost extends MarketIdentity {
     public function fetchPublicKey()
     {
         $endpoint_url = $this['url']."fetch_public_host_key";
+        if (true) {
+            $endpoint_url .= "?from=".urlencode(studip_utf8encode($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']))
+        }
         $host_data = @file_get_contents($endpoint_url);
         if ($host_data) {
             $host_data = studip_utf8decode(json_decode($host_data, true));
