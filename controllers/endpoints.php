@@ -4,6 +4,10 @@ require_once 'app/controllers/plugin_controller.php';
 
 class EndpointsController extends PluginController {
 
+    public function index_action() {
+        $this->reflection = new ReflectionClass($this);
+    }
+
     /**
      * Returns a json with all known hosts.
      * If there is a "from" GET-parameter, this host will

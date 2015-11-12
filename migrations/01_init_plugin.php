@@ -7,7 +7,7 @@ class InitPlugin extends Migration {
             CREATE TABLE IF NOT EXISTS `lehrmarktplatz_hosts` (
                 `host_id` varchar(32) NOT NULL PRIMARY KEY,
                 `name` varchar(64) NOT NULL,
-                `url` varchar(64) NOT NULL,
+                `url` varchar(200) NOT NULL,
                 `public_key` text NOT NULL,
                 `private_key` text NULL,
                 `active` tinyint(4) NOT NULL DEFAULT '1',
