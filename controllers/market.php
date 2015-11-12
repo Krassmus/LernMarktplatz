@@ -45,6 +45,45 @@ class MarketController extends PluginController {
         }
     }
 
+    public function matrixnavigation_action()
+    {
+        $tag_matrix_entries_number = 9;
+        $tag_subtags_number = 6;
+
+        if (!Request::get("tags")) {
+            $this->topics = MarketTag::findBest($tag_matrix_entries_number);
+            $this->materialien = array();
+        } else {
+            $tags = $this->tag_history = explode(",", Request::get("tags"));
+            $this->without_tags = array();
+            $tag_to_search_for = array_pop($tags);
+            foreach (MarketTag::findBest($tag_matrix_entries_number, true) as $related_tag) {
+                if ($related_tag['tag_hash'] !== $this->tag_history[0]) {
+                    $this->without_tags[] = $related_tag['tag_hash'];
+                }
+            }
+            //array_shift($this->tag_history);
+            foreach ($tags as $tag) {
+                foreach (MarketTag::findRelated($tag, $this->without_tags, $tag_subtags_number, true) as $related_tag) {
+                    $this->without_tags[] = $related_tag['tag_hash'];
+                }
+            }
+            $this->topics = MarketTag::findRelated(
+                $tag_to_search_for,
+                $this->without_tags,
+                $tag_subtags_number
+            );
+            $this->materialien = MarketMaterial::findByTagHash($tag_to_search_for);
+        }
+
+        $output = array();
+        $output['breadcrumb'] = $this->render_template_as_string("market/_breadcrumb");
+        $output['matrix'] = $this->render_template_as_string("market/_matrix");
+        $output['materials'] = $this->render_template_as_string("market/_materials");
+
+        $this->render_json($output);
+    }
+
     public function details_action($material_id)
     {
         Navigation::activateItem("/lehrmarktplatz/overview");
@@ -68,7 +107,7 @@ class MarketController extends PluginController {
             throw new AccessDeniedException();
         }
         if (Request::isPost()) {
-            $this->material->setData(Request::getArray("data"));
+            $was_new = $this->material->setData(Request::getArray("data"));
             $this->material['user_id'] = $GLOBALS['user']->id;
             $this->material['host_id'] = null;
             if ($_FILES['file']['tmp_name']) {
@@ -86,10 +125,14 @@ class MarketController extends PluginController {
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
             }
             $this->material->store();
+
+            //Topics:
+            $this->material->setTags(Request::getArray("tags"));
+
             $this->material->pushDataToIndexServers();
 
             PageLayout::postMessage(MessageBox::success(_("Lehrmaterial erfolgreich gespeichert.")));
-            $this->redirect("market/overview");
+            $this->redirect("market/details/".$this->material->getId());
         }
     }
 

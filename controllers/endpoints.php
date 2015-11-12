@@ -4,6 +4,10 @@ require_once 'app/controllers/plugin_controller.php';
 
 class EndpointsController extends PluginController {
 
+    public function index_action() {
+        $this->reflection = new ReflectionClass($this);
+    }
+
     /**
      * Returns a json with all known hosts.
      * If there is a "from" GET-parameter, this host will
@@ -56,6 +60,9 @@ class EndpointsController extends PluginController {
      */
     public function fetch_public_host_key_action() {
         $host = MarketHost::thisOne();
+        if (Request::get("from")) {
+            $this->refreshHost(studip_utf8decode(Request::get("from")));
+        }
         $this->render_json(array(
             'name' => $GLOBALS['UNI_NAME_CLEAN'],
             'public_key' => $host['public_key'],
