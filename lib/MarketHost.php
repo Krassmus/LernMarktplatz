@@ -11,6 +11,7 @@ class MarketHost extends MarketIdentity {
             $host = new MarketHost();
             $host['name'] = $GLOBALS['UNI_NAME_CLEAN'];
             $host['url'] = $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmakrplatz/endpoints/";
+            $host['last_updated'] = time();
             $host->store();
             return $host;
         }
