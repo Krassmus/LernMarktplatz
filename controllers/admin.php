@@ -39,6 +39,7 @@ class AdminController extends PluginController {
             if (!$host) {
                 $host = new MarketHost();
                 $host['url'] = trim(Request::get("url"));
+                $host['last_updated'] = time();
                 $host->fetchPublicKey();
             }
             if ($host['public_key']) {
