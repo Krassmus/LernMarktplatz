@@ -6,11 +6,15 @@ class MarketHost extends MarketIdentity {
     {
         $host = self::findOneBySQL("private_key IS NOT NULL LIMIT 1");
         if ($host) {
+            $host['url'] = $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
+            if ($host->isFieldDirty("url")) {
+                $host->store();
+            }
             return $host;
         } else {
             $host = new MarketHost();
             $host['name'] = $GLOBALS['UNI_NAME_CLEAN'];
-            $host['url'] = $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmakrplatz/endpoints/";
+            $host['url'] = $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
             $host['last_updated'] = time();
             $host->store();
             return $host;
