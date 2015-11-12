@@ -35,9 +35,10 @@ class AdminController extends PluginController {
     public function add_new_host_action() {
         PageLayout::setTitle(_("Neue Lehrmaterialien einstellen"));
         if (Request::isPost()) {
-            $host = MarketHost::findByUrl(Request::get("url"));
+            $host = MarketHost::findByUrl(trim(Request::get("url")));
             if (!$host) {
                 $host = new MarketHost();
+                $host['url'] = trim(Request::get("url"));
                 $host->fetchPublicKey();
             }
             if ($host['public_key']) {

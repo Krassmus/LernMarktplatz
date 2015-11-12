@@ -6,6 +6,9 @@
 <br>
 <?= htmlReady($manifest['pluginname']) ?>: <?= htmlReady($manifest['version']) ?>
 
+<h2><?= _("Public-Key-Hash") ?></h2>
+<?= md5(MarketHost::thisOne()->public_key) ?>
+
 <h2><?= _("Statistik") ?></h2>
 <table class="default nohover">
     <tr>
