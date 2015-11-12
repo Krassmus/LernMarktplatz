@@ -42,7 +42,7 @@ class MarketHost extends MarketIdentity {
         $endpoint_url = $this['url']."fetch_public_host_key";
         $host_data = @file_get_contents($endpoint_url);
         if ($host_data) {
-            $host_data = studip_utf8decode(json_decode($host_data));
+            $host_data = studip_utf8decode(json_decode($host_data, true));
             if ($host_data) {
                 $this['name'] = $host_data['name'];
                 $this['public_key'] = $host_data['public_key'];
@@ -60,7 +60,7 @@ class MarketHost extends MarketIdentity {
             ."?from=".urlencode(studip_utf8encode($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']));
         $output = @file_get_contents($endpoint_url);
         if ($output) {
-            $output = studip_utf8decode(json_decode($output));
+            $output = studip_utf8decode(json_decode($output, true));
             foreach ((array) $output['hosts'] as $host_data) {
                 $host = MarketHost::findByPublic_key($host_data['public_key']);
                 if (!$host) {
@@ -85,7 +85,7 @@ class MarketHost extends MarketIdentity {
         }
         $output = @file_get_contents($endpoint_url);
         if ($output) {
-            $output = studip_utf8decode(json_decode($output));
+            $output = studip_utf8decode(json_decode($output, true));
             foreach ((array) $output['material'] as $material_data) {
                 $host = MarketHost::findByPublic_key($material_data['host']['public_key']);
                 if (!$host) {
