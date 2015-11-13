@@ -38,7 +38,7 @@ class EndpointsController extends PluginController {
     {
         $host_data = file_get_contents($url."fetch_public_host_key");
         if ($host_data) {
-            $host_data = studip_utf8decode(json_decode($host_data));
+            $host_data = studip_utf8decode(json_decode($host_data, true));
             if ($host_data) {
                 $host = MarketHost::findByPublic_key($host_data['public_key']);
                 if (!$host) {
