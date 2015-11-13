@@ -43,13 +43,17 @@ class AdminController extends PluginController {
                 $host['url'] = trim(Request::get("url"));
                 $host['last_updated'] = time();
                 $host->fetchPublicKey();
-            }
-            if ($host['public_key']) {
-                $host->store();
-                PageLayout::postMessage(MessageBox::success(_("Server wurde gefunden und hinzugefügt.")));
+                if ($host['public_key']) {
+                    $host->store();
+                    PageLayout::postMessage(MessageBox::success(_("Server wurde gefunden und hinzugefügt.")));
+                } else {
+                    PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
+                }
             } else {
-                PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
+                $host->fetchPublicKey();
+                PageLayout::postMessage(MessageBox::info(_("Server ist schon in Liste.")));
             }
+
             $this->redirect("admin/hosts");
         }
     }
