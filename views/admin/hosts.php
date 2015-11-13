@@ -1,4 +1,4 @@
-<table class="default">
+<table class="default serversettings">
     <caption>
         <?= _("Lehrmarktplatz-Server") ?>
     </caption>
@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         <? foreach ($hosts as $host) : ?>
-            <tr id="host_<?= $host->getId() ?>">
+            <tr id="host_<?= $host->getId() ?>" data-host_id="<?= $host->getId() ?>">
                 <td>
                     <? if ($host->isMe()) : ?>
                         <?= Assets::img("icons/16/black/home", array('class' => "text-bottom", 'title' => _("Das ist Ihr Stud.IP"))) ?>
@@ -26,13 +26,17 @@
                     </a>
                 </td>
                 <td><?= $host['public_key'] ? md5($host['public_key']) : "" ?></td>
-                <td class="<?= $host['index_server'] ? "index_server" : "non_index_server" ?>">
+                <td style="text-align: center;" class="index_server">
                     <? if ($host->isMe()) : ?>
-                        <a href="" onClick="return false;" title="<?= _("Als Index-Server aktivieren/deaktivieren") ?>">
+                        <a href="" title="<?= _("Als Index-Server aktivieren/deaktivieren") ?>" class="<?= $host['index_server'] ? "checked" : "unchecked" ?>">
                             <?= Assets::img("icons/20/blue/checkbox-".($host['index_server'] ? "" : "un")."checked") ?>
                         </a>
                     <? else : ?>
-                        <?= Assets::img("icons/20/black/checkbox-".($host['index_server'] ? "" : "un")."checked") ?>
+                        <? if ($host['index_server']) : ?>
+                            <a href="" class="<?= $host['allowed_as_index_server'] ? "checked" : "unchecked" ?>">
+                                <?= Assets::img("icons/20/blue/checkbox-".($host['allowed_as_index_server'] ? "" : "un")."checked") ?>
+                            </a>
+                        <? endif ?>
                     <? endif ?>
                 </td>
                 <td>

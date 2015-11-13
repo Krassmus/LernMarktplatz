@@ -86,4 +86,22 @@ class AdminController extends PluginController {
         return $added;
     }
 
+    public function toggle_index_server_action() {
+        if (Request::isPost()) {
+            $host = new MarketHost(Request::option("host_id"));
+            if ($host->isMe()) {
+                $host['index_server'] = Request::int("active", 0);
+                $host->store();
+                //distribute this info to adjacent server
+            } else {
+                $host['allowed_as_index_server'] = Request::int("active", 0);
+                $host->store();
+            }
+        }
+
+        $this->render_text((
+            Assets::img("icons/20/blue/checkbox-".(Request::int("active") ? "" : "un")."checked")
+        ));
+    }
+
 }
