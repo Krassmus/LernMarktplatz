@@ -43,6 +43,7 @@ class AdminController extends PluginController {
                 $host['url'] = trim(Request::get("url"));
                 $host['last_updated'] = time();
                 $host->fetchPublicKey();
+                die("jhgjhg");
             }
             if ($host['public_key']) {
                 $host->store();
@@ -50,9 +51,8 @@ class AdminController extends PluginController {
             } else {
                 PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
             }
-
+            $this->redirect("admin/hosts");
         }
-        $this->redirect("admin/hosts");
     }
 
     public function ask_for_hosts_action($host_id) {

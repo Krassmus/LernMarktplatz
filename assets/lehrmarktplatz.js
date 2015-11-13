@@ -64,7 +64,6 @@ jQuery(function () {
                 'active': active
             },
             "type": "post",
-            //"dataType": "json",
             "success": function (html) {
                 jQuery(a).html(html);
                 if (active) {
