@@ -26,11 +26,6 @@ class MarketHost extends MarketIdentity {
         return self::findBySQL("1=1 ORDER BY name ASC");
     }
 
-    static public function findByPublic_key($public_key)
-    {
-        return self::findOneBySQL("public_key = ?", array($public_key));
-    }
-
     protected static function configure($config = array())
     {
         $config['db_table'] = 'lehrmarktplatz_hosts';

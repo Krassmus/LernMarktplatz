@@ -37,7 +37,7 @@ class AdminController extends PluginController {
         if (Request::submitted("nothanx")) {
             $_SESSION['Lehrmarktplatz_no_thanx'] = true;
         } elseif (Request::isPost()) {
-            $host = MarketHost::findByUrl(trim(Request::get("url")));
+            $host = MarketHost::findOneByUrl(trim(Request::get("url")));
             if (!$host) {
                 $host = new MarketHost();
                 $host['url'] = trim(Request::get("url"));
@@ -50,7 +50,6 @@ class AdminController extends PluginController {
                     PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
                 }
             } else {
-                var_dump($host);
                 $host->fetchPublicKey();
                 PageLayout::postMessage(MessageBox::info(_("Server ist schon in Liste.")));
             }
