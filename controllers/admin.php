@@ -50,6 +50,7 @@ class AdminController extends PluginController {
                     PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
                 }
             } else {
+                var_dump($host);
                 $host->fetchPublicKey();
                 PageLayout::postMessage(MessageBox::info(_("Server ist schon in Liste.")));
             }
