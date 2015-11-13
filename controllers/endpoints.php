@@ -47,6 +47,7 @@ class EndpointsController extends PluginController {
                 $host['name'] = $host_data['name'];
                 $host['url'] = Request::get("from");
                 $host['public_key'] = $host_data['public_key'];
+                $host['last_updated'] = time();
                 if ($host->isNew()) {
                     $host['active'] = get_config("LEHRMARKTPLATZ_ACTIVATE_NEW_HOSTS") ? 1 : 0;
                 }
