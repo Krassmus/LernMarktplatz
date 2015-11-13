@@ -43,7 +43,6 @@ class AdminController extends PluginController {
                 $host['url'] = trim(Request::get("url"));
                 $host['last_updated'] = time();
                 $host->fetchPublicKey();
-                die("jhgjhg");
             }
             if ($host['public_key']) {
                 $host->store();

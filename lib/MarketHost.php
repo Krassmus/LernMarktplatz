@@ -44,6 +44,8 @@ class MarketHost extends MarketIdentity {
             $endpoint_url .= "?from=".urlencode(studip_utf8encode($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']));
         }
         $host_data = @file_get_contents($endpoint_url);
+        var_dump($host_data);
+        die();
         if ($host_data) {
             $host_data = studip_utf8decode(json_decode($host_data, true));
             if ($host_data) {
