@@ -47,7 +47,7 @@
     </tbody>
 </table>
 
-<? if (count($hosts) < 2) : ?>
+<? if (count($hosts) < 2 && !$_SESSION['Lehrmarktplatz_no_thanx']) : ?>
     <div id="init_first_hosts_dialog" style="display: none;">
         <form action="<?= PluginEngine::getLink($plugin, array(), "admin/add_new_host") ?>" method="post">
             <h2><?= _("Werden Sie Teil des weltweiten Stud.IP Lehrmarktplatzes!") ?></h2>
@@ -60,7 +60,7 @@
                     <?= \Studip\Button::create(_("Stud.IP Entwicklungsserver"), 'url', array('value' => "https://develop.studip.de/studip/plugins.php/lehrmarktplatz/endpoints/")) ?>
                 </li>
                 <li>
-                    <?= \Studip\Button::create(_("blubber.it"), 'url', array('value' => "http://blubber.it/plugins.php/lehrmarktplatz/endpoints/")) ?>
+                    <?= \Studip\Button::create(_("blubber.it"), 'url', array('value' => "http://www.blubber.it/plugins.php/lehrmarktplatz/endpoints/")) ?>
                 </li>
                 <li>
                     <?= \Studip\Button::create(_("Nein, danke!"), 'nothanx', array()) ?>

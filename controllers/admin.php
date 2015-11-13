@@ -34,6 +34,9 @@ class AdminController extends PluginController {
 
     public function add_new_host_action() {
         PageLayout::setTitle(_("Neue Lehrmaterialien einstellen"));
+        if (Request::submitted("nothanx")) {
+            $_SESSION['Lehrmarktplatz_no_thanx'] = true;
+        }
         if (Request::isPost()) {
             $host = MarketHost::findByUrl(trim(Request::get("url")));
             if (!$host) {
