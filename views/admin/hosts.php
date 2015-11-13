@@ -38,7 +38,7 @@
                 <td>
                     <? if (!$host->isMe()) : ?>
                         <a href="<?= PluginEngine::getLink($plugin, array(), "admin/ask_for_hosts/".$host->getId()) ?>" title="<?= _("Diesen Server nach weiteren bekannten Hosts fragen.") ?>">
-                            <?= Assets::img($this->plugin->getPluginURL()."/assets/connect.svg", array('width' => "20px", 'class' => "text-bottom")) ?>
+                            <?= Assets::img($this->plugin->getPluginURL()."/assets/social_blue.svg", array('width' => "20px", 'class' => "text-bottom")) ?>
                         </a>
                     <? endif ?>
                 </td>
