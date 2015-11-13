@@ -36,8 +36,7 @@ class AdminController extends PluginController {
         PageLayout::setTitle(_("Neue Lehrmaterialien einstellen"));
         if (Request::submitted("nothanx")) {
             $_SESSION['Lehrmarktplatz_no_thanx'] = true;
-        }
-        if (Request::isPost()) {
+        } elseif (Request::isPost()) {
             $host = MarketHost::findByUrl(trim(Request::get("url")));
             if (!$host) {
                 $host = new MarketHost();
@@ -51,8 +50,9 @@ class AdminController extends PluginController {
             } else {
                 PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
             }
-            $this->redirect("admin/hosts");
+
         }
+        $this->redirect("admin/hosts");
     }
 
     public function ask_for_hosts_action($host_id) {
