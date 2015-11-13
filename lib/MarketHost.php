@@ -50,6 +50,7 @@ class MarketHost extends MarketIdentity {
                 $this['name'] = $host_data['name'];
                 $this['public_key'] = $host_data['public_key'];
                 $this['url'] = $host_data['url'];
+                $this['index_server'] = $host_data['index_server'];
                 $host['last_updated'] = time();
                 if ($this->isNew()) {
                     $host['active'] = get_config("LEHRMARKTPLATZ_ACTIVATE_NEW_HOSTS") ? 1 : 0;

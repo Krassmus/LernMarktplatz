@@ -9,6 +9,23 @@ class EndpointsController extends PluginController {
     }
 
     /**
+     * Returns the public key.
+     */
+    public function fetch_public_host_key_action() {
+        $host = MarketHost::thisOne();
+        if (Request::get("from")) {
+            $this->refreshHost(studip_utf8decode(Request::get("from")));
+        }
+        $this->render_json(array(
+            'name' => $GLOBALS['UNI_NAME_CLEAN'],
+            'public_key' => $host['public_key'],
+            'url' => $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/",
+            'index_server' => $host['index_server']
+        ));
+    }
+
+
+    /**
      * Returns a json with all known hosts.
      * If there is a "from" GET-parameter, this host will
      * fetch the public key of the from-host and saves it to its database.
@@ -54,22 +71,6 @@ class EndpointsController extends PluginController {
                 $host->store();
             }
         }
-    }
-
-    /**
-     * Returns the public key.
-     */
-    public function fetch_public_host_key_action() {
-        $host = MarketHost::thisOne();
-        if (Request::get("from")) {
-            $this->refreshHost(studip_utf8decode(Request::get("from")));
-        }
-        $this->render_json(array(
-            'name' => $GLOBALS['UNI_NAME_CLEAN'],
-            'public_key' => $host['public_key'],
-            'url' => $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/",
-            'index_server' => $host['index_server']
-        ));
     }
 
     public function search_items_action() {
