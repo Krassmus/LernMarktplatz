@@ -93,7 +93,8 @@ class EndpointsController extends PluginController {
             unset($data['data']['material_id']);
             $data['user'] = array(
                 'user_id' => $material['user_id'],
-                'name' => get_fullname($material['user_id'])
+                'name' => get_fullname($material['user_id']),
+                'avatar' => ""
             );
             $data['topics'] = array();
             foreach ($material->getTags() as $topic) {

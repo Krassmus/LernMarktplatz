@@ -99,6 +99,18 @@ class MarketHost extends MarketIdentity {
                     $host->store();
                 }
                 if (!$host->isMe()) {
+                    //set user:
+                    $user = MarketUser::findOneBySQL("foreign_user_id", array($material_data['user']['user_id'], $host->getId()));
+                    if (!$user) {
+                        $user = new MarketUser();
+                        $user['foreign_user_id'] = $material_data['user']['user_id'];
+                        $user['host_id'] = $host->getId();
+                    }
+                    $user['name'] = $material_data['user']['name'];
+                    $user['avatar'] = $material_data['user']['avatar'] ?: null;
+                    $user->store();
+
+                    //set material:
                     $material_data['data']['foreign_material_id'] = $material_data['data']['id'];
                     $material = MarketMaterial::findOneBySQL("foreign_material_id = ? AND host_id = ?", array(
                         $material_data['data']['foreign_material_id'],
@@ -110,12 +122,13 @@ class MarketHost extends MarketIdentity {
                     unset($material_data['data']['id']);
                     $material->setData($material_data['data']);
                     $material['host_id'] = $host->getId();
+                    $material['user_id'] = $user->getId();
                     $material->store();
 
                     //set topics:
                     $material->setTags($material_data['topics']);
 
-                    //set user:
+
                 }
             }
         }

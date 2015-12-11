@@ -52,6 +52,21 @@ class InitPlugin extends Migration {
                 PRIMARY KEY (`tag_hash`)
             ) ENGINE=InnoDB
         ");
+        DBManager::get()->exec("
+            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_user` (
+                `user_id` varchar(32) NOT NULL,
+                `foreign_user_id` varchar(32) NOT NULL,
+                `host_id` varchar(32) NOT NULL,
+                `name` varchar(100) NOT NULL,
+                `avatar` varchar(256) DEFAULT NULL,
+                `chdate` int(11) NOT NULL,
+                `mkdate` int(11) NOT NULL,
+                PRIMARY KEY (`user_id`),
+                UNIQUE KEY `unique_users` (`foreign_user_id`,`host_id`),
+                KEY `foreign_user_id` (`foreign_user_id`),
+                KEY `host_id` (`host_id`)
+            ) ENGINE=InnoDB
+        ");
     }
 
     function down() {
@@ -66,6 +81,9 @@ class InitPlugin extends Migration {
         ");
         DBManager::get()->exec("
             DROP TABLE IF EXISTS `lehrmarktplatz_tags`;
+        ");
+        DBManager::get()->exec("
+            DROP TABLE IF EXISTS `lehrmarktplatz_user`;
         ");
     }
 }
