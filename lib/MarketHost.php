@@ -104,7 +104,7 @@ class MarketHost extends MarketIdentity {
                         $material_data['data']['foreign_material_id'],
                         $host->getId()
                     ));
-                    var_dump($material_data['data']['foreign_material_id']);
+                    var_dump($host->getId());
                     die();
                     if (!$material) {
                         $material = new MarketMaterial();
