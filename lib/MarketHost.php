@@ -91,6 +91,8 @@ class MarketHost extends MarketIdentity {
         if ($output) {
             $output = studip_utf8decode(json_decode($output, true));
             foreach ((array) $output['results'] as $material_data) {
+                var_dump($material_data);
+                die();
                 $host = MarketHost::findByPublic_key($material_data['host']['public_key']);
                 if (!$host) {
                     $host = new MarketHost();
