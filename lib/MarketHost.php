@@ -101,7 +101,7 @@ class MarketHost extends MarketIdentity {
                 if (!$host->isMe()) {
                     $material_data['data']['foreign_material_id'] = $material_data['data']['id'];
                     $material = MarketMaterial::findOneBySQL("foreign_material_id = ? AND host_id = ?", array(
-                        $material_data['foreign_material_id'],
+                        $material_data['data']['foreign_material_id'],
                         $host->getId()
                     ));
                     if (!$material) {
