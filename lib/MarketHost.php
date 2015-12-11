@@ -112,6 +112,9 @@ class MarketHost extends MarketIdentity {
                     $material['host_id'] = $host->getId();
                     $material->store();
 
+                    //set topics:
+                    $material->setTags($material_data['topics']);
+
                     //set user:
                 }
             }

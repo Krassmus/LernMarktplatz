@@ -95,6 +95,10 @@ class EndpointsController extends PluginController {
                 'user_id' => $material['user_id'],
                 'name' => get_fullname($material['user_id'])
             );
+            $data['topics'] = array();
+            foreach ($material->getTags() as $topic) {
+                $data['topics'][] = $topic['name'];
+            }
             $output['results'][] = $data;
         }
         $this->render_json($output);
