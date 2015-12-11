@@ -1,4 +1,4 @@
-<table class="default">
+<table class="default serversettings">
     <caption>
         <?= _("Lehrmarktplatz-Server") ?>
     </caption>
@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         <? foreach ($hosts as $host) : ?>
-            <tr id="host_<?= $host->getId() ?>">
+            <tr id="host_<?= $host->getId() ?>" data-host_id="<?= $host->getId() ?>">
                 <td>
                     <? if ($host->isMe()) : ?>
                         <?= Assets::img("icons/16/black/home", array('class' => "text-bottom", 'title' => _("Das ist Ihr Stud.IP"))) ?>
@@ -26,19 +26,23 @@
                     </a>
                 </td>
                 <td><?= $host['public_key'] ? md5($host['public_key']) : "" ?></td>
-                <td class="<?= $host['index_server'] ? "index_server" : "non_index_server" ?>">
+                <td style="text-align: center;" class="index_server">
                     <? if ($host->isMe()) : ?>
-                        <a href="" onClick="return false;" title="<?= _("Als Index-Server aktivieren/deaktivieren") ?>">
+                        <a href="" title="<?= _("Als Index-Server aktivieren/deaktivieren") ?>" class="<?= $host['index_server'] ? "checked" : "unchecked" ?>">
                             <?= Assets::img("icons/20/blue/checkbox-".($host['index_server'] ? "" : "un")."checked") ?>
                         </a>
                     <? else : ?>
-                        <?= Assets::img("icons/20/black/checkbox-".($host['index_server'] ? "" : "un")."checked") ?>
+                        <? if ($host['index_server']) : ?>
+                            <a href="" class="<?= $host['allowed_as_index_server'] ? "checked" : "unchecked" ?>">
+                                <?= Assets::img("icons/20/blue/checkbox-".($host['allowed_as_index_server'] ? "" : "un")."checked") ?>
+                            </a>
+                        <? endif ?>
                     <? endif ?>
                 </td>
                 <td>
                     <? if (!$host->isMe()) : ?>
                         <a href="<?= PluginEngine::getLink($plugin, array(), "admin/ask_for_hosts/".$host->getId()) ?>" title="<?= _("Diesen Server nach weiteren bekannten Hosts fragen.") ?>">
-                            <?= Assets::img("icons/16/blue/download", array('class' => "text-bottom")) ?>
+                            <?= Assets::img($this->plugin->getPluginURL()."/assets/social_blue.svg", array('width' => "20px", 'class' => "text-bottom")) ?>
                         </a>
                     <? endif ?>
                 </td>
@@ -47,7 +51,7 @@
     </tbody>
 </table>
 
-<? if (count($hosts) < 2) : ?>
+<? if (count($hosts) < 2 && !$_SESSION['Lehrmarktplatz_no_thanx']) : ?>
     <div id="init_first_hosts_dialog" style="display: none;">
         <form action="<?= PluginEngine::getLink($plugin, array(), "admin/add_new_host") ?>" method="post">
             <h2><?= _("Werden Sie Teil des weltweiten Stud.IP Lehrmarktplatzes!") ?></h2>
@@ -60,7 +64,7 @@
                     <?= \Studip\Button::create(_("Stud.IP Entwicklungsserver"), 'url', array('value' => "https://develop.studip.de/studip/plugins.php/lehrmarktplatz/endpoints/")) ?>
                 </li>
                 <li>
-                    <?= \Studip\Button::create(_("blubber.it"), 'url', array('value' => "http://blubber.it/plugins.php/lehrmarktplatz/endpoints/")) ?>
+                    <?= \Studip\Button::create(_("blubber.it"), 'url', array('value' => "http://www.blubber.it/plugins.php/lehrmarktplatz/endpoints/")) ?>
                 </li>
                 <li>
                     <?= \Studip\Button::create(_("Nein, danke!"), 'nothanx', array()) ?>

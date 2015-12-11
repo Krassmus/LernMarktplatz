@@ -34,20 +34,26 @@ class AdminController extends PluginController {
 
     public function add_new_host_action() {
         PageLayout::setTitle(_("Neue Lehrmaterialien einstellen"));
-        if (Request::isPost()) {
-            $host = MarketHost::findByUrl(trim(Request::get("url")));
+        if (Request::submitted("nothanx")) {
+            $_SESSION['Lehrmarktplatz_no_thanx'] = true;
+        } elseif (Request::isPost()) {
+            $host = MarketHost::findOneByUrl(trim(Request::get("url")));
             if (!$host) {
                 $host = new MarketHost();
                 $host['url'] = trim(Request::get("url"));
                 $host['last_updated'] = time();
                 $host->fetchPublicKey();
-            }
-            if ($host['public_key']) {
-                $host->store();
-                PageLayout::postMessage(MessageBox::success(_("Server wurde gefunden und hinzugefügt.")));
+                if ($host['public_key']) {
+                    $host->store();
+                    PageLayout::postMessage(MessageBox::success(_("Server wurde gefunden und hinzugefügt.")));
+                } else {
+                    PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
+                }
             } else {
-                PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
+                $host->fetchPublicKey();
+                PageLayout::postMessage(MessageBox::info(_("Server ist schon in Liste.")));
             }
+
             $this->redirect("admin/hosts");
         }
     }
@@ -81,6 +87,24 @@ class AdminController extends PluginController {
             }
         }
         return $added;
+    }
+
+    public function toggle_index_server_action() {
+        if (Request::isPost()) {
+            $host = new MarketHost(Request::option("host_id"));
+            if ($host->isMe()) {
+                $host['index_server'] = Request::int("active", 0);
+                $host->store();
+                //distribute this info to adjacent server
+            } else {
+                $host['allowed_as_index_server'] = Request::int("active", 0);
+                $host->store();
+            }
+        }
+
+        $this->render_text((
+            Assets::img("icons/20/blue/checkbox-".(Request::int("active") ? "" : "un")."checked")
+        ));
     }
 
 }

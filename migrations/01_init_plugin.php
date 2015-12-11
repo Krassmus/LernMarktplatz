@@ -15,7 +15,8 @@ class InitPlugin extends Migration {
                 `allowed_as_index_server` TINYINT NOT NULL DEFAULT '1',
                 `last_updated` bigint(20) NOT NULL,
                 `chdate` bigint(20) NOT NULL,
-                `mkdate` bigint(20) NOT NULL
+                `mkdate` bigint(20) NOT NULL,
+                UNIQUE KEY `url` (`url`)
             ) ENGINE=InnoDB
         ");
         DBManager::get()->exec("
