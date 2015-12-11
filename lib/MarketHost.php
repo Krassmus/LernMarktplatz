@@ -95,7 +95,7 @@ class MarketHost extends MarketIdentity {
                 echo $material_data['host']['public_key']."\n\n";
                 $extrahost = MarketHost::findOneBySQL("private_key IS NULL");
                 echo $extrahost['public_key']."\n\n";
-                var_dump(preg_replace("/\n/", "", $material_data['host']['public_key']) === preg_replace("/\n/", "", $extrahost['public_key']));
+                var_dump(preg_replace("/\r/", "", $material_data['host']['public_key']) === preg_replace("/\r/", "", $extrahost['public_key']));
                 die();
                 if (!$host) {
                     $host = new MarketHost();
