@@ -72,9 +72,10 @@ class MarketMaterial extends SimpleORMap {
         $cache_name = "Lehrmarktplatz_remote_searched_for_".md5($text)."_".($tag ? 1 : 0);
         $already_searched = (bool) StudipCacheFactory::getCache()->read($cache_name);
         if (!$already_searched) {
-            $host = MarketHost::findOneBySQL("index_server = '1' AND allowed_as_index_server = '1'  ORDER BY RAND()");
+            $host = MarketHost::findOneBySQL("index_server = '1' AND allowed_as_index_server = '1' ORDER BY RAND()");
             if ($host) {
                 $host->fetchRemoteSearch($text, $tag);
+                die("jhgjhg");
             }
             StudipCacheFactory::getCache()->read($cache_name, "1", 60);
         }
