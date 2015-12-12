@@ -39,14 +39,14 @@
     <? if ($material['host_id']) : ?>
         <? $user = $material['host_id'] ? MarketUser::find($material['user_id']) : User::find($material['user_id']) ?>
         <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
-        <div style="background: url('<?= $image ?>') 100% 100% no-repeat; width: 100px; height: 100px;"></div>
+        <div style="background: url('<?= $image ?>') center center no-repeat; background-size: 100% 100%; width: 100px; height: 100px;"></div>
         <div>
             <?= htmlReady($user['name']) ?>
         </div>
     <? else : ?>
         <? $user = User::find($material['user_id']) ?>
         <? $image = Avatar::getAvatar($material['user_id'])->getURL(Avatar::MEDIUM) ?>
-        <div style="background: url('<?= $image ?>') 100% 100% no-repeat; width: 100px; height: 100px;"></div>
+        <div style="background: url('<?= $image ?>') center center no-repeat; background-size: 100% 100%; width: 100px; height: 100px;"></div>
         <div>
             <?= htmlReady($user->getFullName()) ?>
         </div>
