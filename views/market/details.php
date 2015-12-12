@@ -43,9 +43,9 @@
         <div>
             <?= htmlReady($user['name']) ?>
         </div>
-    <? else : ?> 
+    <? else : ?>
         <? $user = User::find($material['user_id']) ?>
-        <? $image = Avatar::getAvatar($material['user_id'] ?>
+        <? $image = Avatar::getAvatar($material['user_id']) ?>
         <div style="background: url('<?= $image ?>') 100% 100% no-repeat; width: 100px; height: 100px;"></div>
         <div>
             <?= htmlReady($user->getFullName()) ?>
