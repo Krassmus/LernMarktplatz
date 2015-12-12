@@ -1,5 +1,9 @@
 <h1><?= htmlReady($material['name']) ?></h1>
 
+<div>
+    <?= formatReady($material['description']) ?>
+</div>
+
 <div style="text-align: center;">
     <a href="<?= PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>"><?= Assets::img("icons/40/blue/download") ?></a>
 </div>
@@ -19,11 +23,36 @@
         <h2><?= _("Themen") ?></h2>
         <ul class="clean">
             <? foreach ($tags as $tag) : ?>
-                <li><?= htmlReady($tag['name']) ?></li>
+                <li>
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $tag), "market/overview") ?>">
+                        <?= Assets::img("icons/20/blue/topic", array('class' => "text-bottom")) ?>
+                        <?= htmlReady($tag['name']) ?>
+                    </a>
+                </li>
             <? endforeach ?>
         </ul>
     </div>
 <? endif ?>
+
+<h2><?= _("Zum Autor") ?></h2>
+<div style="display: flex;">
+    <? if ($material['host_id']) : ?>
+        <? $user = $material['host_id'] ? MarketUser::find($material['user_id']) : User::find($material['user_id']) ?>
+        <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
+        <div style="background: url('<?= $image ?>') 100% 100% no-repeat; width: 100px; height: 100px;"></div>
+        <div>
+            <?= htmlReady($user['name']) ?>
+        </div>
+    <? else : ?>
+        <? $user = User::find($material['user_id'] ?>
+        <? $image = Avatar::getAvatar($material['user_id'] ?>
+        <div style="background: url('<?= $image ?>') 100% 100% no-repeat; width: 100px; height: 100px;"></div>
+        <div>
+            <?= htmlReady($user->getFullName()) ?>
+        </div>
+    <? endif ?>
+</div>
+
 
 <div class="license" style="text-align: center;">
     <?= _("Lizenz:") ?>

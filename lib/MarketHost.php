@@ -162,4 +162,16 @@ class MarketHost extends MarketIdentity {
         curl_close($request);
         return $response_code < 300;
     }
+
+    public function fetchItemData($foreign_material_id)
+    {
+        $endpoint_url = $this['url']."get_item_data/".urlencode(studip_utf8encode($foreign_material_id));
+        $output = @file_get_contents($endpoint_url);
+        if ($output) {
+            $output = studip_utf8decode(json_decode($output, true));
+            if ($output) {
+                return $output;
+            }
+        }
+    }
 }

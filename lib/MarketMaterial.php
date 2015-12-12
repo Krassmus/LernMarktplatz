@@ -241,6 +241,7 @@ class MarketMaterial extends SimpleORMap {
         );
         $data['data'] = $this->toArray();
         unset($data['data']['material_id']);
+        unset($data['data']['user_id']);
         $data['user'] = array(
             'user_id' => $this['user_id'],
             'name' => get_fullname($this['user_id'])
@@ -249,6 +250,24 @@ class MarketMaterial extends SimpleORMap {
         foreach (MarketHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
             if (!$index_server->isMe()) {
                 $index_server->pushDataToIndex($data);
+            }
+        }
+    }
+
+    public function fetchData()
+    {
+        if ($this['host_id']) {
+            $host = new MarketHost($this['host_id']);
+            if ($host) {
+                $data = $host->fetchItemData($this['foreign_foreign_material_id']);
+                unset($data['material_id']);
+                unset($data['user_id']);
+                unset($data['mkdate']);
+                $this->setData($data);
+                $this->store();
+                //topics:
+
+                //user:
             }
         }
     }
