@@ -261,6 +261,17 @@ class MarketMaterial extends SimpleORMap {
             if ($host) {
                 $data = $host->fetchItemData($this['foreign_foreign_material_id']);
 
+                //user:
+                $user = MarketUser::findOneBySQL("foreign_user_id", array($data['user']['user_id'], $host->getId()));
+                if (!$user) {
+                    $user = new MarketUser();
+                    $user['foreign_user_id'] = $data['user']['user_id'];
+                    $user['host_id'] = $host->getId();
+                }
+                $user['name'] = $data['user']['name'];
+                $user['avatar'] = $data['user']['avatar'] ?: null;
+                $user->store();
+
                 //material:
                 $material_data = $data['data'];
                 unset($material_data['material_id']);
