@@ -61,9 +61,9 @@
     </a>
 </div>
 
-<div>
+<div style="text-align: center;">
     <? if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) : ?>
-        <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "market/edit/".$material->getId())) ?>
+        <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "market/edit/".$material->getId()), array('data-dialog' => "1")) ?>
     <? endif ?>
 </div>
 
