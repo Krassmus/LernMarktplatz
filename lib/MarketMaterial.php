@@ -268,7 +268,6 @@ class MarketMaterial extends SimpleORMap {
                     $user['foreign_user_id'] = $data['user']['user_id'];
                     $user['host_id'] = $host->getId();
                 }
-                var_dump($data);
                 $user['name'] = $data['user']['name'];
                 $user['avatar'] = $data['user']['avatar'] ?: null;
                 $user->store();
