@@ -282,8 +282,6 @@ class MarketMaterial extends SimpleORMap {
 
                 //topics:
                 $this->setTags($data['topics']);
-
-                //user:
             }
         }
     }

@@ -61,6 +61,12 @@
     </a>
 </div>
 
+<div>
+    <? if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) : ?>
+        <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "market/edit/".$material->getId())) ?>
+    <? endif ?>
+</div>
+
 <?
 Sidebar::Get()->setImage($plugin->getPluginURL()."/assets/sidebar-service.png");
 $actions = new ActionsWidget();
