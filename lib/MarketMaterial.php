@@ -256,7 +256,6 @@ class MarketMaterial extends SimpleORMap {
 
     public function fetchData()
     {
-        var_dump("Jhgjg");
         if ($this['host_id']) {
             $host = new MarketHost($this['host_id']);
             if ($host) {

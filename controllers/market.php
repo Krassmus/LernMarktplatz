@@ -89,7 +89,7 @@ class MarketController extends PluginController {
         Navigation::activateItem("/lehrmarktplatz/overview");
         $this->material = new MarketMaterial($material_id);
         if ($this->material['host_id']) {
-
+            $this->material->fetchData();
         }
     }
 
