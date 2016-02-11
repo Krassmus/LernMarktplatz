@@ -160,10 +160,12 @@ class EndpointsController extends PluginController {
                     }
                     $material->setData($data['data']);
                     $material->store();
+                    echo "stored ";
                 } else {
                     throw new Exception("Wrong signature, sorry.");
                 }
             }
+            $this->render_text("ok");
         } else {
             throw new Exception("USE POST TO PUSH.");
         }
