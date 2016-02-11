@@ -144,8 +144,8 @@ class EndpointsController extends PluginController {
     public function push_data_action()
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_X_PUBLIC_KEY_HASH'];
-            $signature = $_SERVER['HTTP_X_SIGNATURE'];
+            $public_key_hash = $_SERVER['HTTP_RASMUS'];
+            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             var_dump($_SERVER);
             if ($host && !$host->isMe()) {
