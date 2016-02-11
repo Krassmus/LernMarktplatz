@@ -138,6 +138,8 @@ class MarketHost extends MarketIdentity {
         $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
+        var_dump($payload);
+        die();
         $myHost = MarketHost::thisOne();
         $endpoint_url = $this['url']."push_data";
 
@@ -157,8 +159,6 @@ class MarketHost extends MarketIdentity {
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
-        var_dump($payload);
-        die();
         $result = curl_exec($request);
         $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
         curl_close($request);
