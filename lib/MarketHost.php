@@ -155,6 +155,7 @@ class MarketHost extends MarketIdentity {
             "X-SIGNATURE: ".base64_encode($myHost->createSignature($payload)),
             "X-RASMUS: ".md5($myHost['public_key'])
         );
+        var_dump($data);
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
         $result = curl_exec($request);

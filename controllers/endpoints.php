@@ -147,9 +147,9 @@ class EndpointsController extends PluginController {
             $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
             $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
-            var_dump($host ? "existing " : "not existing ");
             if ($host && !$host->isMe()) {
-                if ($host->verifySignature(json_encode($_POST), $signature)) {
+                $body = file_get_contents('php://input');
+                if ($host->verifySignature($body, $signature)) {
                     $data = Request::getArray("data");
                     $material = MarketMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
                         $host->getId(),
