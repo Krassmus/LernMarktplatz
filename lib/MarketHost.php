@@ -147,7 +147,7 @@ class MarketHost extends MarketIdentity {
         curl_setopt($request, CURLOPT_VERBOSE, 0);
         curl_setopt($request, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($request, CURLOPT_POST, true);
-        curl_setopt($request, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($request, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($request, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($request, CURLOPT_SSL_VERIFYHOST, false);
 
