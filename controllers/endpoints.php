@@ -149,6 +149,7 @@ class EndpointsController extends PluginController {
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
+                echo $body;
                 if ($host->verifySignature($body, $signature)) {
                     $data = Request::getArray("data");
                     $material = MarketMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
@@ -166,7 +167,7 @@ class EndpointsController extends PluginController {
                     throw new Exception("Wrong signature, sorry.");
                 }
             }
-            $this->render_text("ok");
+            $this->render_text("");
         } else {
             throw new Exception("USE POST TO PUSH.");
         }
