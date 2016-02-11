@@ -158,6 +158,7 @@ class MarketHost extends MarketIdentity {
             "X-Rasmus: ".md5($myHost['public_key'])
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
+        var_dump(curl_getinfo($request));die();
 
         $result = curl_exec($request);
         $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
