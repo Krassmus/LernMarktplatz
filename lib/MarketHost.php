@@ -157,11 +157,11 @@ class MarketHost extends MarketIdentity {
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
+        var_dump($payload);
+        die();
         $result = curl_exec($request);
         $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
         curl_close($request);
-        var_dump($response_code);
-        die();
         return $response_code < 300;
     }
 
