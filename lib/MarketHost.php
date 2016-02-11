@@ -141,9 +141,9 @@ class MarketHost extends MarketIdentity {
         $myHost = MarketHost::thisOne();
         $endpoint_url = $this['url']."push_data";
 
+        $request = curl_init();
         var_dump($payload);
         die();
-        $request = curl_init();
         curl_setopt($request, CURLOPT_URL, $this->getUrl($endpoint_url));
         curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($request, CURLOPT_VERBOSE, 0);
