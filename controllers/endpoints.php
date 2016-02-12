@@ -193,7 +193,7 @@ class EndpointsController extends PluginController {
     }
 
     /**
-     * Download an item from this server.
+     * Download an item from this server. The ##material_id## of the item must be given.
      * @param $material_id : material_id from this server or foreign_material_id from another server.
      */
     public function download_action($material_id)

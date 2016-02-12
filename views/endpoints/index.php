@@ -25,7 +25,7 @@
     </tr>
 </table>
 
-<h2><?= _("API") ?></h2>
+<h2><?= _("API-Endpoints") ?></h2>
 
 <ul class="clean">
 <? foreach ($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method) : ?>
@@ -34,9 +34,22 @@
         <? if (!in_array($name, array("render", "map", "index"))) : ?>
             <li style="margin-bottom: 20px;">
                 <? $name = substr($method->name, 0, stripos($method->name, "_action")) ?>
-                <div style="font-weight: bold;"><?= htmlReady($name) ?></div>
+                <h3><?= htmlReady($name) ?></h3>
                 <? $comment = $method->getDocComment() ?>
-                <div><?= nl2br(htmlReady($comment)) ?></div>
+                <div>
+                    <? $html_comment = "" ?>
+                    <? foreach (explode("\n", $comment) as $line) {
+                        $line = ltrim($line, " \t/*");
+                        if (!trim($line)) {
+                            $html_comment .= $line."\n\n";
+                        } elseif ($line[0] === "@" && $html_comment[strlen($html_comment) - 1] !== "\n") {
+                            $html_comment .= "\n".$line;
+                        } else {
+                            $html_comment .= $line." ";
+                        }
+                    } ?>
+                    <?= formatReady(trim($html_comment)) ?>
+                </div>
             </li>
         <? endif ?>
     <? endif ?>
