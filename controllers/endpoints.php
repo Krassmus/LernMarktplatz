@@ -141,6 +141,9 @@ class EndpointsController extends PluginController {
         }
     }
 
+    /**
+     * Update data of an item via POST-request.
+     */
     public function push_data_action()
     {
         if (Request::isPost()) {
@@ -189,6 +192,10 @@ class EndpointsController extends PluginController {
         }
     }
 
+    /**
+     * Download an item from this server.
+     * @param $material_id : material_id from this server or foreign_material_id from another server.
+     */
     public function download_action($material_id)
     {
         $this->material = new MarketMaterial($material_id);

@@ -130,7 +130,13 @@ class MarketController extends PluginController {
             $this->material->store();
 
             //Topics:
-            $this->material->setTags(Request::getArray("tags"));
+            $topics = Request::getArray("tags");
+            foreach ($topics as $key => $topic) {
+                if (!trim($topic)) {
+                    unset($topics[$key]);
+                }
+            }
+            $this->material->setTags($topics);
 
             $this->material->pushDataToIndexServers();
 
