@@ -157,9 +157,9 @@ class EndpointsController extends PluginController {
                     ));
                     if (!$material) {
                         $material = new MarketMaterial();
-                        $material['host_id'] = $host->getId();
                     }
                     $material->setData($data['data']);
+                    $material['host_id'] = $host->getId();
 
                     //update user
                     $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(

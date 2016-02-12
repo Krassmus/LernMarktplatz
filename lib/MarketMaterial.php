@@ -244,6 +244,7 @@ class MarketMaterial extends SimpleORMap {
         unset($data['data']['material_id']);
         unset($data['data']['id']);
         unset($data['data']['user_id']);
+        unset($data['data']['host_id']);
         $data['user'] = array(
             'user_id' => $this['user_id'],
             'name' => get_fullname($this['user_id']),
