@@ -4,12 +4,10 @@
     <?= formatReady($material['description'] ?: $material['short_description']) ?>
 </div>
 
-<div style="text-align: center; font-size: 1.2em;">
-    <a href="<?= $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>">
-        <?= Assets::img("icons/40/blue/download") ?>
-        <?= htmlReady($material['filename']) ?>
-    </a>
-</div>
+<a class="download_link" href="<?= $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>">
+    <?= Assets::img("icons/40/blue/download") ?>
+    <div class="filename"><?= htmlReady($material['filename']) ?></div>
+</a>
 
 <? if ($material->isFolder()) : ?>
     <h2><?= _("Verzeichnisstruktur") ?></h2>
