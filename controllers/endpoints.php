@@ -160,6 +160,22 @@ class EndpointsController extends PluginController {
                         $material['host_id'] = $host->getId();
                     }
                     $material->setData($data['data']);
+
+                    //update user
+                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                        $host->getId(),
+                        $data['user']['user_id']
+                    ));
+                    if (!$user) {
+                        $user = new MarketUser();
+                        $user['host_id'] = $host->getId();
+                        $user['foreign_user_id'] = $data['user']['user_id'];
+                    }
+                    $user['name'] = $data['user']['name'];
+                    $user['avatar'] = $data['user']['avatar'];
+                    $user->store();
+
+                    $material['user_id'] = $user->getId();
                     $material->store();
                     echo "stored ";
                 } else {

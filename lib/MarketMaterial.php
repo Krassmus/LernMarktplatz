@@ -245,7 +245,8 @@ class MarketMaterial extends SimpleORMap {
         unset($data['data']['user_id']);
         $data['user'] = array(
             'user_id' => $this['user_id'],
-            'name' => get_fullname($this['user_id'])
+            'name' => get_fullname($this['user_id']),
+            'avatar' => Avatar::getAvatar($this['user_id'])->getURL(Avatar::NORMAL)
         );
 
         foreach (MarketHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
