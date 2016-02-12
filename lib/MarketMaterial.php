@@ -240,6 +240,7 @@ class MarketMaterial extends SimpleORMap {
             'public_key' => $myHost['public_key']
         );
         $data['data'] = $this->toArray();
+        $data['data']['foreign_material_id'] = $data['data']['material_id'];
         unset($data['data']['material_id']);
         unset($data['data']['user_id']);
         $data['user'] = array(
