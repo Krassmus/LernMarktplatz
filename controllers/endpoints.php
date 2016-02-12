@@ -153,7 +153,7 @@ class EndpointsController extends PluginController {
                     $data = studip_utf8decode(json_decode($body, true));
                     $material = MarketMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
                         $host->getId(),
-                        $data['foreign_material_id']
+                        $data['data']['foreign_material_id']
                     ));
                     if (!$material) {
                         $material = new MarketMaterial();
