@@ -83,7 +83,10 @@ class MarketMaterial extends SimpleORMap {
     protected static function configure($config = array())
     {
         $config['db_table'] = 'lehrmarktplatz_material';
-
+        $config['belongs_to']['host'] = array(
+            'class_name' => 'MarketHost',
+            'foreign_key' => 'host_id'
+        );
         parent::configure($config);
     }
 
@@ -250,10 +253,10 @@ class MarketMaterial extends SimpleORMap {
             'name' => get_fullname($this['user_id']),
             'avatar' => Avatar::getAvatar($this['user_id'])->getURL(Avatar::NORMAL)
         );
-        $data['tags'] = array();
+        $data['topics'] = array();
         foreach ($this->getTags() as $tag) {
             if ($tag['name']) {
-                $data['tags'][] = $tag['name'];
+                $data['topics'][] = $tag['name'];
             }
         }
 

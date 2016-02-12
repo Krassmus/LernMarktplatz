@@ -42,13 +42,15 @@
         <div style="background: url('<?= $image ?>') center center no-repeat; background-size: 100% 100%; width: 100px; height: 100px;"></div>
         <div>
             <?= htmlReady($user['name']) ?>
+            <div><i><?= htmlReady($material->host->name) ?></i></div>
         </div>
     <? else : ?>
         <? $user = User::find($material['user_id']) ?>
         <? $image = Avatar::getAvatar($material['user_id'])->getURL(Avatar::MEDIUM) ?>
         <div style="background: url('<?= $image ?>') center center no-repeat; background-size: 100% 100%; width: 100px; height: 100px;"></div>
         <div>
-            <?= htmlReady($user->getFullName()) ?>
+            <div><?= htmlReady($user->getFullName()) ?></div>
+            <div><i><?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?></i></div>
         </div>
     <? endif ?>
 </div>

@@ -177,7 +177,7 @@ class EndpointsController extends PluginController {
 
                     $material['user_id'] = $user->getId();
                     $material->store();
-                    $material->setTags($data['tags']);
+                    $material->setTags($data['topics']);
                     echo "stored ";
                 } else {
                     throw new Exception("Wrong signature, sorry.");
