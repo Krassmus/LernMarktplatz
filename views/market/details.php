@@ -4,8 +4,11 @@
     <?= formatReady($material['description'] ?: $material['short_description']) ?>
 </div>
 
-<div style="text-align: center;">
-    <a href="<?= $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>"><?= Assets::img("icons/40/blue/download") ?></a>
+<div style="text-align: center; font-size: 1.2em;">
+    <a href="<?= $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>">
+        <?= Assets::img("icons/40/blue/download") ?>
+        <?= htmlReady($material['filename']) ?>
+    </a>
 </div>
 
 <? if ($material->isFolder()) : ?>
@@ -35,11 +38,11 @@
 <? endif ?>
 
 <h2><?= _("Zum Autor") ?></h2>
-<div style="display: flex;">
+<div class="author_information">
     <? if ($material['host_id']) : ?>
         <? $user = $material['host_id'] ? MarketUser::find($material['user_id']) : User::find($material['user_id']) ?>
         <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
-        <div style="background: url('<?= $image ?>') center center no-repeat; background-size: 100% 100%; width: 100px; height: 100px;"></div>
+        <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
             <?= htmlReady($user['name']) ?>
             <div><i><?= htmlReady($material->host->name) ?></i></div>
@@ -47,7 +50,7 @@
     <? else : ?>
         <? $user = User::find($material['user_id']) ?>
         <? $image = Avatar::getAvatar($material['user_id'])->getURL(Avatar::MEDIUM) ?>
-        <div style="background: url('<?= $image ?>') center center no-repeat; background-size: 100% 100%; width: 100px; height: 100px;"></div>
+        <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
             <div><?= htmlReady($user->getFullName()) ?></div>
             <div><i><?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?></i></div>
