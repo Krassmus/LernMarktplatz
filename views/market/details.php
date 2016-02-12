@@ -1,11 +1,11 @@
 <h1><?= htmlReady($material['name']) ?></h1>
 
 <div>
-    <?= formatReady($material['description']) ?>
+    <?= formatReady($material['description'] ?: $material['short_description']) ?>
 </div>
 
 <div style="text-align: center;">
-    <a href="<?= PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>"><?= Assets::img("icons/40/blue/download") ?></a>
+    <a href="<?= $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>"><?= Assets::img("icons/40/blue/download") ?></a>
 </div>
 
 <? if ($material->isFolder()) : ?>

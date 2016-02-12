@@ -5,7 +5,7 @@
         </header>
         <div class="image" style="background-image: url(<?= $material->getLogoURL() ?>);"></div>
         <p class="shortdescription">
-            <?= htmlReady($material['description']) ?>
+            <?= htmlReady($material['short_description'] ?: $material['description']) ?>
         </p>
     </a>
 <? $tags = $material->getTags(); ?>

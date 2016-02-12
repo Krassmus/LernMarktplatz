@@ -189,4 +189,13 @@ class EndpointsController extends PluginController {
         }
     }
 
+    public function download_action($material_id)
+    {
+        $this->material = new MarketMaterial($material_id);
+        $this->set_content_type($this->material['content_type']);
+        $this->response->add_header('Content-Disposition', 'inline;filename="' . addslashes($this->material['filename']) . '"');
+        $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
+        $this->render_text(file_get_contents($this->material->getFilePath()));
+    }
+
 }
