@@ -44,7 +44,7 @@
         <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
         <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
-            <?= htmlReady($user['name']) ?>
+            <strong><?= htmlReady($user['name']) ?></strong>
             <div><i><?= htmlReady($material->host->name) ?></i></div>
         </div>
     <? else : ?>
