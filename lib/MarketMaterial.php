@@ -242,6 +242,7 @@ class MarketMaterial extends SimpleORMap {
         $data['data'] = $this->toArray();
         $data['data']['foreign_material_id'] = $data['data']['material_id'];
         unset($data['data']['material_id']);
+        unset($data['data']['id']);
         unset($data['data']['user_id']);
         $data['user'] = array(
             'user_id' => $this['user_id'],
