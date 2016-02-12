@@ -32,7 +32,7 @@
 
     <label class="file-upload" style="margin-top: 20px;">
         <?= _("Datei (gerne auch eine ZIP) auswählen") ?>
-        <input type="file" name="file" required>
+        <input type="file" name="file"<? $material->isNew() ? "required" : "" ?>>
     </label>
 
     <? if ($material->isNew()) : ?>
