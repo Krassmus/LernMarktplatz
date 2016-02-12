@@ -150,7 +150,7 @@ class EndpointsController extends PluginController {
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
-                    $data = studip_utf8decode(json_decode($body));
+                    $data = studip_utf8decode(json_decode($body, true));
                     $material = MarketMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
                         $host->getId(),
                         $data['foreign_material_id']
