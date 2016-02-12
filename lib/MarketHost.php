@@ -152,6 +152,7 @@ class MarketHost extends MarketIdentity {
         curl_setopt($request, CURLOPT_SSL_VERIFYHOST, false);
 
         var_dump($myHost->verifySignature($payload, $myHost->createSignature($payload)));
+        die();
         echo "\n\n";
         $header = array(
             "X-SIGNATURE: ".base64_encode($myHost->createSignature($payload)),

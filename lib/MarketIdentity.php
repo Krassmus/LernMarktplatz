@@ -16,8 +16,7 @@ class MarketIdentity extends SimpleORMap {
     public function verifySignature($text, $signature) {
         $rsa = new Crypt_RSA();
         $rsa->loadKey($this['public_key']);
-        $rsa->verify($text, $signature);
-        return false;
+        return $rsa->verify($text, $signature);
     }
 
     public function store() {
