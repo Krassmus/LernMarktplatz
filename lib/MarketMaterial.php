@@ -87,6 +87,12 @@ class MarketMaterial extends SimpleORMap {
             'class_name' => 'MarketHost',
             'foreign_key' => 'host_id'
         );
+        $config['has_many']['reviews'] = array(
+            'class_name' => 'LehrmarktplatzReview',
+            'order_by' => 'ORDER BY mkdate DESC',
+            'on_delete' => 'delete',
+            'on_store' => 'store',
+        );
         parent::configure($config);
     }
 
@@ -301,6 +307,49 @@ class MarketMaterial extends SimpleORMap {
 
                 //topics:
                 $this->setTags($data['topics']);
+
+                foreach ($data['user']['reviews'] as $review_data) {
+                    $currenthost = MarketHost::findOneByUrl(trim($review_data['host']['url']));
+                    if (!$currenthost) {
+                        $currenthost = new MarketHost();
+                        $currenthost['url'] = trim($review_data['host']['url']);
+                        $currenthost['last_updated'] = time();
+                        $currenthost->fetchPublicKey();
+                        if ($currenthost['public_key']) {
+                            $currenthost->store();
+                        }
+                    }
+                    if ($currenthost && $currenthost['public_key']) {
+                        $review = LehrmarktplatzReview::findOneBySQL("foreign_review_id = ? AND host_id = ?", array(
+                            $review_data['foreign_review_id'],
+                            $currenthost->getId()
+                        ));
+                        if (!$review) {
+                            $review = new LehrmarktplatzReview();
+                            $review['foreign_review_id'] = $review_data['foreign_review_id'];
+                            $review['material_id'] = $this->getId();
+                            $review['host_id'] = $currenthost->getId();
+                        }
+                        $review['review'] = $review_data['review'];
+                        $review['rating'] = $review_data['rating'];
+                        $review['chdate'] = $review_data['chdate'];
+                        $review['mkdate'] = $review_data['mkdate'];
+
+                        $user = MarketUser::findOneBySQL("foreign_user_id", array($review_data['user']['user_id'], $currenthost->getId()));
+                        if (!$user) {
+                            $user = new MarketUser();
+                            $user['foreign_user_id'] = $review_data['user']['user_id'];
+                            $user['host_id'] = $currenthost->getId();
+                        }
+                        $user['name'] = $review_data['user']['name'];
+                        $user['avatar'] = $review_data['user']['avatar'] ?: null;
+                        $user['description'] = $review_data['user']['description'] ?: null;
+                        $user->store();
+
+                        $review['user_id'] = $user->getId();
+                        $review->store();
+                    }
+                }
             }
         }
     }

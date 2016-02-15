@@ -5,6 +5,7 @@ require_once __DIR__."/lib/MarketHost.php";
 require_once __DIR__."/lib/MarketUser.php";
 require_once __DIR__."/lib/MarketMaterial.php";
 require_once __DIR__."/lib/MarketTag.php";
+require_once __DIR__."/lib/LehrmarktplatzReview.php";
 
 class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
 

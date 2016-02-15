@@ -6,8 +6,20 @@
 <br>
 <?= htmlReady($manifest['pluginname']) ?>: <?= htmlReady($manifest['version']) ?>
 
-<h2><?= _("Public-Key-Hash") ?></h2>
-<?= md5(MarketHost::thisOne()->public_key) ?>
+<h2><?= _("Public-Key") ?></h2>
+<table class="default nohover">
+    <tbody>
+        <tr>
+            <td><?= _("MD5-Hash") ?></td>
+            <td><?= md5(MarketHost::thisOne()->public_key) ?></td>
+        </tr>
+        <tr>
+            <td><?= _("Key") ?></td>
+            <td><?= nl2br(htmlReady(MarketHost::thisOne()->public_key)) ?></td>
+        </tr>
+    </tbody>
+</table>
+
 
 <h2><?= _("Statistik") ?></h2>
 <table class="default nohover">
@@ -20,7 +32,7 @@
         <td><?= MarketMaterial::countBySQL("host_id IS NULL") ?></td>
     </tr>
     <tr>
-        <td><?= _("Anzahl Materialien auf anderen Servern") ?></td>
+        <td><?= _("Anzahl Materialien von anderen Servern") ?></td>
         <td><?= MarketMaterial::countBySQL("host_id IS NOT NULL") ?></td>
     </tr>
 </table>

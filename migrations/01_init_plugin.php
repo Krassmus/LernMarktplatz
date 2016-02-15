@@ -70,6 +70,26 @@ class InitPlugin extends Migration {
         ");
 
         DBManager::get()->exec("
+            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_reviews` (
+                `review_id` varchar(32) NOT NULL,
+                `material_id` varchar(32) NOT NULL,
+                `foreign_review_id` varchar(32) NULL,
+                `user_id` varchar(32) NOT NULL,
+                `host_id` varchar(32) NULL,
+                `rating` int(11) NOT NULL,
+                `review` TEXT NOT NULL,
+                `chdate` int(11) NOT NULL,
+                `mkdate` int(11) NOT NULL,
+                PRIMARY KEY (`review_id`),
+                UNIQUE KEY `unique_users` (`user_id`,`host_id`),
+                KEY `material_id` (`material_id`),
+                KEY `foreign_review_id` (`foreign_review_id`),
+                KEY `user_id` (`user_id`),
+                KEY `host_id` (`host_id`)
+            ) ENGINE=InnoDB
+        ");
+
+        DBManager::get()->exec("
             INSERT IGNORE INTO datafields
             SET datafield_id = MD5('Lehrmarktplatz-Beschreibung'),
                 name = 'Lehrmarktplatz-Beschreibung',

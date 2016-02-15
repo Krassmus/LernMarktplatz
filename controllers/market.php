@@ -93,6 +93,22 @@ class MarketController extends PluginController {
         }
     }
 
+    public function review_action($material_id = null)
+    {
+        Navigation::activateItem("/lehrmarktplatz/overview");
+        $this->material = new MarketMaterial($material_id);
+        $this->review = LehrmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL");
+        if (!$this->review) {
+            $this->review['material_id'] = $this->material->getId();
+            $this->review['user_id'] = $GLOBALS['user']->id;
+        }
+        if (Request::isPost()) {
+            $this->review['review'] = Request::get("review");
+            $this->review['rating'] = Request::get("rating");
+            $this->review->store();
+        }
+    }
+
 
     public function download_action($material_id, $disposition = "inline")
     {

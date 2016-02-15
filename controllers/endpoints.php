@@ -108,7 +108,10 @@ class EndpointsController extends PluginController {
     /**
      * Returns data of a given item including where to download it and the structure, decription, etc.
      * If item is not hosted on this server, just relocate the request to the real server.
-     * @param $item_id
+     *
+     * This endpoint should be called by a remote whenever a client wants to view the details of an item.
+     *
+     * @param $item_id : ID of the item on this server.
      */
     public function get_item_data_action($item_id)
     {
@@ -121,6 +124,42 @@ class EndpointsController extends PluginController {
             $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
             if ($user_description_datafield) {
                 $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($material['user_id'], $user_description_datafield->getId()));
+            }
+
+            $reviews = array();
+            foreach ($material->reviews as $review) {
+                if ($review['host_id']) {
+                    $user = MarketUser::findOneBySQL("user_id = ?", array($review['user_id']));
+                    $user = array(
+                        'user_id' => $review['user_id'],
+                        'name' => $user['name'],
+                        'avatar' => $user['avatar'],
+                        'description' => $user['description']
+                    );
+                } else {
+                    if ($user_description_datafield) {
+                        $user_description = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($review['user_id'], $user_description_datafield->getId()));
+                    }
+                    $user = array(
+                        'user_id' => $review['user_id'],
+                        'name' =>get_fullname($review['user_id']),
+                        'avatar' => Avatar::getAvatar($review['user_id'])->getURL(Avatar::NORMAL),
+                        'description' => $user_description['content'] ?: null
+                    );
+                }
+                $reviews[] = array(
+                    'foreign_review_id' => $review['foreign_review_id'] ?: $review->getId(),
+                    'review' => $review['review'],
+                    'rating' => $review['rating'],
+                    'user' => $user,
+                    'host' => !$review['host_id'] ? null : array(
+                        'name' => $review->host['name'],
+                        'url' => $review->host['url'],
+                        'public_key' => $review->host['public_key']
+                    ),
+                    'mkdate' => $review['mkdate'],
+                    'chkdate' => $review['chdate']
+                );
             }
             $this->render_json(array(
                 'data' => array(
@@ -137,7 +176,8 @@ class EndpointsController extends PluginController {
                     'avatar' => Avatar::getAvatar($material['user_id'])->getURL(Avatar::NORMAL),
                     'description' => $datafield_entry ? $datafield_entry['content'] : null
                 ),
-                'topics' => $topics
+                'topics' => $topics,
+                'reviews' => $reviews
             ));
         } else {
             $host = new MarketHost($material['host_id']);
@@ -181,6 +221,7 @@ class EndpointsController extends PluginController {
                     }
                     $user['name'] = $data['user']['name'];
                     $user['avatar'] = $data['user']['avatar'];
+                    $user['description'] = $data['user']['description'] ?: null;
                     $user->store();
 
                     $material['user_id'] = $user->getId();
@@ -208,6 +249,66 @@ class EndpointsController extends PluginController {
         $this->response->add_header('Content-Disposition', 'inline;filename="' . addslashes($this->material['filename']) . '"');
         $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
         $this->render_text(file_get_contents($this->material->getFilePath()));
+    }
+
+    /**
+     * Adds or edits a review to the material on this server from a client of another server.
+     * Use this request only as a POST request, the body must be a JSON-object that carries all the
+     * necessary variables.
+     * @param $material_id : ID of the item on this server.
+     */
+    public function add_review_action($material_id)
+    {
+        if (Request::isPost()) {
+            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
+            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            if ($host && !$host->isMe()) {
+                $body = file_get_contents('php://input');
+                if ($host->verifySignature($body, $signature)) {
+                    $data = studip_utf8decode(json_decode($body, true));
+                    $material = new MarketMaterial($material_id);
+                    if ($material->isNew() || $material['host_id']) {
+                        throw new Exception("Unknown material.");
+                    }
+
+                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                        $host->getId(),
+                        $data['user']['user_id']
+                    ));
+                    if (!$user) {
+                        $user = new MarketUser();
+                        $user['host_id'] = $host->getId();
+                        $user['foreign_user_id'] = $data['user']['user_id'];
+                    }
+                    $user['name'] = $data['user']['name'];
+                    $user['avatar'] = $data['user']['avatar'];
+                    $user['description'] = $data['user']['description'] ?: null;
+                    $user->store();
+
+                    $review = LehrmarktplatzReview::findOnyBySQL("foreign_review_id = ? AND host_id = ?", array(
+                        $data['data']['foreign_review_id'],
+                        $host->getId()
+                    ));
+                    if (!$review) {
+                        $review = new LehrmarktplatzReview();
+                        $review['user_id'] = $user->getId();
+                        $review['foreign_review_id'] = $data['data']['foreign_review_id'];
+                        $review['host_id'] => $host->getId();
+                    }
+                    $review['review'] = $data['data']['review'];
+                    $review['rating'] = $data['data']['rating'];
+                    $review->store();
+
+                    echo "stored ";
+                } else {
+                    throw new Exception("Wrong signature, sorry.");
+                }
+            }
+            $this->render_text("");
+        } else {
+            throw new Exception("USE POST TO PUSH.");
+        }
     }
 
 }

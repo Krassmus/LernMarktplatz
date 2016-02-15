@@ -78,6 +78,17 @@
     <? endif ?>
 </div>
 
+<? if (count($material->reviews) > 0) : ?>
+    <h2><?= _("Reviews") ?></h2>
+    <ul class="clean reviews">
+        <? foreach ($material->reviews as $review) : ?>
+            <li>
+                <?= formatReady($review['review']) ?>
+            </li>
+        <? endforeach ?>
+    </ul>
+<? endif ?>
+
 <?
 Sidebar::Get()->setImage($plugin->getPluginURL()."/assets/sidebar-service.png");
 $actions = new ActionsWidget();
