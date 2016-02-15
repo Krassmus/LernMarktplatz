@@ -118,6 +118,10 @@ class EndpointsController extends PluginController {
             foreach ($material->getTags() as $topic) {
                 $topics[] = $topic['name'];
             }
+            $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+            if ($user_description_datafield) {
+                $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($material['user_id'], $user_description_datafield->getId()));
+            }
             $this->render_json(array(
                 'data' => array(
                     'name' => $material['name'],
@@ -130,7 +134,8 @@ class EndpointsController extends PluginController {
                 'user' => array(
                     'user_id' => $material['user_id'],
                     'name' => User::find($material['user_id'])->getFullName(),
-                    'avatar' => Avatar::getAvatar($material['user_id'])->getURL(Avatar::NORMAL)
+                    'avatar' => Avatar::getAvatar($material['user_id'])->getURL(Avatar::NORMAL),
+                    'description' => $datafield_entry ? $datafield_entry['content'] : null
                 ),
                 'topics' => $topics
             ));

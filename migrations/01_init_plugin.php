@@ -59,6 +59,7 @@ class InitPlugin extends Migration {
                 `host_id` varchar(32) NOT NULL,
                 `name` varchar(100) NOT NULL,
                 `avatar` varchar(256) DEFAULT NULL,
+                `description` TEXT NULL,
                 `chdate` int(11) NOT NULL,
                 `mkdate` int(11) NOT NULL,
                 PRIMARY KEY (`user_id`),
@@ -66,6 +67,26 @@ class InitPlugin extends Migration {
                 KEY `foreign_user_id` (`foreign_user_id`),
                 KEY `host_id` (`host_id`)
             ) ENGINE=InnoDB
+        ");
+
+        DBManager::get()->exec("
+            INSERT IGNORE INTO datafields
+            SET datafield_id = MD5('Lehrmarktplatz-Beschreibung'),
+                name = 'Lehrmarktplatz-Beschreibung',
+                object_type = 'user',
+                edit_perms = 'user',
+                view_perms = 'user',
+                priority = 0,
+                mkdate = UNIX_TIMESTAMP(),
+                chdate = UNIX_TIMESTAMP(),
+                `type` = 'textarea',
+                typeparam = '',
+                description = 'Geben Sie eine kurze Beschreibung für Sich ab, die auf Ihrem Profil im Lehrmarktplatz sichtbar ist.'
+        ");
+        DBManager::get()->exec("
+            INSERT IGNORE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`)
+            VALUES
+                (MD5('LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD'), '', 'LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD', MD5('Lehrmarktplatz-Beschreibung'), MD5('Lehrmarktplatz-Beschreibung'), 'string', 'global', 'LEHRMARKTPLATZ', 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'MD5-Hash or name of datafield that is representing the user-description', '', '')
         ");
     }
 

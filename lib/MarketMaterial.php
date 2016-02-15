@@ -248,10 +248,15 @@ class MarketMaterial extends SimpleORMap {
         unset($data['data']['id']);
         unset($data['data']['user_id']);
         unset($data['data']['host_id']);
+        $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+        if ($user_description_datafield) {
+            $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($this['user_id'], $user_description_datafield->getId()));
+        }
         $data['user'] = array(
             'user_id' => $this['user_id'],
             'name' => get_fullname($this['user_id']),
-            'avatar' => Avatar::getAvatar($this['user_id'])->getURL(Avatar::NORMAL)
+            'avatar' => Avatar::getAvatar($this['user_id'])->getURL(Avatar::NORMAL),
+            'description' => $datafield_entry ? $datafield_entry['content'] : null
         );
         $data['topics'] = array();
         foreach ($this->getTags() as $tag) {
@@ -283,6 +288,7 @@ class MarketMaterial extends SimpleORMap {
                 }
                 $user['name'] = $data['user']['name'];
                 $user['avatar'] = $data['user']['avatar'] ?: null;
+                $user['description'] = $data['user']['description'] ?: null;
                 $user->store();
 
                 //material:
