@@ -47,7 +47,7 @@ class LehrmarktplatzReview extends SimpleORMap {
             );
 
             if (!$remote->isMe()) {
-                $remote->pushDataToEndpoint("add_review", $data);
+                $remote->pushDataToEndpoint("add_review/".$this->material['foreign_material_id'], $data);
             }
         }
     }
