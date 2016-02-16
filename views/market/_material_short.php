@@ -8,7 +8,7 @@
             <?= htmlReady($material['short_description'] ?: $material['description']) ?>
         </p>
     </a>
-<? $tags = $material->getTags(); ?>
+<? $tags = $material->getTopics(); ?>
 <? if (count($tags)) : ?>
     <footer class="tags">
     <? foreach ($tags as $tag): ?>

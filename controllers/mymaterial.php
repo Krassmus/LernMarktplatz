@@ -49,7 +49,7 @@ class MymaterialController extends PluginController {
 
 
             //Topics:
-            $this->material->setTags(Request::getArray("tags"));
+            $this->material->setTopics(Request::getArray("tags"));
 
             $this->material->pushDataToIndexServers();
 

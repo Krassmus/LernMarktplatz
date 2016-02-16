@@ -117,7 +117,7 @@ class MarketMaterial extends SimpleORMap {
         return true;
     }
 
-    public function getTags()
+    public function getTopics()
     {
         $statement = DBManager::get()->prepare("
             SELECT lehrmarktplatz_tags.*
@@ -130,7 +130,7 @@ class MarketMaterial extends SimpleORMap {
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function setTags($tags) {
+    public function setTopics($tags) {
         $statement = DBManager::get()->prepare("
             DELETE FROM lehrmarktplatz_tags_material
             WHERE material_id = :material_id
@@ -265,7 +265,7 @@ class MarketMaterial extends SimpleORMap {
             'description' => $datafield_entry ? $datafield_entry['content'] : null
         );
         $data['topics'] = array();
-        foreach ($this->getTags() as $tag) {
+        foreach ($this->getTopics() as $tag) {
             if ($tag['name']) {
                 $data['topics'][] = $tag['name'];
             }
@@ -306,7 +306,7 @@ class MarketMaterial extends SimpleORMap {
                 $this->store();
 
                 //topics:
-                $this->setTags($data['topics']);
+                $this->setTopics($data['topics']);
 
                 foreach ($data['user']['reviews'] as $review_data) {
                     $currenthost = MarketHost::findOneByUrl(trim($review_data['host']['url']));

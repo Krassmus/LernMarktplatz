@@ -97,7 +97,7 @@ class EndpointsController extends PluginController {
                 'avatar' => ""
             );
             $data['topics'] = array();
-            foreach ($material->getTags() as $topic) {
+            foreach ($material->getTopics() as $topic) {
                 $data['topics'][] = $topic['name'];
             }
             $output['results'][] = $data;
@@ -118,7 +118,7 @@ class EndpointsController extends PluginController {
         $material = new MarketMaterial($item_id);
         if (!$material['foreign_material_id']) {
             $topics = array();
-            foreach ($material->getTags() as $topic) {
+            foreach ($material->getTopics() as $topic) {
                 $topics[] = $topic['name'];
             }
             $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
@@ -226,7 +226,7 @@ class EndpointsController extends PluginController {
 
                     $material['user_id'] = $user->getId();
                     $material->store();
-                    $material->setTags($data['topics']);
+                    $material->setTopics($data['topics']);
                     echo "stored ";
                 } else {
                     throw new Exception("Wrong signature, sorry.");

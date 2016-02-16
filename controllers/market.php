@@ -152,7 +152,7 @@ class MarketController extends PluginController {
                     unset($topics[$key]);
                 }
             }
-            $this->material->setTags($topics);
+            $this->material->setTopics($topics);
 
             $this->material->pushDataToIndexServers();
 

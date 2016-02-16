@@ -18,7 +18,7 @@
     </ol>
 <? endif ?>
 
-<? $tags = $material->getTags() ?>
+<? $tags = $material->getTopics() ?>
 <? if (count($tags) > 0) : ?>
     <div class="tags">
         <h2><?= _("Themen") ?></h2>
