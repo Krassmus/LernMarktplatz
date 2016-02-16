@@ -285,9 +285,6 @@ class MarketMaterial extends SimpleORMap {
             if ($host) {
                 $data = $host->fetchItemData($this['foreign_material_id']);
 
-                var_dump($data);
-                die();
-
                 //user:
                 $user = MarketUser::findOneBySQL("foreign_user_id", array($data['user']['user_id'], $host->getId()));
                 if (!$user) {
