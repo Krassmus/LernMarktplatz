@@ -118,7 +118,7 @@
     <ul class="clean reviews">
         <? foreach ($material->reviews as $review) : ?>
             <li>
-                <strong><?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])-name : get_fullname($review['user_id'])) ?></strong>
+                <strong><?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->name : get_fullname($review['user_id'])) ?></strong>
                 <div>
                     <?= formatReady($review['review']) ?>
                 </div>
