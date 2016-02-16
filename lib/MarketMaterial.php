@@ -308,7 +308,7 @@ class MarketMaterial extends SimpleORMap {
                 //topics:
                 $this->setTopics($data['topics']);
 
-                foreach ($data['user']['reviews'] as $review_data) {
+                foreach ((array) $data['user']['reviews'] as $review_data) {
                     $currenthost = MarketHost::findOneByUrl(trim($review_data['host']['url']));
                     if (!$currenthost) {
                         $currenthost = new MarketHost();
