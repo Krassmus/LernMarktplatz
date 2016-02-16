@@ -10,6 +10,6 @@
 
     <textarea name="review"><?= htmlReady($review['review']) ?></textarea>
     <div data-dialog-button>
-        <?= \Studip\}Button::create(_("Absenden")) ?>
+        <?= \Studip\Button::create(_("Absenden")) ?>
     </div>
 </form>

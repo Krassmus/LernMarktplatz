@@ -353,4 +353,21 @@ class MarketMaterial extends SimpleORMap {
             }
         }
     }
+
+    public function calculateRating() {
+        $rating = 0;
+        $factors = 0;
+        foreach ($this->reviews as $review) {
+            $age = time() - $review['chdate'];
+            $factor = (pi() - 2 * atan($age / (86400 * 180))) / pi();
+            $rating += $review['rating'] * $factor * 2;
+            $factors += $factor;
+        }
+        if ($factors > 0) {
+            $rating /= $factors;
+        } else {
+            return $rating = null;
+        }
+        return $rating;
+    }
 }

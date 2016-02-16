@@ -31,6 +31,7 @@ class InitPlugin extends Migration {
                 `user_id` varchar(32) NOT NULL,
                 `content_type` varchar(64) NOT NULL,
                 `structure` text NULL,
+                `rating` DOUBLE NULL,
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL
             ) ENGINE=InnoDB

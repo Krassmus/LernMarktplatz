@@ -65,7 +65,7 @@
 </div>
 
 
-<div class="license" style="text-align: center;">
+<div class="license" style="text-align: center; margin-top: 20px;">
     <?= _("Lizenz:") ?>
     <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
         <img src="<?= $plugin->getPluginURL()."/assets/cc-by.png" ?>">
@@ -78,8 +78,43 @@
     <? endif ?>
 </div>
 
-<? if (count($material->reviews) > 0) : ?>
-    <h2><?= _("Reviews") ?></h2>
+
+<h2><?= _("Reviews") ?></h2>
+<div>
+    <div style="text-align: center;">
+        <? if ($material['rating'] === null) : ?>
+            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+                <a style="opacity: 0.3;" title="<?= $GLOBALS['perm']->have_perm("autor") ? _("Geben Sie die erste Bewertung ab.") : _("Noch keine bewertung abgegeben.") ?>" href="<?= PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()) ?>" data-dialog>
+            <? endif ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
+            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+                </a>
+            <? endif ?>
+        <? else : ?>
+            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+                <a href="<?= PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()) ?>" data-dialog title="<?= sprintf(_("%s von 5 Sternen"), round($material['rating'] / 2, 1)) ?>">
+            <? endif ?>
+            <? $material['rating'] = round($material['rating'], 1) / 2 ?>
+            <? $v = $material['rating'] >= 0.75 ? 3 : ($material['rating'] >= 0.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <? $v = $material['rating'] >= 1.75 ? 3 : ($material['rating'] >= 1.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <? $v = $material['rating'] >= 2.75 ? 3 : ($material['rating'] >= 2.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <? $v = $material['rating'] >= 3.75 ? 3 : ($material['rating'] >= 3.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <? $v = $material['rating'] >= 4.75 ? 3 : ($material['rating'] >= 4.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+                </a>
+            <? endif ?>
+        <? endif ?>
+    </div>
+
     <ul class="clean reviews">
         <? foreach ($material->reviews as $review) : ?>
             <li>
@@ -87,7 +122,9 @@
             </li>
         <? endforeach ?>
     </ul>
-<? endif ?>
+
+</div>
+
 
 <?
 Sidebar::Get()->setImage($plugin->getPluginURL()."/assets/sidebar-service.png");

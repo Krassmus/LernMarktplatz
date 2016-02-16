@@ -91,14 +91,17 @@ class MarketController extends PluginController {
         if ($this->material['host_id']) {
             $this->material->fetchData();
         }
+        $this->material['rating'] = $this->material->calculateRating();
+        $this->material->store();
     }
 
     public function review_action($material_id = null)
     {
         Navigation::activateItem("/lehrmarktplatz/overview");
         $this->material = new MarketMaterial($material_id);
-        $this->review = LehrmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL");
+        $this->review = LehrmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL", array($material_id, $GLOBALS['user']->id));
         if (!$this->review) {
+            $this->review = new LehrmarktplatzReview();
             $this->review['material_id'] = $this->material->getId();
             $this->review['user_id'] = $GLOBALS['user']->id;
         }
@@ -106,6 +109,11 @@ class MarketController extends PluginController {
             $this->review['review'] = Request::get("review");
             $this->review['rating'] = Request::get("rating");
             $this->review->store();
+
+            $this->material['rating'] = $this->material->calculateRating();
+            $this->material->store();
+            PageLayout::postMessage(MessageBox::success(_("Danke für das Review!")));
+            $this->redirect("market/details/".$material_id);
         }
     }
 
