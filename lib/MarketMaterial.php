@@ -287,6 +287,8 @@ class MarketMaterial extends SimpleORMap {
 
                 //user:
                 $user = MarketUser::findOneBySQL("foreign_user_id", array($data['user']['user_id'], $host->getId()));
+                var_dump($data);
+                die();
                 if (!$user) {
                     $user = new MarketUser();
                     $user['foreign_user_id'] = $data['user']['user_id'];

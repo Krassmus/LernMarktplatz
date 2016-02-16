@@ -19,6 +19,10 @@ class AdminController extends PluginController {
         MarketHost::thisOne();
         $this->hosts = MarketHost::findAll();
 
+        if (!function_exists("curl_init")) {
+            PageLayout::postMessage(MessageBox::error(_("Ihr PHP hat kein aktiviertes cURL-Modul.")));
+        }
+
         //zufällig einen Host nach Neuigkeiten fragen:
         if (count($this->hosts) > 1) {
             $index = rand(0, count($this->hosts) - 1);
