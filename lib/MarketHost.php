@@ -167,6 +167,8 @@ class MarketHost extends MarketIdentity {
     {
         $endpoint_url = $this['url']."get_item_data/".urlencode(studip_utf8encode($foreign_material_id));
         $output = @file_get_contents($endpoint_url);
+        var_dump($output);
+        die();
         if ($output) {
             $output = studip_utf8decode(json_decode($output, true));
             if ($output) {
