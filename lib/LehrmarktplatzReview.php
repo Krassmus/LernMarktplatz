@@ -11,7 +11,8 @@ class LehrmarktplatzReview extends SimpleORMap {
         );
         $config['has_one']['host'] = array(
             'class_name' => 'MarketHost',
-            'assoc_key' => 'host_id'
+            'foreign_key' => 'host_id',
+            'assoc_foreign_key' => 'host_id'
         );
         parent::configure($config);
     }
