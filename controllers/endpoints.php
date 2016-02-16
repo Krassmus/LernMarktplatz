@@ -298,6 +298,8 @@ class EndpointsController extends PluginController {
                     }
                     $review['review'] = $data['data']['review'];
                     $review['rating'] = $data['data']['rating'];
+                    $review['mkdate'] = $data['data']['mkdate'];
+                    $review['chdate'] = $data['data']['chdate'];
                     $review->store();
 
                     echo "stored ";

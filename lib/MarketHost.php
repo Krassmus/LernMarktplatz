@@ -134,12 +134,12 @@ class MarketHost extends MarketIdentity {
         }
     }
 
-    public function pushDataToIndex($data) {
+    public function pushDataToEndpoint($endpoint, $data) {
         $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
         $myHost = MarketHost::thisOne();
-        $endpoint_url = $this['url']."push_data";
+        $endpoint_url = $this['url'].$endpoint;
 
         $request = curl_init();
         curl_setopt($request, CURLOPT_URL, $endpoint_url);

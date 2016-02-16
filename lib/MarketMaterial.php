@@ -273,7 +273,7 @@ class MarketMaterial extends SimpleORMap {
 
         foreach (MarketHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
             if (!$index_server->isMe()) {
-                $index_server->pushDataToIndex($data);
+                $index_server->pushDataToEndpoint("push_data", $data);
             }
         }
     }
