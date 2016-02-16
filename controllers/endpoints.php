@@ -294,7 +294,7 @@ class EndpointsController extends PluginController {
                         $review = new LehrmarktplatzReview();
                         $review['user_id'] = $user->getId();
                         $review['foreign_review_id'] = $data['data']['foreign_review_id'];
-                        $review['host_id'] => $host->getId();
+                        $review['host_id'] = $host->getId();
                     }
                     $review['review'] = $data['data']['review'];
                     $review['rating'] = $data['data']['rating'];
