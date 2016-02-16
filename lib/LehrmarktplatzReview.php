@@ -30,7 +30,7 @@ class LehrmarktplatzReview extends SimpleORMap {
                 'public_key' => $myHost['public_key']
             );
             $data['data'] = $this->toArray();
-            $data['data']['foreign_review_id'] = $data['data']['foreign_review_id'];
+            $data['data']['foreign_review_id'] = $data['data']['review_id'];
             unset($data['data']['review_id']);
             unset($data['data']['id']);
             unset($data['data']['user_id']);

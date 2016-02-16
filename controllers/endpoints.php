@@ -296,6 +296,7 @@ class EndpointsController extends PluginController {
                         $review['foreign_review_id'] = $data['data']['foreign_review_id'];
                         $review['host_id'] = $host->getId();
                     }
+                    $review['material_id'] = $material_id;
                     $review['review'] = $data['data']['review'];
                     $review['rating'] = $data['data']['rating'];
                     $review['mkdate'] = $data['data']['mkdate'];
