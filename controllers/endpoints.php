@@ -286,7 +286,7 @@ class EndpointsController extends PluginController {
                     $user['description'] = $data['user']['description'] ?: null;
                     $user->store();
 
-                    $review = LehrmarktplatzReview::findOnyBySQL("foreign_review_id = ? AND host_id = ?", array(
+                    $review = LehrmarktplatzReview::findOneBySQL("foreign_review_id = ? AND host_id = ?", array(
                         $data['data']['foreign_review_id'],
                         $host->getId()
                     ));
