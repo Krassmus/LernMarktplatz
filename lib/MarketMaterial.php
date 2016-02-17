@@ -325,7 +325,7 @@ class MarketMaterial extends SimpleORMap {
                             $currenthost->store();
                         }
                     }
-                    if ($currenthost && $currenthost['public_key']) {
+                    if ($currenthost && $currenthost['public_key'] && !$currenthost->isMe()) {
                         $review = LehrmarktplatzReview::findOneBySQL("foreign_review_id = ? AND host_id = ?", array(
                             $review_data['foreign_review_id'],
                             $currenthost->getId()
