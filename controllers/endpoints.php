@@ -85,9 +85,9 @@ class EndpointsController extends PluginController {
         foreach ($this->materialien as $material) {
             $data = array();
             $data['host'] = array(
-                'name' => $host['name'],
-                'url' => $host['url'],
-                'public_key' => $host['public_key']
+                'name' => $material->host ? $material->host['name'] : $host['name'],
+                'url' => $material->host ? $material->host['url'] : $host['url'],
+                'public_key' => $material->host ? $material->host['public_key'] : $host['public_key']
             );
             $data['data'] = $material->toArray();
             unset($data['data']['material_id']);
