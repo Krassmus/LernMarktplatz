@@ -91,11 +91,20 @@ class EndpointsController extends PluginController {
             );
             $data['data'] = $material->toArray();
             unset($data['data']['material_id']);
-            $data['user'] = array(
-                'user_id' => $material['user_id'],
-                'name' => get_fullname($material['user_id']),
-                'avatar' => ""
-            );
+            if ($material->host) {
+                $foreign_user = MarketUser::find($material['user_id']);
+                $data['user'] = array(
+                    'user_id' => $foreign_user ? $foreign_user->foreign_user_id : "unbekannt",
+                    'name' => $foreign_user ? $foreign_user->name : "unbekannt",
+                    'avatar' => $foreign_user ? $foreign_user->avatar : null
+                );
+            } else {
+                $data['user'] = array(
+                    'user_id' => $material->host ? MarketUser::find($material['user_id'])->foreign_user_id : $material['user_id'],
+                    'name' => get_fullname($material['user_id']),
+                    'avatar' => Avatar::getAvatar($material['user_id'])->getURL(Avatar::NORMAL)
+                );
+            }
             $data['topics'] = array();
             foreach ($material->getTopics() as $topic) {
                 $data['topics'][] = $topic['name'];
