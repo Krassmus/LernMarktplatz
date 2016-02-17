@@ -115,12 +115,32 @@
         <? endif ?>
     </div>
 
-    <ul class="clean reviews">
+    <ul class="reviews">
         <? foreach ($material->reviews as $review) : ?>
-            <li id="review_<?= $review->getId() ?>">
-                <strong><?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->name : get_fullname($review['user_id'])) ?></strong>
-                <div>
-                    <?= formatReady($review['review']) ?>
+            <li id="review_<?= $review->getId() ?>" class="review">
+                <div class="avatar">
+                    <img width="50px" height="50px" src="<?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->avatar : Avatar::getAvatar($review['user_id'])->getURL(Avatar::MEDIUM)) ?>">
+                </div>
+                <div class="content">
+                    <div class="timestamp"><?= date("j.n.Y G:i", $review['chdate']) ?></div>
+                    <strong><?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->name : get_fullname($review['user_id'])) ?></strong>
+                    <span class="origin">(<?= htmlReady($review['host_id'] ? $review->host['name'] : $GLOBALS['UNI_NAME_CLEAN']) ?>)</span>
+                    <div class="review_text">
+                        <?= formatReady($review['review']) ?>
+                    </div>
+                    <div class="stars">
+                        <? $rating = round($review['rating'], 1) ?>
+                        <? $v = $rating >= 0.75 ? 3 : ($rating >= 0.25 ? 2 : "") ?>
+                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <? $v = $rating >= 1.75 ? 3 : ($rating >= 1.25 ? 2 : "") ?>
+                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <? $v = $rating >= 2.75 ? 3 : ($rating >= 2.25 ? 2 : "") ?>
+                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <? $v = $rating >= 3.75 ? 3 : ($rating >= 3.25 ? 2 : "") ?>
+                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <? $v = $rating >= 4.75 ? 3 : ($rating >= 4.25 ? 2 : "") ?>
+                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                    </div>
                 </div>
             </li>
         <? endforeach ?>
