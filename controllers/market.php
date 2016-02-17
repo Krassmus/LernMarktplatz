@@ -89,6 +89,7 @@ class MarketController extends PluginController {
         Navigation::activateItem("/lehrmarktplatz/overview");
         $this->material = new MarketMaterial($material_id);
         if ($this->material['host_id']) {
+            var_dump("kjgghj");
             $success = $this->material->fetchData();
             if (!$success) {
                 PageLayout::postMessage(MessageBox::info(_("Dieses Material stammt von einem anderen Server, der zur Zeit nicht erreichbar ist.")));
