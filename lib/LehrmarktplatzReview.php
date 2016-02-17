@@ -34,8 +34,8 @@ class LehrmarktplatzReview extends SimpleORMap {
                 Assets::image_path("icons/16/blue/support.svg")
             );
         }
-        //only pus if the comment is from this server and the material-server is different
-        if ($this->material['host_id'] && !$this['host_id']) {
+        //only push if the comment is from this server and the material-server is different
+        if ($this->material['host_id'] && !$this['host_id'] && $this->isDirty()) {
             $remote = new MarketHost($this->material['host_id']);
             $myHost = MarketHost::thisOne();
             $data = array();
