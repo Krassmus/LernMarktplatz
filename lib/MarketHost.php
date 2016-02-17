@@ -98,6 +98,7 @@ class MarketHost extends MarketIdentity {
                     $host->fetchPublicKey();
                     $host->store();
                 }
+                var_dump($host->isMe());
                 if (!$host->isMe()) {
                     //set user:
                     $user = MarketUser::findOneBySQL("foreign_user_id", array($material_data['user']['user_id'], $host->getId()));
@@ -127,8 +128,6 @@ class MarketHost extends MarketIdentity {
 
                     //set topics:
                     $material->setTopics($material_data['topics']);
-
-
                 }
             }
         }
