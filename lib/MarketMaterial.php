@@ -283,6 +283,7 @@ class MarketMaterial extends SimpleORMap {
         if ($this['host_id']) {
             $host = new MarketHost($this['host_id']);
             if ($host) {
+                die();
                 $data = $host->fetchItemData($this['foreign_material_id']);
 
                 if (!$data) {
