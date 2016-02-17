@@ -25,7 +25,7 @@ class LehrmarktplatzReview extends SimpleORMap {
 
     public function pushToRemote()
     {
-        if ($this->material['host_id']) {
+        if ($this->material['host_id'] && !$this['host_id']) {
             $remote = new MarketHost($this->material['host_id']);
             $myHost = MarketHost::thisOne();
             $data = array();

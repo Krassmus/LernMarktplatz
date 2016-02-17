@@ -308,7 +308,6 @@ class MarketMaterial extends SimpleORMap {
                 unset($material_data['mkdate']);
                 $this->setData($material_data);
                 $this->store();
-                die();
 
                 //topics:
                 $this->setTopics($data['topics']);
