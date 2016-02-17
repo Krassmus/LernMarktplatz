@@ -126,6 +126,7 @@ class EndpointsController extends PluginController {
     {
         $material = new MarketMaterial($item_id);
         if (!$material['foreign_material_id']) {
+            $me = MarketHost::thisOne();
             $topics = array();
             foreach ($material->getTopics() as $topic) {
                 $topics[] = $topic['name'];
@@ -161,10 +162,10 @@ class EndpointsController extends PluginController {
                     'review' => $review['review'],
                     'rating' => $review['rating'],
                     'user' => $user,
-                    'host' => !$review['host_id'] ? null : array(
-                        'name' => $review->host['name'],
-                        'url' => $review->host['url'],
-                        'public_key' => $review->host['public_key']
+                    'host' => array(
+                        'name' => $review['host_id'] ? $review->host['name'] : $me['name'],
+                        'url' => $review['host_id'] ? $review->host['url'] : $me['url'],
+                        'public_key' => $review['host_id'] ? $review->host['public_key'] : $me['public_key']
                     ),
                     'mkdate' => $review['mkdate'],
                     'chkdate' => $review['chdate']
