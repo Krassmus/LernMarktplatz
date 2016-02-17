@@ -338,8 +338,12 @@ class MarketMaterial extends SimpleORMap {
                         }
                         $review['review'] = $review_data['review'];
                         $review['rating'] = $review_data['rating'];
-                        $review['chdate'] = $review_data['chdate'];
-                        $review['mkdate'] = $review_data['mkdate'];
+                        if ($review_data['chdate']) {
+                            $review['chdate'] = $review_data['chdate'];
+                        }
+                        if ($review_data['mkdate']) {
+                            $review['mkdate'] = $review_data['mkdate'];
+                        }
 
                         $user = MarketUser::findOneBySQL("foreign_user_id", array($review_data['user']['user_id'], $currenthost->getId()));
                         if (!$user) {
