@@ -19,12 +19,21 @@ class LehrmarktplatzReview extends SimpleORMap {
 
     function __construct($id = null)
     {
-        $this->registerCallback('after_store', 'pushToRemote');
+        $this->registerCallback('after_store', 'afterStoreCallback');
         parent::__construct($id);
     }
 
-    public function pushToRemote()
+    public function afterStoreCallback()
     {
+        if (!$this->material['host_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
+            PersonalNotifications::add(
+                $this->material['user_id'],
+                URLHelper::getURL("plugins.php/lehrmarktplatz/market/details/".$this->material->getId()."#review_".$this->getId()),
+                sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : $this['name']),
+                "review_".$this->getId()
+            );
+        }
+        //only pus if the comment is from this server and the material-server is different
         if ($this->material['host_id'] && !$this['host_id']) {
             $remote = new MarketHost($this->material['host_id']);
             $myHost = MarketHost::thisOne();
