@@ -103,7 +103,7 @@ class AdminController extends PluginController {
                 $data = array(
                     'data' => array(
                         'public_key' => $host['public_key'],
-                        'url' => $host['public_key'],
+                        'url' => $host['url'],
                         'name' => $host['name'],
                         'index_server' => $host['index_server']
                     )
