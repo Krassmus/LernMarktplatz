@@ -111,7 +111,7 @@ class AdminController extends PluginController {
 
                 foreach (MarketHost::findAll() as $remote) {
                     if (!$remote->isMe()) {
-                        $request = $remote->pushDataToEndpoint("update_server_info", $data);
+                        $remote->pushDataToEndpoint("update_server_info", $data);
                     }
                 }
                 /*$curl_multi_handle = curl_multi_init();
