@@ -63,9 +63,11 @@
                 <li>
                     <?= \Studip\Button::create(_("Stud.IP Entwicklungsserver"), 'url', array('value' => "https://develop.studip.de/studip/plugins.php/lehrmarktplatz/endpoints/")) ?>
                 </li>
+                <!--
                 <li>
                     <?= \Studip\Button::create(_("blubber.it"), 'url', array('value' => "http://www.blubber.it/plugins.php/lehrmarktplatz/endpoints/")) ?>
                 </li>
+                -->
                 <li>
                     <?= \Studip\Button::create(_("Nein, danke!"), 'nothanx', array()) ?>
                 </li>

@@ -132,7 +132,8 @@ class MarketHost extends MarketIdentity {
         }
     }
 
-    public function pushDataToEndpoint($endpoint, $data) {
+
+    public function pushDataToEndpoint($endpoint, $data, $curl_multi_handle = null) {
         $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
@@ -155,10 +156,14 @@ class MarketHost extends MarketIdentity {
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
-        $result = curl_exec($request);
-        $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
-        curl_close($request);
-        return $response_code < 300;
+        if ($curl_multi_handle) {
+            curl_multi_add_handle($curl_multi_handle, $request);
+        } else {
+            $result = curl_exec($request);
+            $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
+            curl_close($request);
+            return $response_code < 300;
+        }
     }
 
     public function fetchItemData($foreign_material_id)

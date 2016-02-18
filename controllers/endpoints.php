@@ -24,6 +24,39 @@ class EndpointsController extends PluginController {
         ));
     }
 
+    /**
+     * Called by a remote-server to update its server-information.
+     * Even the public key could be updated this way!
+     */
+    public function update_server_info_action()
+    {
+        if (Request::isPost()) {
+            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
+            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            if ($host && !$host->isMe()) {
+                $body = file_get_contents('php://input');
+                if ($host->verifySignature($body, $signature)) {
+                    $data = studip_utf8decode(json_decode($body, true));
+
+                    $host['name'] = $data['data']['name'];
+                    $host['index_server'] = $data['data']['index_server'];
+                    $host['public_key'] = $data['data']['public_key'];
+                    $host['url'] = $data['data']['url'];
+                    $host['last_updated'] = time();
+                    $host->store();
+
+                    echo "stored ";
+                } else {
+                    throw new Exception("Wrong signature, sorry.");
+                }
+            }
+            $this->render_text("");
+        } else {
+            throw new Exception("USE POST TO PUSH.");
+        }
+    }
+
 
     /**
      * Returns a json with all known hosts.

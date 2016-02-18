@@ -100,6 +100,27 @@ class AdminController extends PluginController {
                 $host['index_server'] = Request::int("active", 0);
                 $host->store();
                 //distribute this info to adjacent server
+                $data = array(
+                    'data' => array(
+                        'public_key' => $host['public_key'],
+                        'url' => $host['public_key'],
+                        'name' => $host['name'],
+                        'index_server' => $host['index_server']
+                    )
+                );
+
+                $mh = curl_multi_init();
+                foreach (MarketHost::findAll() as $remote) {
+                    if (!$remote->isMe()) {
+                        $remote->pushDataToEndpoint("update_server_info", $data, $mh);
+                    }
+                }
+                $active = null;
+                do {
+                    $mrc = curl_multi_exec($mh, $active);
+                } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+                curl_multi_close($mh);
+
             } else {
                 $host['allowed_as_index_server'] = Request::int("active", 0);
                 $host->store();

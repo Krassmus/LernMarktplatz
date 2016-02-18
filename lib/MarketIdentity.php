@@ -28,7 +28,7 @@ class MarketIdentity extends SimpleORMap {
 
     protected function createKeys() {
         $rsa = new Crypt_RSA();
-        $keypair = $rsa->createKey();
+        $keypair = $rsa->createKey(2048);
         $this['private_key'] = preg_replace("/\r/", "", $keypair['privatekey']);
         $this['public_key'] = preg_replace("/\r/", "", $keypair['publickey']);
     }
