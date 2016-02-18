@@ -133,7 +133,7 @@ class MarketHost extends MarketIdentity {
     }
 
 
-    public function pushDataToEndpoint($endpoint, $data, $curl_multi_handle = null) {
+    public function pushDataToEndpoint($endpoint, $data, $curl_multi_request = false) {
         $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
@@ -156,8 +156,8 @@ class MarketHost extends MarketIdentity {
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
-        if ($curl_multi_handle) {
-            curl_multi_add_handle($curl_multi_handle, $request);
+        if ($curl_multi_request) {
+            return $request;
         } else {
             $result = curl_exec($request);
             $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
