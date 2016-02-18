@@ -109,7 +109,12 @@ class AdminController extends PluginController {
                     )
                 );
 
-                $curl_multi_handle = curl_multi_init();
+                foreach (MarketHost::findAll() as $remote) {
+                    if (!$remote->isMe()) {
+                        $request = $remote->pushDataToEndpoint("update_server_info", $data);
+                    }
+                }
+                /*$curl_multi_handle = curl_multi_init();
                 $requests = array();
                 foreach (MarketHost::findAll() as $remote) {
                     if (!$remote->isMe()) {
@@ -133,6 +138,7 @@ class AdminController extends PluginController {
                     curl_multi_remove_handle($curl_multi_handle, $request);
                 }
                 curl_multi_close($curl_multi_handle);
+                */
 
             } else {
                 $host['allowed_as_index_server'] = Request::int("active", 0);
