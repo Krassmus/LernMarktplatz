@@ -58,8 +58,15 @@
                 if ($user_description_datafield) {
                     $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($user['user_id'], $user_description_datafield->getId()));
                     echo $datafield_entry && $datafield_entry['content'] ? formatReady($datafield_entry['content']) : "";
+
+                    if ($material['user_id'] === $GLOBALS['user']->id) : ?>
+                        <a href="<?= URLHelper::getLink("dispatch.php/settings/details#datafields_".$user_description_datafield->getId()) ?>" title="<?= _("Text bearbeiten") ?>">
+                            <?= Assets::img("icons/20/blue/edit", array('class' => "text-bottom")) ?>
+                        </a>
+                    <? endif;
                 }
-                ?></div>
+                ?>
+            </div>
         </div>
     <? endif ?>
 </div>
