@@ -63,6 +63,10 @@ class MarketMaterial extends SimpleORMap {
         return $GLOBALS['STUDIP_BASE_PATH'] . "/data/lehrmarktplatz";
     }
 
+    static public function getImageFileDataPath() {
+        return $GLOBALS['STUDIP_BASE_PATH'] . "/data/lehrmarktplatz_images";
+    }
+
     /**
      * Searches on remote hosts for the text.
      * @param $text
@@ -157,7 +161,8 @@ class MarketMaterial extends SimpleORMap {
         }
     }
 
-    public function getFilePath() {
+    public function getFilePath()
+    {
         if (!file_exists(self::getFileDataPath())) {
             mkdir(self::getFileDataPath());
         }
@@ -165,6 +170,17 @@ class MarketMaterial extends SimpleORMap {
             $this->setId($this->getNewId());
         }
         return self::getFileDataPath()."/".$this->getId();
+    }
+
+    public function getFrontImageFilePath()
+    {
+        if (!file_exists(self::getImageFileDataPath())) {
+            mkdir(self::getImageFileDataPath());
+        }
+        if (!$this->getId()) {
+            $this->setId($this->getNewId());
+        }
+        return self::getImageFileDataPath()."/".$this->getId();
     }
 
     public function delete()
@@ -176,7 +192,13 @@ class MarketMaterial extends SimpleORMap {
 
     public function getLogoURL($color = "blue")
     {
-        if ($this->isFolder()) {
+        if ($this['front_image_content_type']) {
+            if ($this['host_id']) {
+                return $this->host['url']."download_front_image/".$this['foreign_material_id'];
+            } else {
+                return URLHelper::getURL("plugins.php/lehrmarktplatz/endpoints/download_front_image/".$this->getId());
+            }
+        } elseif ($this->isFolder()) {
             return Assets::image_path("icons/$color/folder-full.svg");
         } elseif($this->isImage()) {
             return Assets::image_path("icons/$color/file-pic.svg");
@@ -190,7 +212,8 @@ class MarketMaterial extends SimpleORMap {
 
     }
 
-    public function isFolder() {
+    public function isFolder()
+    {
         return (bool) $this['structure'];
     }
 

@@ -210,6 +210,7 @@ class EndpointsController extends PluginController {
                     'short_description' => $material['short_description'],
                     'description' => $material['description'],
                     'content_type' => $material['content_type'],
+                    'front_image_content_type' => $material['front_image_content_type'],
                     'url' => ($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lehrmarktplatz/market/download/".$item_id,
                     'structure' => $material['structure']
                 ),
@@ -292,6 +293,19 @@ class EndpointsController extends PluginController {
         $this->response->add_header('Content-Disposition', 'inline;filename="' . addslashes($this->material['filename']) . '"');
         $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
         $this->render_text(file_get_contents($this->material->getFilePath()));
+    }
+
+    /**
+     * Download image of this item from this server. The ##material_id## of the item must be given.
+     * @param $material_id : material_id from this server or foreign_material_id from another server.
+     */
+    public function download_front_image_action($material_id)
+    {
+        $this->material = new MarketMaterial($material_id);
+        $this->set_content_type($this->material['front_image_content_type']);
+        $this->response->add_header('Content-Disposition', 'inline');
+        $this->response->add_header('Content-Length', filesize($this->material->getFrontImageFilePath()));
+        $this->render_text(file_get_contents($this->material->getFrontImageFilePath()));
     }
 
     /**

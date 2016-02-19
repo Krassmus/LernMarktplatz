@@ -154,6 +154,13 @@ class MarketController extends PluginController {
                 $this->material['filename'] = $_FILES['file']['name'];
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
             }
+            if ($_FILES['image']['tmp_name']) {
+                $this->material['front_image_content_type'] = $_FILES['file']['type'];
+                move_uploaded_file($_FILES['image']['tmp_name'], $this->material->getFrontImageFilePath());
+            }
+            if (Request::get("delete_front_image")) {
+                $this->material['front_image_content_type'] = null;
+            }
             $this->material->store();
 
             //Topics:

@@ -30,6 +30,7 @@ class InitPlugin extends Migration {
                 `description` text NOT NULL,
                 `user_id` varchar(32) NOT NULL,
                 `content_type` varchar(64) NOT NULL,
+                `front_image_content_type` VARCHAR(64) NULL,
                 `structure` text NULL,
                 `rating` DOUBLE NULL,
                 `chdate` bigint(20) NOT NULL,
