@@ -37,7 +37,7 @@
 
     <label class="file-upload" style="margin-top: 20px;">
         <?= _("Logo-Bilddatei (optional)") ?>
-        <input type="image" name="file" accept="image/*">
+        <input type="file" name="image" accept="image/*">
     </label>
 
     <? if ($material['front_image_content_type']) : ?>
