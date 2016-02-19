@@ -1,7 +1,9 @@
 <h1><?= htmlReady($material['name']) ?></h1>
 
 <? if ($material['front_image_content_type']) : ?>
-    <img src="<?= $material->getLogoURL() ?>" style="display: block; max-width: 100%; max-height: 200px; height: 200px;">
+    <div style="text-align: center;">
+        <img src="<?= $material->getLogoURL() ?>" style="display: block; max-width: 100%; max-height: 200px; height: 200px;">
+    </div>
 <? endif ?>
 
 <div>
