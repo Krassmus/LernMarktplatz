@@ -140,6 +140,7 @@ class MarketController extends PluginController {
             $was_new = $this->material->setData(Request::getArray("data"));
             $this->material['user_id'] = $GLOBALS['user']->id;
             $this->material['host_id'] = null;
+            $this->material['license'] = "CC BY 4.0";
             if ($_FILES['file']['tmp_name']) {
                 $this->material['content_type'] = $_FILES['file']['type'];
                 if (in_array($this->material['content_type'], array("application/x-zip-compressed", "application/zip", "application/x-zip"))) {
