@@ -90,8 +90,13 @@ class MarketController extends PluginController {
         $this->material = new MarketMaterial($material_id);
         if ($this->material['host_id']) {
             $success = $this->material->fetchData();
-            if (!$success) {
+            if ($success === false) {
                 PageLayout::postMessage(MessageBox::info(_("Dieses Material stammt von einem anderen Server, der zur Zeit nicht erreichbar ist.")));
+            } elseif ($success === "deleted") {
+                $material = clone $this->material;
+                $this->material->delete();
+                $this->material = $material;
+                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelöscht worden und wird gleich aus dem Cache verschwinden.")));
             }
         }
         $this->material['rating'] = $this->material->calculateRating();

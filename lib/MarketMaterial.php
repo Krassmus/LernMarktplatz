@@ -315,6 +315,10 @@ class MarketMaterial extends SimpleORMap {
                     return false;
                 }
 
+                if ($data['deleted']) {
+                    return "deleted";
+                }
+
                 //user:
                 $user = MarketUser::findOneBySQL("foreign_user_id", array($data['user']['user_id'], $host->getId()));
                 if (!$user) {

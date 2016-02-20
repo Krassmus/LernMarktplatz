@@ -158,7 +158,11 @@ class EndpointsController extends PluginController {
     public function get_item_data_action($item_id)
     {
         $material = new MarketMaterial($item_id);
-        if (!$material['foreign_material_id']) {
+        if ($material->isNew()) {
+            $this->render_json(array(
+                'deleted' => 1
+            ));
+        } elseif (!$material['foreign_material_id']) {
             $me = MarketHost::thisOne();
             $topics = array();
             foreach ($material->getTopics() as $topic) {
