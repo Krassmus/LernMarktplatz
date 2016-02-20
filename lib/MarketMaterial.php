@@ -262,7 +262,7 @@ class MarketMaterial extends SimpleORMap {
         ));
     }
 
-    public function pushDataToIndexServers()
+    public function pushDataToIndexServers($delete = false)
     {
         $myHost = MarketHost::thisOne();
         $data = array();
@@ -292,6 +292,9 @@ class MarketMaterial extends SimpleORMap {
             if ($tag['name']) {
                 $data['topics'][] = $tag['name'];
             }
+        }
+        if ($delete) {
+            $data['delete_material'] = 1;
         }
 
         foreach (MarketHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {

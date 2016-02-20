@@ -136,7 +136,12 @@ class MarketController extends PluginController {
         if ($this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
             throw new AccessDeniedException();
         }
-        if (Request::isPost()) {
+        if (Request::submitted("delete") && Request::isPost()) {
+            $this->material->pushDataToIndexServers("delete");
+            $this->material->delete();
+            PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelöscht.")));
+            $this->redirect("market/overview");
+        } elseif (Request::isPost()) {
             $was_new = $this->material->setData(Request::getArray("data"));
             $this->material['user_id'] = $GLOBALS['user']->id;
             $this->material['host_id'] = null;

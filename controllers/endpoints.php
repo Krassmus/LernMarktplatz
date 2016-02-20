@@ -251,28 +251,33 @@ class EndpointsController extends PluginController {
                     if (!$material) {
                         $material = new MarketMaterial();
                     }
-                    $material->setData($data['data']);
-                    $material['host_id'] = $host->getId();
+                    if ($data['delete_material']) {
+                        $material->delete();
+                        echo "deleted ";
+                    } else {
+                        $material->setData($data['data']);
+                        $material['host_id'] = $host->getId();
 
-                    //update user
-                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
-                        $host->getId(),
-                        $data['user']['user_id']
-                    ));
-                    if (!$user) {
-                        $user = new MarketUser();
-                        $user['host_id'] = $host->getId();
-                        $user['foreign_user_id'] = $data['user']['user_id'];
+                        //update user
+                        $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                            $host->getId(),
+                            $data['user']['user_id']
+                        ));
+                        if (!$user) {
+                            $user = new MarketUser();
+                            $user['host_id'] = $host->getId();
+                            $user['foreign_user_id'] = $data['user']['user_id'];
+                        }
+                        $user['name'] = $data['user']['name'];
+                        $user['avatar'] = $data['user']['avatar'];
+                        $user['description'] = $data['user']['description'] ?: null;
+                        $user->store();
+
+                        $material['user_id'] = $user->getId();
+                        $material->store();
+                        $material->setTopics($data['topics']);
+                        echo "stored ";
                     }
-                    $user['name'] = $data['user']['name'];
-                    $user['avatar'] = $data['user']['avatar'];
-                    $user['description'] = $data['user']['description'] ?: null;
-                    $user->store();
-
-                    $material['user_id'] = $user->getId();
-                    $material->store();
-                    $material->setTopics($data['topics']);
-                    echo "stored ";
                 } else {
                     throw new Exception("Wrong signature, sorry.");
                 }
