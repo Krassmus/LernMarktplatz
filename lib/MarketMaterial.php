@@ -121,6 +121,16 @@ class MarketMaterial extends SimpleORMap {
         return true;
     }
 
+    public function delete()
+    {
+        $success = parent::delete();
+        if ($success) {
+            $this->setTopics(array());
+            @unlink($this->getFilePath());
+        }
+        return $success;
+    }
+
     public function getTopics()
     {
         $statement = DBManager::get()->prepare("
@@ -181,13 +191,6 @@ class MarketMaterial extends SimpleORMap {
             $this->setId($this->getNewId());
         }
         return self::getImageFileDataPath()."/".$this->getId();
-    }
-
-    public function delete()
-    {
-        $success = parent::delete();
-        @unlink($this->getFilePath());
-        return $success;
     }
 
     public function getLogoURL($color = "blue")
