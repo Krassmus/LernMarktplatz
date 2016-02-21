@@ -30,7 +30,7 @@
         <ul class="clean">
             <? foreach ($tags as $tag) : ?>
                 <li>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $tag), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $tag['name']), "market/overview") ?>">
                         <?= Assets::img("icons/20/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($tag['name']) ?>
                     </a>
