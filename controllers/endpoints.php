@@ -382,4 +382,67 @@ class EndpointsController extends PluginController {
         }
     }
 
+    /**
+     * Adds or edits a comment to the material on this server from a client of another server.
+     * Use this request only as a POST request, the body must be a JSON-object that carries all the
+     * necessary variables.
+     * @param $material_id : ID of the item on this server.
+     */
+    public function add_comment_action($review_id)
+    {
+        if (Request::isPost()) {
+            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
+            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            if ($host && !$host->isMe()) {
+                $body = file_get_contents('php://input');
+                if ($host->verifySignature($body, $signature)) {
+                    $data = studip_utf8decode(json_decode($body, true));
+                    $review = new LehrmarktplatzReview($review_id);
+                    if ($review->isNew() || $review['host_id']) {
+                        throw new Exception("Unknown material.");
+                    }
+
+                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                        $host->getId(),
+                        $data['user']['user_id']
+                    ));
+                    if (!$user) {
+                        $user = new MarketUser();
+                        $user['host_id'] = $host->getId();
+                        $user['foreign_user_id'] = $data['user']['user_id'];
+                    }
+                    $user['name'] = $data['user']['name'];
+                    $user['avatar'] = $data['user']['avatar'];
+                    $user['description'] = $data['user']['description'] ?: null;
+                    $user->store();
+
+                    $comment = LehrmarktplatzComment::findOneBySQL("review_id = ? AND user_id = ? AND host_id = ?", array(
+                        $review_id,
+                        $user->getId(),
+                        $host->getId()
+                    ));
+                    if (!$comment) {
+                        $comment = new LehrmarktplatzReview();
+                        $comment['user_id'] = $user->getId();
+                        $comment['foreign_review_id'] = $data['data']['foreign_review_id'];
+                        $comment['host_id'] = $host->getId();
+                    }
+                    $comment['review_id'] = $review_id;
+                    $comment['review'] = $data['data']['comment'];
+                    $comment['mkdate'] = $data['data']['mkdate'];
+                    $comment['chdate'] = $data['data']['chdate'];
+                    $review->store();
+
+                    echo "stored ";
+                } else {
+                    throw new Exception("Wrong signature, sorry.");
+                }
+            }
+            $this->render_text("");
+        } else {
+            throw new Exception("USE POST TO PUSH.");
+        }
+    }
+
 }
