@@ -158,7 +158,11 @@ class EndpointsController extends PluginController {
     public function get_item_data_action($item_id)
     {
         $material = new MarketMaterial($item_id);
-        if (!$material['foreign_material_id']) {
+        if ($material->isNew()) {
+            $this->render_json(array(
+                'deleted' => 1
+            ));
+        } elseif (!$material['foreign_material_id']) {
             $me = MarketHost::thisOne();
             $topics = array();
             foreach ($material->getTopics() as $topic) {
@@ -210,8 +214,10 @@ class EndpointsController extends PluginController {
                     'short_description' => $material['short_description'],
                     'description' => $material['description'],
                     'content_type' => $material['content_type'],
+                    'front_image_content_type' => $material['front_image_content_type'],
                     'url' => ($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lehrmarktplatz/market/download/".$item_id,
-                    'structure' => $material['structure']
+                    'structure' => $material['structure'],
+                    'license' => $material['license']
                 ),
                 'user' => array(
                     'user_id' => $material['user_id'],
@@ -249,28 +255,33 @@ class EndpointsController extends PluginController {
                     if (!$material) {
                         $material = new MarketMaterial();
                     }
-                    $material->setData($data['data']);
-                    $material['host_id'] = $host->getId();
+                    if ($data['delete_material']) {
+                        $material->delete();
+                        echo "deleted ";
+                    } else {
+                        $material->setData($data['data']);
+                        $material['host_id'] = $host->getId();
 
-                    //update user
-                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
-                        $host->getId(),
-                        $data['user']['user_id']
-                    ));
-                    if (!$user) {
-                        $user = new MarketUser();
-                        $user['host_id'] = $host->getId();
-                        $user['foreign_user_id'] = $data['user']['user_id'];
+                        //update user
+                        $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                            $host->getId(),
+                            $data['user']['user_id']
+                        ));
+                        if (!$user) {
+                            $user = new MarketUser();
+                            $user['host_id'] = $host->getId();
+                            $user['foreign_user_id'] = $data['user']['user_id'];
+                        }
+                        $user['name'] = $data['user']['name'];
+                        $user['avatar'] = $data['user']['avatar'];
+                        $user['description'] = $data['user']['description'] ?: null;
+                        $user->store();
+
+                        $material['user_id'] = $user->getId();
+                        $material->store();
+                        $material->setTopics($data['topics']);
+                        echo "stored ";
                     }
-                    $user['name'] = $data['user']['name'];
-                    $user['avatar'] = $data['user']['avatar'];
-                    $user['description'] = $data['user']['description'] ?: null;
-                    $user->store();
-
-                    $material['user_id'] = $user->getId();
-                    $material->store();
-                    $material->setTopics($data['topics']);
-                    echo "stored ";
                 } else {
                     throw new Exception("Wrong signature, sorry.");
                 }
@@ -292,6 +303,19 @@ class EndpointsController extends PluginController {
         $this->response->add_header('Content-Disposition', 'inline;filename="' . addslashes($this->material['filename']) . '"');
         $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
         $this->render_text(file_get_contents($this->material->getFilePath()));
+    }
+
+    /**
+     * Download image of this item from this server. The ##material_id## of the item must be given.
+     * @param $material_id : material_id from this server or foreign_material_id from another server.
+     */
+    public function download_front_image_action($material_id)
+    {
+        $this->material = new MarketMaterial($material_id);
+        $this->set_content_type($this->material['front_image_content_type']);
+        $this->response->add_header('Content-Disposition', 'inline');
+        $this->response->add_header('Content-Length', filesize($this->material->getFrontImageFilePath()));
+        $this->render_text(file_get_contents($this->material->getFrontImageFilePath()));
     }
 
     /**
@@ -345,6 +369,69 @@ class EndpointsController extends PluginController {
                     $review['rating'] = $data['data']['rating'];
                     $review['mkdate'] = $data['data']['mkdate'];
                     $review['chdate'] = $data['data']['chdate'];
+                    $review->store();
+
+                    echo "stored ";
+                } else {
+                    throw new Exception("Wrong signature, sorry.");
+                }
+            }
+            $this->render_text("");
+        } else {
+            throw new Exception("USE POST TO PUSH.");
+        }
+    }
+
+    /**
+     * Adds or edits a comment to the material on this server from a client of another server.
+     * Use this request only as a POST request, the body must be a JSON-object that carries all the
+     * necessary variables.
+     * @param $material_id : ID of the item on this server.
+     */
+    public function add_comment_action($review_id)
+    {
+        if (Request::isPost()) {
+            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
+            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            if ($host && !$host->isMe()) {
+                $body = file_get_contents('php://input');
+                if ($host->verifySignature($body, $signature)) {
+                    $data = studip_utf8decode(json_decode($body, true));
+                    $review = new LehrmarktplatzReview($review_id);
+                    if ($review->isNew() || $review['host_id']) {
+                        throw new Exception("Unknown material.");
+                    }
+
+                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                        $host->getId(),
+                        $data['user']['user_id']
+                    ));
+                    if (!$user) {
+                        $user = new MarketUser();
+                        $user['host_id'] = $host->getId();
+                        $user['foreign_user_id'] = $data['user']['user_id'];
+                    }
+                    $user['name'] = $data['user']['name'];
+                    $user['avatar'] = $data['user']['avatar'];
+                    $user['description'] = $data['user']['description'] ?: null;
+                    $user->store();
+
+                    $comment = LehrmarktplatzComment::findOneBySQL("review_id = ? AND user_id = ? AND host_id = ?", array(
+                        $review_id,
+                        $user->getId(),
+                        $host->getId()
+                    ));
+                    if (!$comment) {
+                        $comment = new LehrmarktplatzReview();
+                        $comment['user_id'] = $user->getId();
+                        $comment['foreign_review_id'] = $data['data']['foreign_review_id'];
+                        $comment['host_id'] = $host->getId();
+                    }
+                    $comment['review_id'] = $review_id;
+                    $comment['review'] = $data['data']['comment'];
+                    $comment['mkdate'] = $data['data']['mkdate'];
+                    $comment['chdate'] = $data['data']['chdate'];
                     $review->store();
 
                     echo "stored ";

@@ -1,13 +1,18 @@
 <h1><?= htmlReady($material['name']) ?></h1>
 
-<div>
-    <?= formatReady($material['description'] ?: $material['short_description']) ?>
-</div>
+<? if ($material['front_image_content_type']) : ?>
+    <img src="<?= $material->getLogoURL() ?>" style="display: block; max-width: 100%; max-height: 200px; height: 200px; margin-left: auto; margin-right: auto;">
+<? endif ?>
 
 <a class="download_link" href="<?= $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>">
     <?= Assets::img("icons/40/blue/download") ?>
     <div class="filename"><?= htmlReady($material['filename']) ?></div>
 </a>
+
+<div>
+    <?= formatReady($material['description'] ?: $material['short_description']) ?>
+</div>
+
 
 <? if ($material->isFolder()) : ?>
     <h2><?= _("Verzeichnisstruktur") ?></h2>
@@ -25,7 +30,7 @@
         <ul class="clean">
             <? foreach ($tags as $tag) : ?>
                 <li>
-                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $tag), "market/overview") ?>">
+                    <a href="<?= PluginEngine::getLink($plugin, array('tag' => $tag['name']), "market/overview") ?>">
                         <?= Assets::img("icons/20/blue/topic", array('class' => "text-bottom")) ?>
                         <?= htmlReady($tag['name']) ?>
                     </a>
@@ -82,6 +87,9 @@
 <div style="text-align: center;">
     <? if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) : ?>
         <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "market/edit/".$material->getId()), array('data-dialog' => "1")) ?>
+        <form action="<?= PluginEngine::getLink($plugin, array(), "market/edit/".$material->getId()) ?>" method="post" style="display: inline;">
+            <?= \Studip\Button::create(_("Löschen"), "delete", array('value' => 1, 'onclick' => "return window.confirm('"._("Wirklich löschen?")."');")) ?>
+        </form>
     <? endif ?>
 </div>
 

@@ -35,6 +35,18 @@
         <input type="file" name="file"<? $material->isNew() ? "required" : "" ?>>
     </label>
 
+    <label class="file-upload" style="margin-top: 20px;">
+        <?= _("Logo-Bilddatei (optional)") ?>
+        <input type="file" name="image" accept="image/*">
+    </label>
+
+    <? if ($material['front_image_content_type']) : ?>
+        <label>
+            <input type="checkbox" name="delete_front_image" value="1">
+            <?= _("Logo löschen") ?>
+        </label>
+    <? endif ?>
+
     <? if ($material->isNew()) : ?>
         <div style="margin-top: 20px;">
             <?= sprintf(

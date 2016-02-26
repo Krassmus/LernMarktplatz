@@ -63,6 +63,10 @@ class MarketMaterial extends SimpleORMap {
         return $GLOBALS['STUDIP_BASE_PATH'] . "/data/lehrmarktplatz";
     }
 
+    static public function getImageFileDataPath() {
+        return $GLOBALS['STUDIP_BASE_PATH'] . "/data/lehrmarktplatz_images";
+    }
+
     /**
      * Searches on remote hosts for the text.
      * @param $text
@@ -117,6 +121,16 @@ class MarketMaterial extends SimpleORMap {
         return true;
     }
 
+    public function delete()
+    {
+        $success = parent::delete();
+        if ($success) {
+            $this->setTopics(array());
+            @unlink($this->getFilePath());
+        }
+        return $success;
+    }
+
     public function getTopics()
     {
         $statement = DBManager::get()->prepare("
@@ -157,7 +171,8 @@ class MarketMaterial extends SimpleORMap {
         }
     }
 
-    public function getFilePath() {
+    public function getFilePath()
+    {
         if (!file_exists(self::getFileDataPath())) {
             mkdir(self::getFileDataPath());
         }
@@ -167,16 +182,26 @@ class MarketMaterial extends SimpleORMap {
         return self::getFileDataPath()."/".$this->getId();
     }
 
-    public function delete()
+    public function getFrontImageFilePath()
     {
-        $success = parent::delete();
-        @unlink($this->getFilePath());
-        return $success;
+        if (!file_exists(self::getImageFileDataPath())) {
+            mkdir(self::getImageFileDataPath());
+        }
+        if (!$this->getId()) {
+            $this->setId($this->getNewId());
+        }
+        return self::getImageFileDataPath()."/".$this->getId();
     }
 
     public function getLogoURL($color = "blue")
     {
-        if ($this->isFolder()) {
+        if ($this['front_image_content_type']) {
+            if ($this['host_id']) {
+                return $this->host['url']."download_front_image/".$this['foreign_material_id'];
+            } else {
+                return URLHelper::getURL("plugins.php/lehrmarktplatz/endpoints/download_front_image/".$this->getId());
+            }
+        } elseif ($this->isFolder()) {
             return Assets::image_path("icons/$color/folder-full.svg");
         } elseif($this->isImage()) {
             return Assets::image_path("icons/$color/file-pic.svg");
@@ -190,7 +215,8 @@ class MarketMaterial extends SimpleORMap {
 
     }
 
-    public function isFolder() {
+    public function isFolder()
+    {
         return (bool) $this['structure'];
     }
 
@@ -239,7 +265,7 @@ class MarketMaterial extends SimpleORMap {
         ));
     }
 
-    public function pushDataToIndexServers()
+    public function pushDataToIndexServers($delete = false)
     {
         $myHost = MarketHost::thisOne();
         $data = array();
@@ -270,6 +296,9 @@ class MarketMaterial extends SimpleORMap {
                 $data['topics'][] = $tag['name'];
             }
         }
+        if ($delete) {
+            $data['delete_material'] = 1;
+        }
 
         foreach (MarketHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
             if (!$index_server->isMe()) {
@@ -287,6 +316,10 @@ class MarketMaterial extends SimpleORMap {
 
                 if (!$data) {
                     return false;
+                }
+
+                if ($data['deleted']) {
+                    return "deleted";
                 }
 
                 //user:

@@ -30,8 +30,10 @@ class InitPlugin extends Migration {
                 `description` text NOT NULL,
                 `user_id` varchar(32) NOT NULL,
                 `content_type` varchar(64) NOT NULL,
+                `front_image_content_type` VARCHAR(64) NULL,
                 `structure` text NULL,
                 `rating` DOUBLE NULL,
+                `license` VARCHAR( 64 ) NOT NULL DEFAULT 'CC BY 4.0',
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL
             ) ENGINE=InnoDB
@@ -87,6 +89,24 @@ class InitPlugin extends Migration {
                 KEY `foreign_review_id` (`foreign_review_id`),
                 KEY `user_id` (`user_id`),
                 KEY `host_id` (`host_id`)
+            ) ENGINE=InnoDB
+        ");
+
+        DBmanager::get()->exec("
+            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_comments` (
+                `comment_id` varchar(32) NOT NULL,
+                `review_id` varchar(32) NOT NULL,
+                `foreign_comment_id` varchar(32) DEFAULT NULL,
+                `comment` text NOT NULL,
+                `host_id` varchar(32) DEFAULT NULL,
+                `user_id` varchar(32) NOT NULL,
+                `chdate` bigint(20) NOT NULL,
+                `mkdate` bigint(20) NOT NULL,
+                PRIMARY KEY (`comment_id`),
+                KEY `review_id` (`review_id`),
+                KEY `foreign_comment_id` (`foreign_comment_id`),
+                KEY `host_id` (`host_id`),
+                KEY `user_id` (`user_id`)
             ) ENGINE=InnoDB
         ");
 

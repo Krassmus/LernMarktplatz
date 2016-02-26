@@ -90,8 +90,13 @@ class MarketController extends PluginController {
         $this->material = new MarketMaterial($material_id);
         if ($this->material['host_id']) {
             $success = $this->material->fetchData();
-            if (!$success) {
+            if ($success === false) {
                 PageLayout::postMessage(MessageBox::info(_("Dieses Material stammt von einem anderen Server, der zur Zeit nicht erreichbar ist.")));
+            } elseif ($success === "deleted") {
+                $material = clone $this->material;
+                $this->material->delete();
+                $this->material = $material;
+                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelöscht worden und wird gleich aus dem Cache verschwinden.")));
             }
         }
         $this->material['rating'] = $this->material->calculateRating();
@@ -136,10 +141,16 @@ class MarketController extends PluginController {
         if ($this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
             throw new AccessDeniedException();
         }
-        if (Request::isPost()) {
+        if (Request::submitted("delete") && Request::isPost()) {
+            $this->material->pushDataToIndexServers("delete");
+            $this->material->delete();
+            PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelöscht.")));
+            $this->redirect("market/overview");
+        } elseif (Request::isPost()) {
             $was_new = $this->material->setData(Request::getArray("data"));
             $this->material['user_id'] = $GLOBALS['user']->id;
             $this->material['host_id'] = null;
+            $this->material['license'] = "CC BY 4.0";
             if ($_FILES['file']['tmp_name']) {
                 $this->material['content_type'] = $_FILES['file']['type'];
                 if (in_array($this->material['content_type'], array("application/x-zip-compressed", "application/zip", "application/x-zip"))) {
@@ -153,6 +164,13 @@ class MarketController extends PluginController {
                 }
                 $this->material['filename'] = $_FILES['file']['name'];
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
+            }
+            if ($_FILES['image']['tmp_name']) {
+                $this->material['front_image_content_type'] = $_FILES['image']['type'];
+                move_uploaded_file($_FILES['image']['tmp_name'], $this->material->getFrontImageFilePath());
+            }
+            if (Request::get("delete_front_image")) {
+                $this->material['front_image_content_type'] = null;
             }
             $this->material->store();
 
