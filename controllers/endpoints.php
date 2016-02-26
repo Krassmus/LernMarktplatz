@@ -432,7 +432,7 @@ class EndpointsController extends PluginController {
                     $comment['review'] = $data['data']['comment'];
                     $comment['mkdate'] = $data['data']['mkdate'];
                     $comment['chdate'] = $data['data']['chdate'];
-                    $review->store();
+                    $comment->store();
 
                     echo "stored ";
                 } else {

@@ -34,9 +34,30 @@ class LehrmarktplatzComment extends SimpleORMap {
                 Assets::image_path("icons/16/blue/support.svg")
             );
         }
+        $statement = DBManager::get()->prepare("
+            SELECT user_id
+            FROM lehrmarktplatz_comments
+            WHERE review_id = :review_id
+                AND host_id IS NULL
+            GROUP BY user_id
+        ");
+        $statement->execute(array(
+            'review_id' => $this->review->getId()
+        ));
+        foreach ($statement->fetchAll(PDO::FETCH_COLUMN, 0) as $user_id) {
+            if (!in_array($user_id, array($this->review['user_id'], $this['user_id']))) {
+                PersonalNotifications::add(
+                    $user_id,
+                    URLHelper::getURL("plugins.php/lehrmarktplatz/market/details/".$this->material->getId()."#review_".$this->getId()),
+                    sprintf(_("%s hat auch einen Kommentar geschrieben."), $this['host_id'] ? MarketUser::find($user_id)->name : get_fullname($user_id)),
+                    "comment_".$this->getId(),
+                    Assets::image_path("icons/16/blue/support.svg")
+                );
+            }
+        }
+
         //only push if the comment is from this server and the material-server is different
-        if ($this->review['host_id'] && !$this['host_id'] && $this->isDirty()) {
-            $remote = new MarketHost($this->review->material['host_id']);
+        if (!$this['host_id'] && $this->isDirty()) {
             $myHost = MarketHost::thisOne();
             $data = array();
             $data['host'] = array(
@@ -61,8 +82,25 @@ class LehrmarktplatzComment extends SimpleORMap {
                 'description' => $datafield_entry ? $datafield_entry['content'] : null
             );
 
-            if (!$remote->isMe()) {
-                $remote->pushDataToEndpoint("add_comment/".$this->review['foreign_review_id'], $data);
+            $statement = DBManager::get()->prepare("
+                SELECT host_id
+                FROM lehrmarktplatz_comments
+                WHERE review_id = :review_id
+                    AND host_id IS NOT NULL
+                GROUP BY host_id
+            ");
+            $statement->execute(array(
+                'review_id' => $this->review->getId()
+            ));
+            $hosts = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+            if ($this->review['host_id'] && !in_array($this->review->material['host_id'], $hosts)) {
+                $hosts[] = $this->review->material['host_id'];
+            }
+            foreach ($hosts as $host_id) {
+                $remote = new MarketHost($host_id);
+                if (!$remote->isMe()) {
+                    $remote->pushDataToEndpoint("add_comment/".$this->review['foreign_review_id'], $data);
+                }
             }
         }
     }
