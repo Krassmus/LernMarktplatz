@@ -391,8 +391,8 @@ class EndpointsController extends PluginController {
     public function add_comment_action($review_id)
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
-            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $public_key_hash = $_SERVER['HTTP_X_RASMUS']; //MD5_HASH_OF_RSA_PUBLIC_KEY
+            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']); //BASE64_RSA_SIGNATURE
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
