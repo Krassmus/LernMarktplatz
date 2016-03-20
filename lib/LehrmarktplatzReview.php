@@ -29,7 +29,9 @@ class LehrmarktplatzReview extends SimpleORMap {
             PersonalNotifications::add(
                 $this->material['user_id'],
                 URLHelper::getURL("plugins.php/lehrmarktplatz/market/details/".$this->material->getId()."#review_".$this->getId()),
-                sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name']),
+                $this->isNew()
+                    ? sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name'])
+                    : sprintf(_("%s hat ein Review zu '%s' verändert."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name']),
                 "review_".$this->getId(),
                 Assets::image_path("icons/blue/service.svg")
             );
