@@ -134,6 +134,7 @@ class MarketHost extends MarketIdentity {
 
 
     public function pushDataToEndpoint($endpoint, $data, $curl_multi_request = false) {
+        die("push");
         $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
