@@ -156,14 +156,15 @@ class MarketHost extends MarketIdentity {
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
+        var_dump("hghjg");
+        die();
+
         if ($curl_multi_request) {
             return $request;
         } else {
             $result = curl_exec($request);
             $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
             curl_close($request);
-            var_dump($result);
-            die();
             return $response_code < 300;
         }
     }
