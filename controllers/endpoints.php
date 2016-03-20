@@ -359,9 +359,6 @@ class EndpointsController extends PluginController {
                         $host->getId()
                     ));
 
-                    var_dump($material_id." ".$user->getId()." ".$host->getId());
-                    die();
-
                     if (!$review) {
                         $review = new LehrmarktplatzReview();
                         $review['user_id'] = $user->getId();

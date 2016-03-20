@@ -84,7 +84,7 @@ class InitPlugin extends Migration {
                 `chdate` int(11) NOT NULL,
                 `mkdate` int(11) NOT NULL,
                 PRIMARY KEY (`review_id`),
-                UNIQUE KEY `unique_users` (`user_id`,`host_id`),
+                UNIQUE KEY `unique_users` (`user_id`,`host_id`, `material_id`),
                 KEY `material_id` (`material_id`),
                 KEY `foreign_review_id` (`foreign_review_id`),
                 KEY `user_id` (`user_id`),
