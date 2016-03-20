@@ -353,13 +353,15 @@ class EndpointsController extends PluginController {
                     $user['description'] = $data['user']['description'] ?: null;
                     $user->store();
 
-                    var_dump($host->getId());
-                    die();
                     $review = LehrmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id = ?", array(
                         $material_id,
                         $user->getId(),
                         $host->getId()
                     ));
+
+                    var_dump($material_id." ".$user->getId()." ".$host->getId());
+                    die();
+
                     if (!$review) {
                         $review = new LehrmarktplatzReview();
                         $review['user_id'] = $user->getId();
