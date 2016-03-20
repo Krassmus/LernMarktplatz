@@ -134,7 +134,6 @@ class MarketHost extends MarketIdentity {
 
 
     public function pushDataToEndpoint($endpoint, $data, $curl_multi_request = false) {
-        die("push");
         $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
@@ -163,6 +162,8 @@ class MarketHost extends MarketIdentity {
             $result = curl_exec($request);
             $response_code = curl_getinfo($request, CURLINFO_HTTP_CODE);
             curl_close($request);
+            var_dump($result);
+            die();
             return $response_code < 300;
         }
     }
