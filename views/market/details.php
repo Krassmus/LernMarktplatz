@@ -137,7 +137,12 @@
                     <img width="50px" height="50px" src="<?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->avatar : Avatar::getAvatar($review['user_id'])->getURL(Avatar::MEDIUM)) ?>">
                 </div>
                 <div class="content">
-                    <div class="timestamp"><?= date("j.n.Y G:i", $review['chdate']) ?></div>
+                    <div class="timestamp">
+                        <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>" title="<?= _("Schreiben Sie einen Kommentar dazu.") ?>">
+                            <?= Assets::img("icons/14/grey/comment", array('class' => "text-bottom")) ?>
+                        </a>
+                        <?= date("j.n.Y G:i", $review['chdate']) ?>
+                    </div>
                     <strong><?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->name : get_fullname($review['user_id'])) ?></strong>
                     <span class="origin">(<?= htmlReady($review['host_id'] ? $review->host['name'] : $GLOBALS['UNI_NAME_CLEAN']) ?>)</span>
                     <div class="review_text">
@@ -155,6 +160,14 @@
                         <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
                         <? $v = $rating >= 4.75 ? 3 : ($rating >= 4.25 ? 2 : "") ?>
                         <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                    </div>
+                    <div class="comments" style="text-align: center;">
+                        <? if (count($review->comments)) : ?>
+                            <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>">
+                                <?= Assets::img("icons/16/blue/comment", array('class' => "text-bottom")) ?>
+                                <?= sprintf(_("%s Kommentare dazu"), count($review->comments)) ?>
+                            </a>
+                        <? endif ?>
                     </div>
                 </div>
             </li>

@@ -125,6 +125,19 @@ class MarketController extends PluginController {
         }
     }
 
+    public function discussion_action($review_id)
+    {
+        Navigation::activateItem("/lehrmarktplatz/overview");
+        $this->review = new LehrmarktplatzReview($review_id);
+        if (Request::isPost() && Request::get("comment")) {
+            $comment = new LehrmarktplatzComment();
+            $comment['review_id'] = $review_id;
+            $comment['comment'] = Request::get("comment");
+            $comment['user_id'] = $GLOBALS['user']->id;
+            $comment->store();
+        }
+    }
+
 
     public function download_action($material_id, $disposition = "inline")
     {

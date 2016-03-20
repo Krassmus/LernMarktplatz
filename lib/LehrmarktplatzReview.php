@@ -14,6 +14,10 @@ class LehrmarktplatzReview extends SimpleORMap {
             'foreign_key' => 'host_id',
             'assoc_foreign_key' => 'host_id'
         );
+        $config['has_many']['comments'] = array(
+            'class_name' => 'LehrmarktplatzComment',
+            'foreign_key' => 'review_id'
+        );
         parent::configure($config);
     }
 
