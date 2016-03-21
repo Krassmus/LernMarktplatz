@@ -167,6 +167,11 @@
                                 <?= Assets::img("icons/16/blue/comment", array('class' => "text-bottom")) ?>
                                 <?= sprintf(_("%s Kommentare dazu"), count($review->comments)) ?>
                             </a>
+                        <? elseif ($material['user_id'] === $GLOBALS['user']->id) : ?>
+                            <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>">
+                                <?= Assets::img("icons/16/blue/comment", array('class' => "text-bottom")) ?>
+                                <?= _("Dazu einen Kommentar schreiben") ?>
+                            </a>
                         <? endif ?>
                     </div>
                 </div>
