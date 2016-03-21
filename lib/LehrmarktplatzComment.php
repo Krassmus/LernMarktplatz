@@ -28,7 +28,7 @@ class LehrmarktplatzComment extends SimpleORMap {
         if (!$this->review['host_id'] && $this->review['user_id'] !== $GLOBALS['user']->id) {
             PersonalNotifications::add(
                 $this->review['user_id'],
-                URLHelper::getURL("plugins.php/lehrmarktplatz/market/details/".$this->material->getId()."#review_".$this->getId()),
+                URLHelper::getURL("plugins.php/lehrmarktplatz/market/discussion/".$this['review_id']."#comment_".$this->getId()),
                 sprintf(_("%s hat einen Kommentar zu Ihrem Review geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                 "comment_".$this->getId(),
                 Assets::image_path("icons/16/blue/support.svg")
