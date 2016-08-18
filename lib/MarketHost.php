@@ -151,8 +151,8 @@ class MarketHost extends MarketIdentity {
         curl_setopt($request, CURLOPT_SSL_VERIFYHOST, false);
 
         $header = array(
-            "X-SIGNATURE: ".base64_encode($myHost->createSignature($payload)),
-            "X-RASMUS: ".md5($myHost['public_key'])
+            $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'].": ".base64_encode($myHost->createSignature($payload)),
+            $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'].": ".md5($myHost['public_key'])
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 

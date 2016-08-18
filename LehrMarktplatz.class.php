@@ -8,11 +8,14 @@ require_once __DIR__."/lib/MarketTag.php";
 require_once __DIR__."/lib/LehrmarktplatzReview.php";
 require_once __DIR__."/lib/LehrmarktplatzComment.php";
 
+$GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'] = "X-RASMUS"; //an MD5-hash of the armored public key of the server
+$GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE']       = "X-SIGNATURE"; //the base64 encoded signature provided by the public key over the body of the message
+
 class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
 
     public function __construct() {
         parent::__construct();
-        if ($GLOBALS['perm']->have_perm("tutor")) {
+        if ($GLOBALS['perm']->have_perm("autor")) {
             $topicon = new Navigation(_("Lehrmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
             $topicon->setImage(Assets::image_path("icons/lightblue/service.svg"));
             Navigation::addItem("/lehrmarktplatz", $topicon);

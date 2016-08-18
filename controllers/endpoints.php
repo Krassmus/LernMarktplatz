@@ -31,8 +31,8 @@ class EndpointsController extends PluginController {
     public function update_server_info_action()
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
-            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
@@ -241,8 +241,8 @@ class EndpointsController extends PluginController {
     public function push_data_action()
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
-            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
@@ -327,8 +327,8 @@ class EndpointsController extends PluginController {
     public function add_review_action($material_id)
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_X_RASMUS'];
-            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']);
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
@@ -392,8 +392,8 @@ class EndpointsController extends PluginController {
     public function add_comment_action($review_id)
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_X_RASMUS']; //MD5_HASH_OF_RSA_PUBLIC_KEY
-            $signature = base64_decode($_SERVER['HTTP_X_SIGNATURE']); //BASE64_RSA_SIGNATURE
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])]; //MD5_HASH_OF_RSA_PUBLIC_KEY
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]); //BASE64_RSA_SIGNATURE
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
