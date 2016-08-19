@@ -2,6 +2,10 @@
 
 class LehrmarktplatzComment extends SimpleORMap {
 
+    static public function findByReview_id($review_id) {
+        return self::findBySQL("review_id = ? ORDER BY mkdate ASC", array($review_id));
+    }
+
     protected static function configure($config = array())
     {
         $config['db_table'] = 'lehrmarktplatz_comments';
