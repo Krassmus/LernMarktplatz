@@ -404,7 +404,7 @@ class EndpointsController extends PluginController {
                     if (!$review || $review->material['host_id'] !== $host->getId()) {
                         var_dump($review);
                         var_dump($review->material['host_id']);
-                        var_dump($host->getId());
+                        var_dump($host->getId()); 
                         die();
                         throw new Exception("Unknown material.");
                     }
