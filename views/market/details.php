@@ -180,7 +180,9 @@
     </ul>
 
     <div style="text-align: center;">
-        <?= \Studip\LinkButton::create(_("Review schreiben"), PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()), array('data-dialog' => 1)) ?>
+        <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+            <?= \Studip\LinkButton::create(_("Review schreiben"), PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()), array('data-dialog' => 1)) ?>
+        <? endif ?>
     </div>
 
 </div>
