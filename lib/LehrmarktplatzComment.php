@@ -98,7 +98,10 @@ class LehrmarktplatzComment extends SimpleORMap {
                     'review_id' => $this->review->getId()
                 ));
                 $hosts = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
-                if ($this->review['host_id'] && !in_array($this->review->material['host_id'], $hosts)) {
+                if ($this->review['host_id'] && !in_array($this->material['host_id'], $hosts)) {
+                    $hosts[] = $this->review['host_id'];
+                }
+                if ($this->material->review['host_id'] && !in_array($this->review->material['host_id'], $hosts)) {
                     $hosts[] = $this->review->material['host_id'];
                 }
                 var_dump($hosts);
