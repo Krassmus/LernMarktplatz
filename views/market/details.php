@@ -179,6 +179,10 @@
         <? endforeach ?>
     </ul>
 
+    <div>
+        <?= \Studip\LinkButton::create(_("Review schreiben"), PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()), array('data-dialog' => 1)) ?>
+    </div>
+
 </div>
 
 
