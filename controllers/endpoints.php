@@ -401,7 +401,7 @@ class EndpointsController extends PluginController {
                     $data = studip_utf8decode(json_decode($body, true));
                     //$review = new LehrmarktplatzReview($review_id);
                     $review = LehrmarktplatzComment::findOneBySQL("comment_id = :id OR comment_id = :id", array('id' => $review_id));
-                    var_dump($review); die();
+                    var_dump($review); die(); 
                     if (!$review || $review->material['host_id'] !== $host->getId()) {
                         throw new Exception("Unknown material.");
                     }
