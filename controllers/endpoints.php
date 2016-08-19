@@ -400,8 +400,8 @@ class EndpointsController extends PluginController {
                 if ($host->verifySignature($body, $signature)) {
                     $data = studip_utf8decode(json_decode($body, true));
                     //$review = new LehrmarktplatzReview($review_id);
-                    $review = LehrmarktplatzComment::findOneBySQL("comment_id = :id OR comment_id = :id", array('id' => $review_id));
-                    var_dump($review); die(); 
+                    $review = LehrmarktplatzReview::findOneBySQL("review_id = :id OR foreign_review_id = :id", array('id' => $review_id));
+                    var_dump($review); die();
                     if (!$review || $review->material['host_id'] !== $host->getId()) {
                         throw new Exception("Unknown material.");
                     }
@@ -421,7 +421,7 @@ class EndpointsController extends PluginController {
                     $user->store();
 
                     $comment = LehrmarktplatzComment::findOneBySQL("review_id = ? AND user_id = ? AND host_id = ?", array(
-                        $review_id,
+                        $review->getId(),
                         $user->getId(),
                         $host->getId()
                     ));
@@ -431,7 +431,7 @@ class EndpointsController extends PluginController {
                         $comment['foreign_comment_id'] = $data['data']['foreign_comment_id'];
                         $comment['host_id'] = $host->getId();
                     }
-                    $comment['review_id'] = $review_id;
+                    $comment['review_id'] = $review->getId();
                     $comment['comment'] = $data['data']['comment'];
                     $comment['mkdate'] = $data['data']['mkdate'];
                     $comment['chdate'] = $data['data']['chdate'];
