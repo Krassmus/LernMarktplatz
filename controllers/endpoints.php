@@ -424,7 +424,7 @@ class EndpointsController extends PluginController {
                         $host->getId()
                     ));
                     if (!$comment) {
-                        $comment = new LehrmarktplatzReview();
+                        $comment = new LehrmarktplatzComment();
                         $comment['user_id'] = $user->getId();
                         $comment['foreign_review_id'] = $data['data']['foreign_review_id'];
                         $comment['host_id'] = $host->getId();
