@@ -430,7 +430,7 @@ class EndpointsController extends PluginController {
                         $comment['host_id'] = $host->getId();
                     }
                     $comment['review_id'] = $review_id;
-                    $comment['review'] = $data['data']['comment'];
+                    $comment['comment'] = $data['data']['comment'];
                     $comment['mkdate'] = $data['data']['mkdate'];
                     $comment['chdate'] = $data['data']['chdate'];
                     $comment->store();
