@@ -104,7 +104,6 @@ class LehrmarktplatzComment extends SimpleORMap {
                 if ($this->review->material['host_id'] && !in_array($this->review->material['host_id'], $hosts)) {
                     $hosts[] = $this->review->material['host_id'];
                 }
-                var_dump($hosts);
                 foreach ($hosts as $host_id) {
                     $remote = new MarketHost($host_id);
                     if (!$remote->isMe()) {
