@@ -63,8 +63,6 @@ class LehrmarktplatzComment extends SimpleORMap {
 
             //only push if the comment is from this server and the material-server is different
             if (!$this['host_id']) {
-                var_dump("yea");
-                die();
                 $myHost = MarketHost::thisOne();
                 $data = array();
                 $data['host'] = array(
@@ -106,6 +104,8 @@ class LehrmarktplatzComment extends SimpleORMap {
                 foreach ($hosts as $host_id) {
                     $remote = new MarketHost($host_id);
                     if (!$remote->isMe()) {
+                        var_dump("yea");
+                        die();
                         $remote->pushDataToEndpoint("add_comment/" . $this->review['foreign_review_id'], $data);
                     }
                 }
