@@ -26,8 +26,6 @@ class LehrmarktplatzComment extends SimpleORMap {
     public function afterStoreCallback()
     {
         if ($this->isDirty()) {
-            var_dump("yea");
-            die();
             //add notification to writer of review
             if (!$this->review['host_id'] && $this->review['user_id'] !== $this['user_id']) {
                 PersonalNotifications::add(
@@ -65,6 +63,8 @@ class LehrmarktplatzComment extends SimpleORMap {
 
             //only push if the comment is from this server and the material-server is different
             if (!$this['host_id']) {
+                var_dump("yea");
+                die();
                 $myHost = MarketHost::thisOne();
                 $data = array();
                 $data['host'] = array(
