@@ -394,6 +394,7 @@ class EndpointsController extends PluginController {
         if (Request::isPost()) {
             $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])]; //MD5_HASH_OF_RSA_PUBLIC_KEY
             $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]); //BASE64_RSA_SIGNATURE
+            var_dump($public_key_hash);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
@@ -404,7 +405,7 @@ class EndpointsController extends PluginController {
                     if (!$review || $review->material['host_id'] !== $host->getId()) {
                         var_dump($review);
                         var_dump($review->material['host_id']);
-                        var_dump($host->getId()); 
+                        var_dump($host->getId());
                         die();
                         throw new Exception("Unknown material.");
                     }
