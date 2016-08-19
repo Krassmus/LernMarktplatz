@@ -16,7 +16,8 @@ class LehrmarktplatzReview extends SimpleORMap {
         );
         $config['has_many']['comments'] = array(
             'class_name' => 'LehrmarktplatzComment',
-            'foreign_key' => 'review_id'
+            'foreign_key' => 'review_id',
+            'order_by' => "mkdate ASC"
         );
         parent::configure($config);
     }
