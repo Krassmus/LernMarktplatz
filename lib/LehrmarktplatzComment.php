@@ -104,8 +104,6 @@ class LehrmarktplatzComment extends SimpleORMap {
                 foreach ($hosts as $host_id) {
                     $remote = new MarketHost($host_id);
                     if (!$remote->isMe()) {
-                        var_dump("yea");
-                        die();
                         $remote->pushDataToEndpoint("add_comment/" . $this->review['foreign_review_id'], $data);
                     }
                 }
