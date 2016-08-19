@@ -402,6 +402,10 @@ class EndpointsController extends PluginController {
                     //$review = new LehrmarktplatzReview($review_id);
                     $review = LehrmarktplatzReview::findOneBySQL("review_id = :id OR foreign_review_id = :id", array('id' => $review_id));
                     if (!$review || $review->material['host_id'] !== $host->getId()) {
+                        var_dump($review);
+                        var_dump($review->material['host_id']);
+                        var_dump($host->getId());
+                        die();
                         throw new Exception("Unknown material.");
                     }
 
@@ -422,7 +426,7 @@ class EndpointsController extends PluginController {
                     $comment = LehrmarktplatzComment::findOneBySQL("review_id = ? AND user_id = ? AND host_id = ?", array(
                         $review->getId(),
                         $user->getId(),
-                        $host->getId() 
+                        $host->getId()
                     ));
                     if (!$comment) {
                         $comment = new LehrmarktplatzComment();
