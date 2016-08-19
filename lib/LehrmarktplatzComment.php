@@ -106,6 +106,7 @@ class LehrmarktplatzComment extends SimpleORMap {
                 }
                 foreach ($hosts as $host_id) {
                     $remote = new MarketHost($host_id);
+                    var_dump($host_id);
                     if (!$remote->isMe()) {
                         var_dump($host_id);
                         die();
