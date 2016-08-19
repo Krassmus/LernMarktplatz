@@ -422,7 +422,7 @@ class EndpointsController extends PluginController {
                     $comment = LehrmarktplatzComment::findOneBySQL("review_id = ? AND user_id = ? AND host_id = ?", array(
                         $review->getId(),
                         $user->getId(),
-                        $host->getId()
+                        $host->getId() 
                     ));
                     if (!$comment) {
                         $comment = new LehrmarktplatzComment();
