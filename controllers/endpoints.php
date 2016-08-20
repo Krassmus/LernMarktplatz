@@ -387,26 +387,29 @@ class EndpointsController extends PluginController {
      * Adds or edits a comment to the material on this server from a client of another server.
      * Use this request only as a POST request, the body must be a JSON-object that carries all the
      * necessary variables.
+     * The review_id is the foreign_review_id if the host_hash is not empty or the review_id if the host_hash is empty.
      * @param $material_id : ID of the item on this server.
      */
-    public function add_comment_action($review_id)
+    public function add_comment_action($review_id, $host_hash = null)
     {
         if (Request::isPost()) {
             $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])]; //MD5_HASH_OF_RSA_PUBLIC_KEY
             $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]); //BASE64_RSA_SIGNATURE
-            var_dump($public_key_hash);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
                     $data = studip_utf8decode(json_decode($body, true));
                     //$review = new LehrmarktplatzReview($review_id);
-                    $review = LehrmarktplatzReview::findOneBySQL("review_id = :id OR foreign_review_id = :id", array('id' => $review_id));
-                    if (!$review || $review->material['host_id'] !== $host->getId()) {
-                        var_dump($review);
-                        var_dump($review->material['host_id']);
-                        var_dump($host->getId());
-                        die();
+                    if ($host_hash) {
+                        $review = LehrmarktplatzReview::findOneBySQL("INNER JOIN lehrmarktplatz_hosts ON (lehrmarktplatz_hosts.host_id = lehrmarktplatz_reviews.host_id) WHERE foreign_review_id = :id AND MD5(lehrmarktplatz_hosts.public_key) = :host_hash", array(
+                            'id' => $review_id,
+                            'host_hash' => $host_hash
+                        ));
+                    } else {
+                        $review = LehrmarktplatzReview::find($review_id);
+                    }
+                    if (!$review) {
                         throw new Exception("Unknown material.");
                     }
 
