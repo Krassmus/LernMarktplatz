@@ -20,12 +20,12 @@
             <? foreach ($material->getTopics() as $tag) : ?>
             <li>
                 <?= Assets::img("icons/20/black/topic", array('class' => "text-bottom")) ?>
-                <input type="text" name="tags[]" value="<?= htmlReady($tag['name']) ?>">
+                <input type="text" name="tags[]" value="<?= htmlReady($tag['name']) ?>" style="max-width: calc(100% - 30px);">
             </li>
             <? endforeach ?>
             <li>
                 <?= Assets::img("icons/20/black/topic", array('class' => "text-bottom")) ?>
-                <input type="text" name="tags[]" value="<?= htmlReady($tag['name']) ?>">
+                <input type="text" name="tags[]" value="<?= htmlReady($tag['name']) ?>" style="max-width: calc(100% - 30px);">
             </li>
         </ul>
     </div>

@@ -28,6 +28,27 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
         if ($GLOBALS['i_page'] === "folder.php" && $GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
             NotificationCenter::addObserver($this, "addToFolderSidebar", "SidebarWillRender");
         }
+        if (UpdateInformation::isCollecting()
+                && stripos(Request::get("page"), "plugins.php/lehrmarktplatz/market/discussion/") !== false) {
+            $data = Request::getArray("page_info");
+            $last_update = Request::get("server_timestamp", time() - 30);
+            $review_id = $data['Lehrmarktplatz']['review_id'];
+            $output = array('comments' => array());
+            $comments = LehrmarktplatzComment::findBySQL("review_id = :review_id AND mkdate >= :last_update ORDER BY mkdate ASC", array(
+                'last_update' => $last_update,
+                'review_id' => $review_id
+            ));
+            $tf = new Flexi_TemplateFactory(__DIR__ . "/views");
+            foreach ($comments as $comment) {
+                $template = $tf->open("market/_comment.php");
+                $template->set_attribute('comment', $comment);
+                $output['comments'][] = array(
+                    'comment_id' => $comment->getId(),
+                    'html' => $template->render()
+                );
+            }
+            UpdateInformation::setInformation("Lehrmarktplatz.update", $output);
+        }
     }
 
     public function addToFolderSidebar() {

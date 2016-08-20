@@ -138,6 +138,20 @@ class MarketController extends PluginController {
         }
     }
 
+    public function comment_action($review_id)
+    {
+        $this->review = new LehrmarktplatzReview($review_id);
+        if (Request::isPost() && Request::get("comment")) {
+            $this->comment = new LehrmarktplatzComment();
+            $this->comment['review_id'] = $review_id;
+            $this->comment['comment'] = studip_utf8decode(Request::get("comment"));
+            $this->comment['user_id'] = $GLOBALS['user']->id;
+            $this->comment->store();
+            $comment_html = $this->render_template_as_string("market/_comment");
+            $this->render_json(array('html' => $comment_html));
+        }
+    }
+
 
     public function download_action($material_id, $disposition = "inline")
     {

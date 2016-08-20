@@ -8,27 +8,15 @@
 </div>
 
 
-<ol class="reviews">
+<ol class="comments">
     <? foreach ($review->comments as $comment) : ?>
-        <li id="comment_<?= $comment->getId() ?>" class="review">
-            <div class="avatar">
-                <img width="50px" height="50px" src="<?= htmlReady($comment['host_id'] ? MarketUser::find($comment['user_id'])->avatar : Avatar::getAvatar($comment['user_id'])->getURL(Avatar::MEDIUM)) ?>">
-            </div>
-            <div class="content">
-                <div class="timestamp">
-                    <?= date("j.n.Y G:i", $comment['chdate']) ?>
-                </div>
-                <strong><?= htmlReady($comment['host_id'] ? MarketUser::find($comment['user_id'])->name : get_fullname($comment['user_id'])) ?></strong>
-                <span class="origin">(<?= htmlReady($comment['host_id'] ? $comment->host['name'] : $GLOBALS['UNI_NAME_CLEAN']) ?>)</span>
-                <div class="review_text">
-                    <?= formatReady($comment['comment']) ?>
-                </div>
-            </div>
-        </li>
+        <?= $this->render_partial("market/_comment.php", compact("comment")) ?>
     <? endforeach ?>
 </ol>
 
 <form action="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>" method="post" class="default">
-    <textarea name="comment"></textarea>
-    <?= \Studip\Button::create(_("Abschicken")) ?>
+    <textarea name="comment" data-review_id="<?= htmlReady($review->getId()) ?>"></textarea>
+    <div>
+        <?= \Studip\LinkButton::create(_("Abschicken"), "#", array('onclick' => "return STUDIP.Lehrmarktplatz.addComment();")) ?>
+    </div>
 </form>
