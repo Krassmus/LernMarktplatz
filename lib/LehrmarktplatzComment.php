@@ -54,7 +54,7 @@ class LehrmarktplatzComment extends SimpleORMap {
                     PersonalNotifications::add(
                         $user_id,
                         URLHelper::getURL("plugins.php/lehrmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
-                        sprintf(_("%s hat auch einen Kommentar geschrieben."), $this['host_id'] ? MarketUser::find($user_id)->name : get_fullname($user_id)),
+                        sprintf(_("%s hat auch einen Kommentar geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                         "comment_" . $this->getId(),
                         Assets::image_path("icons/16/blue/support.svg")
                     );
