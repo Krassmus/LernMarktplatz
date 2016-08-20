@@ -409,6 +409,7 @@ class EndpointsController extends PluginController {
                             'id' => $review_id,
                             'host_hash' => $host_hash
                         ));
+                        $review = LehrmarktplatzReview::findOneByForeign_review_id($review_id);
                     } else {
                         var_dump("yes2");
                         var_dump($review_id);
