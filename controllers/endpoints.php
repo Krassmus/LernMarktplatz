@@ -427,17 +427,11 @@ class EndpointsController extends PluginController {
                     $user['description'] = $data['user']['description'] ?: null;
                     $user->store();
 
-                    $comment = LehrmarktplatzComment::findOneBySQL("review_id = ? AND user_id = ? AND host_id = ?", array(
-                        $review->getId(),
-                        $user->getId(),
-                        $host->getId()
-                    ));
-                    if (!$comment) {
-                        $comment = new LehrmarktplatzComment();
-                        $comment['user_id'] = $user->getId();
-                        $comment['foreign_comment_id'] = $data['data']['foreign_comment_id'];
-                        $comment['host_id'] = $host->getId();
-                    }
+
+                    $comment = new LehrmarktplatzComment();
+                    $comment['user_id'] = $user->getId();
+                    $comment['foreign_comment_id'] = $data['data']['foreign_comment_id'];
+                    $comment['host_id'] = $host->getId();
                     $comment['review_id'] = $review->getId();
                     $comment['comment'] = $data['data']['comment'];
                     $comment['mkdate'] = $data['data']['mkdate'];
