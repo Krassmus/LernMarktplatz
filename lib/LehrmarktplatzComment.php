@@ -108,7 +108,19 @@ class LehrmarktplatzComment extends SimpleORMap {
                     $remote = new MarketHost($host_id);
                     if (!$remote->isMe()) {
                         $review_id = ($this->review['foreign_review_id'] ?: $this->review->getId());
-                        $host_hash = md5($this->review['foreign_review_id'] ? $this->review->host['public_key'] : $myHost['public_key']);
+                        if ($this->review['foreign_review_id']) {
+                            if ($this->review->host_id === $remote->getId()) {
+                                $host_hash = null;
+                            } else {
+                                $host_hash = md5($this->review->host['public_key']);
+                            }
+                        } else {
+                            $host_hash = md5($myHost['public_key']);
+                        }
+
+                        /*$host_hash = $this->review->host_id === $remote->getId()
+                            ? md5($this->review['foreign_review_id'] ? $this->review->host['public_key'] : $myHost['public_key'])
+                            : null;*/
                         $remote->pushDataToEndpoint("add_comment/" . $review_id ."/".$host_hash, $data);
                     }
                 }
