@@ -408,10 +408,6 @@ class EndpointsController extends PluginController {
                     } else {
                         $review = LehrmarktplatzReview::find($review_id);
                     }
-                    var_dump($host_hash);
-                    var_dump($review_id);
-                    var_dump($review);
-                    die();
                     if (!$review) {
                         throw new Exception("Unknown material.");
                     }
