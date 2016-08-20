@@ -411,6 +411,7 @@ class EndpointsController extends PluginController {
                         ));
                     } else {
                         var_dump("yes2");
+                        var_dump($review_id);
                         $review = LehrmarktplatzReview::find($review_id);
                     }
                     die();
