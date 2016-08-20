@@ -408,6 +408,9 @@ class EndpointsController extends PluginController {
                     } else {
                         $review = LehrmarktplatzReview::find($review_id);
                     }
+                    var_dump($host_hash);
+                    var_dump($review_id);
+                    var_dump($review);
                     if (!$review) {
                         throw new Exception("Unknown material.");
                     }
@@ -418,7 +421,7 @@ class EndpointsController extends PluginController {
                         $data['user']['user_id']
                     ));
                     if (!$user) {
-                        $user = new MarketUser(); 
+                        $user = new MarketUser();
                         $user['host_id'] = $host->getId();
                         $user['foreign_user_id'] = $data['user']['user_id'];
                     }
