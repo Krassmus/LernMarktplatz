@@ -418,7 +418,7 @@ class EndpointsController extends PluginController {
                         $data['user']['user_id']
                     ));
                     if (!$user) {
-                        $user = new MarketUser();
+                        $user = new MarketUser(); 
                         $user['host_id'] = $host->getId();
                         $user['foreign_user_id'] = $data['user']['user_id'];
                     }
