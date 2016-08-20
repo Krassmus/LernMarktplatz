@@ -399,8 +399,6 @@ class EndpointsController extends PluginController {
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
-                    $data = studip_utf8decode(json_decode($body, true));
-                    //$review = new LehrmarktplatzReview($review_id);
                     if ($host_hash) {
                         /*$review = LehrmarktplatzReview::findOneBySQL("INNER JOIN lehrmarktplatz_hosts ON (lehrmarktplatz_hosts.host_id = lehrmarktplatz_reviews.host_id) WHERE foreign_review_id = :id AND MD5(lehrmarktplatz_hosts.public_key) = :host_hash", array(
                             'id' => $review_id,
@@ -410,12 +408,13 @@ class EndpointsController extends PluginController {
                     } else {
                         $review = LehrmarktplatzReview::find($review_id);
                     }
-                    var_dump($review->host->public_key);
+                    var_dump($review->host);
                     die();
                     if (!$review) {
                         throw new Exception("Unknown material.");
                     }
 
+                    $data = studip_utf8decode(json_decode($body, true));
                     $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
                         $host->getId(),
                         $data['user']['user_id']
