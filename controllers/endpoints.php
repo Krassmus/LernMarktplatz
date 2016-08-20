@@ -402,13 +402,18 @@ class EndpointsController extends PluginController {
                     $data = studip_utf8decode(json_decode($body, true));
                     //$review = new LehrmarktplatzReview($review_id);
                     if ($host_hash) {
+                        var_dump("yes1");
+                        var_dump($review_id);
+                        var_dump($host_hash);
                         $review = LehrmarktplatzReview::findOneBySQL("INNER JOIN lehrmarktplatz_hosts ON (lehrmarktplatz_hosts.host_id = lehrmarktplatz_reviews.host_id) WHERE foreign_review_id = :id AND MD5(lehrmarktplatz_hosts.public_key) = :host_hash", array(
                             'id' => $review_id,
                             'host_hash' => $host_hash
                         ));
                     } else {
+                        var_dump("yes2");
                         $review = LehrmarktplatzReview::find($review_id);
                     }
+                    die();
                     if (!$review) {
                         throw new Exception("Unknown material.");
                     }
