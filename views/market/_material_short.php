@@ -7,7 +7,7 @@
         <p class="shortdescription">
             <?= htmlReady($material['short_description'] ?: $material['description']) ?>
         </p>
-    </a>
+    </a> 
 <? $tags = $material->getTopics(); ?>
 <? if (count($tags)) : ?>
     <footer class="tags">
