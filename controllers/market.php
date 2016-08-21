@@ -217,6 +217,11 @@ class MarketController extends PluginController {
         }
     }
 
+    public function licenseinfo_action()
+    {
+
+    }
+
     protected function getFolderStructure($folder) {
         $structure = array();
         foreach (scandir($folder) as $file) {

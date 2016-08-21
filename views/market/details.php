@@ -82,6 +82,9 @@
     <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
         <img src="<?= $plugin->getPluginURL()."/assets/cc-by.png" ?>">
     </a>
+    <a href="<?= PluginEngine::getLink($plugin, array(), "market/licenseinfo") ?>" data-dialog>
+        <?= _("Was heißt das?") ?>
+    </a>
 </div>
 
 <div style="text-align: center;">
