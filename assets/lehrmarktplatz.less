@@ -149,13 +149,22 @@ article.contentbox {
     }
 }
 
-.download_link {
+a:link.download_link, a:visited.download_link {
+    padding: 10px;
     margin-top: 20px;
+    background-color: @brand-color-lighter;
     margin-bottom: 20px;
-    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-flex;
+    width: auto;
     justify-content: center;
     align-items: center;
     font-size: 1.2em;
+    color: white;
+    &:hover {
+        color: white;
+    }
     > .filename {
         margin-left: 10px;
     }
