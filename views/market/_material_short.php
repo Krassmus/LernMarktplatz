@@ -3,7 +3,7 @@
         <header>
             <h1><?= htmlReady($material['name']) ?></h1>
         </header>
-        <div class="image" style="background-image: url(<?= $material->getLogoURL() ?>);"></div>
+        <div class="image" style="background-image: url(<?= $material->getLogoURL() ?>);<?= (!$material['front_image_content_type'] && !$material->isImage()) ? " background-size: 60% auto;" : "" ?>"></div>
         <p class="shortdescription">
             <?= htmlReady($material['short_description'] ?: $material['description']) ?>
         </p>
