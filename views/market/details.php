@@ -5,8 +5,10 @@
 <? endif ?>
 
 <div style="text-align: center;">
-    <a class="download_link" href="<?= $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>" title="<?= _("Download") ?>">
-        <?= Assets::img("icons/35/white/download") ?>
+    <? $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>
+    <a class="button download_link" href="<?= $url ?>" title="<?= _("Download") ?>">
+        <?= Assets::img("icons/35/blue/download", array('class' => "blue")) ?>
+        <?= Assets::img("icons/35/white/download", array('class' => "whitebutton")) ?>
         <div class="filename"><?= htmlReady($material['filename']) ?></div>
     </a>
 </div>
