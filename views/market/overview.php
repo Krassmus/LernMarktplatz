@@ -1,3 +1,6 @@
+<? if (!Request::get("tags") && !Request::get("search") && !Request::get("tag")) : ?>
+    <?= $this->render_partial("market/_maininfo.php") ?>
+<? endif ?>
 <? if (Request::get("tags")) : ?>
 
     <div class="material_navigation">

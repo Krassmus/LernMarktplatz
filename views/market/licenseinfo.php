@@ -11,12 +11,11 @@
     ab. So einen fiesen Umgang wollen wir bei Stud.IP und insbesondere beim Lehrmarktplatz absolut nicht! Wer Materialien
     bei uns hoch lädt, soll weiterhin volle Kontrolle über die Nutzung seiner/ihrer Dateien haben.
 </p>
-<h2><?= _("Was ist uns wichtig") ?></h2>
+<h2><?= _("Was ist uns wichtig?") ?></h2>
 <p>
-    Um eine Lizenz kommen wir beim Lehrmaterialienmarktplatz nicht drumrum, weil dort Dateien hoch und wieder
-    heruntergeladen werden. Und illegales Gemauschel wollen wir auch nicht. Wir gehen davon aus, dass jeder, der/die
-    auf dem Marktplatz eine Datei frei für alle zur Verfügung stellt, will dass die Datei am Ende auch verwendet werden
-    kann. Selbstverständlich wollen wir:
+    Um eine Lizenz kommen wir beim Lehrmaterialienmarktplatz nicht herum. Und illegales Gemauschel wollen wir auch nicht. Wir gehen davon aus, dass jeder, der/die
+    auf dem Marktplatz eine Datei frei für alle zur Verfügung stellt, will dass die Datei am Ende auch verwendet wird und
+    verwendet werden darf. Selbstverständlich wollen wir:
     <ul>
         <li>Dateien sollen zum Selbstlernen verwendet werden.</li>
         <li>Die Dateien sollen im Rahmen von Veranstaltungen zum Einsatz kommen zum Beispiel als Vorlesungsfolien.</li>
@@ -39,12 +38,13 @@
     Materialien ist unentgeldlich (selbstverständlich verdienen auch wir nichts damit) und die Materialien können, wenn
     sie einmal heruntergeladen worden sind, auch noch beliebig weiter verteilt werden. Es gibt zwar eine CreativeCommons-Lizenz,
     die kommerzielle Nutzung ausschließt. Die ist aber explizit für den Marktplatz nicht praktikabel. Denn stellen Sie
-    sich die Frage: Wenn ein Professor ein Material vom Marktplatz innerhalb seiner Veranstaltung als Infobild auf den
+    sich diese Frage: Wenn ein Professor ein Material vom Marktplatz innerhalb seiner Veranstaltung als Infobild auf den
     Projektor wirft, ist das dann eine kommerzielle Nutzung? Ja, irgendwie schon. Wie gesagt, wir legen besonderen
     Wert auf die Rechtssicherheit aller Nutzer. Deswegen kommen auf unseren Marktplatz keine Materialien, die die
-    kommerzielle Nutzung ausschließen.
+    kommerzielle Nutzung ausschließen. Nichtsdestotrotz haben Sie weiterhin alle Rechte, ihre Vorlesungsfolien
+    auf anderem Wege über einen Verlag zu veröffentlichen und Tantiemen zu bekommen.
 </p>
-<?= _("Was darf ich mit den Materialien machen?") ?>
+<h2><?= _("Was darf ich mit den Materialien machen?") ?></h2>
 <p>
     Grundsätzlich können Sie also mit Materialien im Marktplatz immer:
     <ul>
