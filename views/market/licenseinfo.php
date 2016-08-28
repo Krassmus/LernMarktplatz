@@ -52,7 +52,7 @@
         <li>Die Dateien können Sie an andere Menschen weiter geben, sogar selbst auf anderen Seiten hochladen.</li>
         <li>Dabei müssen Sie immer den Originalautor der Datei nennen. Tun sie das in einem Beschreibungstext oder innerhalb der Datei.</li>
         <li>Sie können die Materialien auch verändern und verbessern.</li>
-        <li>Auch dabei müssen Sie den Originalautor bzw. alle vorherigen Autoren des Materials nennen.</li>
+        <li>Auch dabei müssen Sie den Originalautor bzw. alle vorherigen Autoren des Materials nennen und das neue Werk unter dieselbe Lizenz (CC BY SA) stellen.</li>
     </ul>
     Wie gesagt: wir hoffen, dass dieser Weg für alle ein sehr intuitiver Weg ist, Materialien zu verbreiten und zu nutzen.
     Die meisten Menschen wollen sich keine Gedanken um Rechten und Pflichten von sowas machen. Wir hoffen, dass wir

@@ -1,4 +1,4 @@
-<? if (!Request::get("tags") && !Request::get("search") && !Request::get("tag")) : ?>
+<? if (!Request::get("tags") && !Request::get("search") && !Request::get("tag") && !UserConfig::get($GLOBALS['user']->id)->LEHRMARKTPLATZ_DISABLE_MAININFO) : ?>
     <?= $this->render_partial("market/_maininfo.php") ?>
 <? endif ?>
 <? if (Request::get("tags")) : ?>

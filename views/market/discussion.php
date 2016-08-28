@@ -3,7 +3,23 @@
     <?= _("Zurück") ?>
 </a>
 
-<div style="margin-top: 30px; margin-bottom: 30px;">
+<div class="mainreview">
+    <div style="margin-bottom: 10px;">
+        <img width="50px" height="50px" src="<?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->avatar : Avatar::getAvatar($review['user_id'])->getURL(Avatar::MEDIUM)) ?>" style="vertical-align: middle;">
+        <span class="stars" style="vertical-align: middle;">
+            <? $rating = round($review['rating'], 1) ?>
+            <? $v = $rating >= 0.75 ? 3 : ($rating >= 0.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <? $v = $rating >= 1.75 ? 3 : ($rating >= 1.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <? $v = $rating >= 2.75 ? 3 : ($rating >= 2.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <? $v = $rating >= 3.75 ? 3 : ($rating >= 3.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <? $v = $rating >= 4.75 ? 3 : ($rating >= 4.25 ? 2 : "") ?>
+            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+        </span>
+    </div>
     <?= formatReady($review['review']) ?>
 </div>
 

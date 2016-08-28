@@ -45,6 +45,9 @@ class MymaterialController extends PluginController {
                 $this->material['filename'] = $_FILES['file']['name'];
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
             }
+            if (!$this->material['license']) {
+                $this->material['license'] = "CC BY SA 3.0";
+            }
             $this->material->store();
 
 

@@ -15,6 +15,11 @@ class MarketController extends PluginController {
         $tag_matrix_entries_number = 9;
         $tag_subtags_number = 6;
 
+        if (Request::get("disable_maininfo")) {
+            UserConfig::get($GLOBALS['user']->id)->store("LEHRMARKTPLATZ_DISABLE_MAININFO", 1);
+            $this->redirect("market/overview");
+        }
+
         if (Request::get("tags")) {
             $tags = $this->tag_history = explode(",", Request::get("tags"));
             $this->without_tags = array();

@@ -83,8 +83,8 @@
 
 <div class="license" style="text-align: center; margin-top: 20px;">
     <?= _("Lizenz:") ?>
-    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">
-        <img src="<?= $plugin->getPluginURL()."/assets/cc-by.png" ?>">
+    <a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank">
+        <img src="<?= $plugin->getPluginURL()."/assets/cc-by-sa.svg" ?>" width="80px">
     </a>
     <a href="<?= PluginEngine::getLink($plugin, array(), "market/licenseinfo") ?>" data-dialog>
         <?= _("Was heißt das?") ?>

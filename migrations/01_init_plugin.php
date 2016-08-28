@@ -33,7 +33,7 @@ class InitPlugin extends Migration {
                 `front_image_content_type` VARCHAR(64) NULL,
                 `structure` text NULL,
                 `rating` DOUBLE NULL,
-                `license` VARCHAR( 64 ) NOT NULL DEFAULT 'CC BY 4.0',
+                `license` VARCHAR( 64 ) NOT NULL DEFAULT 'CC BY SA 3.0',
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL
             ) ENGINE=InnoDB
