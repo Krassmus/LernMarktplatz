@@ -77,7 +77,7 @@ class MarketMaterial extends SimpleORMap {
         $already_searched = (bool) StudipCacheFactory::getCache()->read($cache_name);
         if (!$already_searched) {
             $host = MarketHost::findOneBySQL("index_server = '1' AND allowed_as_index_server = '1' ORDER BY RAND()");
-            if ($host) {
+            if ($host && !$host->isMe()) {
                 $host->fetchRemoteSearch($text, $tag);
             }
             StudipCacheFactory::getCache()->read($cache_name, "1", 60);
