@@ -56,6 +56,7 @@ jQuery(document).on("change", ".lehrmarktplatz_tags li input", function () {
 
 jQuery(document).on("click", ".matrix a", function () {
     jQuery(this).closest(".matrix").hide("puff");
+    jQuery(".maininfo").slideUp();
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/market/matrixnavigation",
         "data": {
