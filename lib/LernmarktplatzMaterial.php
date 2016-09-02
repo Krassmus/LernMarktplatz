@@ -48,7 +48,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
         $materials = array();
         foreach ($material_data as $data) {
             $materials[] = LernmarktplatzMaterial::buildExisting($data);
-        } 
+        }
         return $materials;
     }
 
