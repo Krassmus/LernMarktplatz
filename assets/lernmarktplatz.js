@@ -75,6 +75,7 @@ jQuery(document).on("click", ".matrix a", function () {
 
 jQuery(document).on("click", ".breadcrumb a", function () {
     jQuery(".matrix").fadeOut();
+    jQuery(".material_overview").fadeOut();
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/market/matrixnavigation",
         "data": {
