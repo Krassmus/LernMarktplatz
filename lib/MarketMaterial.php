@@ -41,7 +41,10 @@ class MarketMaterial extends SimpleORMap {
                 OR lehrmarktplatz_tags.name LIKE :text
             GROUP BY lehrmarktplatz_material.material_id
         ");
-        $statement->execute(array('text' => $text));
+        $statement->execute(array(
+            'tag' => $text,
+            'text' => "%".$text."%"
+        ));
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
         $materials = array();
         foreach ($material_data as $data) {
