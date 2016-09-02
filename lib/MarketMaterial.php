@@ -42,7 +42,6 @@ class MarketMaterial extends SimpleORMap {
             GROUP BY lehrmarktplatz_material.material_id
         ");
         $statement->execute(array(
-            'tag' => $text,
             'text' => "%".$text."%"
         ));
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
