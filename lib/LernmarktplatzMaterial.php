@@ -39,7 +39,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 OR description LIKE :text
                 OR short_description LIKE :text
                 OR lernmarktplatz_tags.name LIKE :text
-            GROUP BY lermarktplatz_material.material_id
+            GROUP BY lernmarktplatz_material.material_id
         ");
         $statement->execute(array(
             'text' => "%".$text."%"
