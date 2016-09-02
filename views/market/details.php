@@ -11,6 +11,14 @@
         <?= Assets::img("icons/35/white/download", array('class' => "whitebutton")) ?>
         <div class="filename"><?= htmlReady($material['filename']) ?></div>
     </a>
+    <? if ($GLOBALS['perm']->have_perm("tutor")) : ?>
+        <div>
+            <a href="<?= PluginEngine::getLink($plugin, array(), "market/add_to_course/".$material->getId()) ?>" data-dialog>
+                <?= Assets::img("icons/16/blue/add/course", array('class' => "text-bottom")) ?>
+                <?= _("Zu Veranstaltung hinzufügen") ?>
+            </a>
+        </div>
+    <? endif ?>
 </div>
 
 <div>
@@ -51,8 +59,8 @@
         <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
         <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
-            <strong><?= htmlReady($user['name']) ?></strong>
-            <div><i><?= htmlReady($material->host->name) ?></i></div>
+            <div class="author_name"><?= htmlReady($user['name']) ?></div>
+            <div class="author_host">(<?= htmlReady($material->host->name) ?>)</div>
             <div class="description"><?= formatReady($user['description']) ?></div>
         </div>
     <? else : ?>
@@ -60,8 +68,8 @@
         <? $image = Avatar::getAvatar($material['user_id'])->getURL(Avatar::MEDIUM) ?>
         <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
-            <div><?= htmlReady($user->getFullName()) ?></div>
-            <div><i><?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?></i></div>
+            <div class="author_name"><?= htmlReady($user->getFullName()) ?></div>
+            <div class="author_host">(<?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?>)</div>
             <div class="description"><?
                 $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
                 if ($user_description_datafield) {

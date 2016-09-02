@@ -227,6 +227,11 @@ class MarketController extends PluginController {
 
     }
 
+    public function add_to_course_action($material_id)
+    {
+        $this->material = new MarketMaterial($material_id);
+    }
+
     protected function getFolderStructure($folder) {
         $structure = array();
         foreach (scandir($folder) as $file) {
