@@ -1,6 +1,6 @@
 <?php
 
-class LehrmarktplatzReview extends SimpleORMap {
+class LernmarktplatzReview extends SimpleORMap {
 
     protected static function configure($config = array())
     {
@@ -15,7 +15,7 @@ class LehrmarktplatzReview extends SimpleORMap {
             'assoc_foreign_key' => 'host_id'
         );
         $config['has_many']['comments'] = array(
-            'class_name' => 'LehrmarktplatzComment',
+            'class_name' => 'LernmarktplatzComment',
             'foreign_key' => 'review_id',
             'order_by' => "ORDER BY mkdate ASC"
         );

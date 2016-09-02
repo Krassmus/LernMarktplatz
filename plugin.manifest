@@ -2,3 +2,4 @@ pluginname=LernMarktplatz
 pluginclassname=LehrMarktplatz
 version=1.0.3
 origin=RasmusFuhse
+studipMinVersion=3.1

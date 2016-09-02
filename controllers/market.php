@@ -112,9 +112,9 @@ class MarketController extends PluginController {
     {
         Navigation::activateItem("/lernmarktplatz/overview");
         $this->material = new MarketMaterial($material_id);
-        $this->review = LehrmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL", array($material_id, $GLOBALS['user']->id));
+        $this->review = LernmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL", array($material_id, $GLOBALS['user']->id));
         if (!$this->review) {
-            $this->review = new LehrmarktplatzReview();
+            $this->review = new LernmarktplatzReview();
             $this->review['material_id'] = $this->material->getId();
             $this->review['user_id'] = $GLOBALS['user']->id;
         }
@@ -133,9 +133,9 @@ class MarketController extends PluginController {
     public function discussion_action($review_id)
     {
         Navigation::activateItem("/lernmarktplatz/overview");
-        $this->review = new LehrmarktplatzReview($review_id);
+        $this->review = new LernmarktplatzReview($review_id);
         if (Request::isPost() && Request::get("comment")) {
-            $comment = new LehrmarktplatzComment();
+            $comment = new LernmarktplatzComment();
             $comment['review_id'] = $review_id;
             $comment['comment'] = Request::get("comment");
             $comment['user_id'] = $GLOBALS['user']->id;
@@ -145,9 +145,9 @@ class MarketController extends PluginController {
 
     public function comment_action($review_id)
     {
-        $this->review = new LehrmarktplatzReview($review_id);
+        $this->review = new LernmarktplatzReview($review_id);
         if (Request::isPost() && Request::get("comment")) {
-            $this->comment = new LehrmarktplatzComment();
+            $this->comment = new LernmarktplatzComment();
             $this->comment['review_id'] = $review_id;
             $this->comment['comment'] = studip_utf8decode(Request::get("comment"));
             $this->comment['user_id'] = $GLOBALS['user']->id;

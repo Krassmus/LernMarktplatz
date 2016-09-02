@@ -1,12 +1,12 @@
 <?php
 
-class LehrmarktplatzComment extends SimpleORMap {
+class LernmarktplatzComment extends SimpleORMap {
 
     protected static function configure($config = array())
     {
         $config['db_table'] = 'lernmarktplatz_comments';
         $config['belongs_to']['review'] = array(
-            'class_name' => 'LehrmarktplatzReview',
+            'class_name' => 'LernmarktplatzReview',
             'foreign_key' => 'review_id'
         );
         $config['has_one']['host'] = array(

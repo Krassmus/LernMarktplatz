@@ -5,8 +5,8 @@ require_once __DIR__."/lib/MarketHost.php";
 require_once __DIR__."/lib/MarketUser.php";
 require_once __DIR__."/lib/MarketMaterial.php";
 require_once __DIR__."/lib/MarketTag.php";
-require_once __DIR__."/lib/LehrmarktplatzReview.php";
-require_once __DIR__."/lib/LehrmarktplatzComment.php";
+require_once __DIR__."/lib/LernmarktplatzReview.php";
+require_once __DIR__."/lib/LernmarktplatzComment.php";
 
 $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'] = "X-RASMUS";    //MD5-hash of the armored public key of the server
 $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE']       = "X-SIGNATURE"; //the base64 encoded signature provided by the public key over the body of the message
@@ -34,7 +34,7 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
             $last_update = Request::get("server_timestamp", time() - 30);
             $review_id = $data['Lehrmarktplatz']['review_id'];
             $output = array('comments' => array());
-            $comments = LehrmarktplatzComment::findBySQL("review_id = :review_id AND mkdate >= :last_update ORDER BY mkdate ASC", array(
+            $comments = LernmarktplatzComment::findBySQL("review_id = :review_id AND mkdate >= :last_update ORDER BY mkdate ASC", array(
                 'last_update' => $last_update,
                 'review_id' => $review_id
             ));

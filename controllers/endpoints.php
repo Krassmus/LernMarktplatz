@@ -353,14 +353,14 @@ class EndpointsController extends PluginController {
                     $user['description'] = $data['user']['description'] ?: null;
                     $user->store();
 
-                    $review = LehrmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id = ?", array(
+                    $review = LernmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id = ?", array(
                         $material_id,
                         $user->getId(),
                         $host->getId()
                     ));
 
                     if (!$review) {
-                        $review = new LehrmarktplatzReview();
+                        $review = new LernmarktplatzReview();
                         $review['user_id'] = $user->getId();
                         $review['foreign_review_id'] = $data['data']['foreign_review_id'];
                         $review['host_id'] = $host->getId();
@@ -400,13 +400,13 @@ class EndpointsController extends PluginController {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
                     if ($host_hash) {
-                        /*$review = LehrmarktplatzReview::findOneBySQL("INNER JOIN lernmarktplatz_hosts ON (lernmarktplatz_hosts.host_id = lernmarktplatz_reviews.host_id) WHERE foreign_review_id = :id AND MD5(lernmarktplatz_hosts.public_key) = :host_hash", array(
+                        /*$review = LernmarktplatzReview::findOneBySQL("INNER JOIN lernmarktplatz_hosts ON (lernmarktplatz_hosts.host_id = lernmarktplatz_reviews.host_id) WHERE foreign_review_id = :id AND MD5(lernmarktplatz_hosts.public_key) = :host_hash", array(
                             'id' => $review_id,
                             'host_hash' => $host_hash
                         ));*/
-                        $review = LehrmarktplatzReview::findOneByForeign_review_id($review_id);
+                        $review = LernmarktplatzReview::findOneByForeign_review_id($review_id);
                     } else {
-                        $review = LehrmarktplatzReview::find($review_id);
+                        $review = LernmarktplatzReview::find($review_id);
                     }
                     if (!$review) {
                         throw new Exception("Unknown material.");
@@ -428,7 +428,7 @@ class EndpointsController extends PluginController {
                     $user->store();
 
 
-                    $comment = new LehrmarktplatzComment();
+                    $comment = new LernmarktplatzComment();
                     $comment['user_id'] = $user->getId();
                     $comment['foreign_comment_id'] = $data['data']['foreign_comment_id'];
                     $comment['host_id'] = $host->getId();

@@ -94,7 +94,7 @@ class MarketMaterial extends SimpleORMap {
             'foreign_key' => 'host_id'
         );
         $config['has_many']['reviews'] = array(
-            'class_name' => 'LehrmarktplatzReview',
+            'class_name' => 'LernmarktplatzReview',
             'order_by' => 'ORDER BY mkdate DESC',
             'on_delete' => 'delete',
             'on_store' => 'store',
@@ -366,12 +366,12 @@ class MarketMaterial extends SimpleORMap {
                         }
                     }
                     if ($currenthost && $currenthost['public_key'] && !$currenthost->isMe()) {
-                        $review = LehrmarktplatzReview::findOneBySQL("foreign_review_id = ? AND host_id = ?", array(
+                        $review = LernmarktplatzReview::findOneBySQL("foreign_review_id = ? AND host_id = ?", array(
                             $review_data['foreign_review_id'],
                             $currenthost->getId()
                         ));
                         if (!$review) {
-                            $review = new LehrmarktplatzReview();
+                            $review = new LernmarktplatzReview();
                             $review['foreign_review_id'] = $review_data['foreign_review_id'];
                             $review['material_id'] = $this->getId();
                             $review['host_id'] = $currenthost->getId();
