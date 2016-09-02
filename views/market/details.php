@@ -14,7 +14,7 @@
     <? if ($GLOBALS['perm']->have_perm("tutor")) : ?>
         <div>
             <a href="<?= PluginEngine::getLink($plugin, array(), "market/add_to_course/".$material->getId()) ?>" data-dialog>
-                <?= Assets::img("icons/16/blue/add/seminar", array('class' => "text-bottom")) ?>
+                <?= Assets::img("icons/16/blue/move_down/seminar", array('class' => "text-bottom")) ?>
                 <?= _("Zu Veranstaltung hinzufügen") ?>
             </a>
         </div>
