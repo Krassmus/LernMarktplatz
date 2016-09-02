@@ -7,7 +7,7 @@ class AdminController extends PluginController {
     function before_filter($action, $args)
     {
         parent::before_filter($action, $args);
-        Navigation::activateItem("/admin/config/lehrmarktplatz");
+        Navigation::activateItem("/admin/config/lernmarktplatz");
         if (!$GLOBALS['perm']->have_perm("root")) {
             throw new AccessDeniedException();
         }

@@ -7,17 +7,17 @@ class MymaterialController extends PluginController {
     function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        PageLayout::setTitle(_("Lehrmaterialien"));
+        PageLayout::setTitle(_("Lernmaterialien"));
     }
 
     public function overview_action() {
-        Navigation::activateItem("/lehrmarktplatz/overview");
+        Navigation::activateItem("/lernmarktplatz/overview");
 
     }
 
     public function details_action($material_id)
     {
-        Navigation::activateItem("/lehrmarktplatz/overview");
+        Navigation::activateItem("/lernmarktplatz/overview");
         $this->material = new MarketMaterial($material_id);
     }
 
@@ -56,7 +56,7 @@ class MymaterialController extends PluginController {
 
             $this->material->pushDataToIndexServers();
 
-            PageLayout::postMessage(MessageBox::success(_("Lehrmaterial erfolgreich gespeichert.")));
+            PageLayout::postMessage(MessageBox::success(_("Lernmaterial erfolgreich gespeichert.")));
             $this->redirect("market/details/".$this->material->getId());
         }
     }

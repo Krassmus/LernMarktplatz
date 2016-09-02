@@ -7,11 +7,11 @@ class MarketController extends PluginController {
     function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        PageLayout::setTitle(_("Lehrmaterialien"));
+        PageLayout::setTitle(_("Lernmaterialien"));
     }
 
     public function overview_action() {
-        Navigation::activateItem("/lehrmarktplatz/overview");
+        Navigation::activateItem("/lernmarktplatz/overview");
         $tag_matrix_entries_number = 9;
         $tag_subtags_number = 6;
 
@@ -91,7 +91,7 @@ class MarketController extends PluginController {
 
     public function details_action($material_id)
     {
-        Navigation::activateItem("/lehrmarktplatz/overview");
+        Navigation::activateItem("/lernmarktplatz/overview");
         $this->material = new MarketMaterial($material_id);
         if ($this->material['host_id']) {
             $success = $this->material->fetchData();
@@ -110,7 +110,7 @@ class MarketController extends PluginController {
 
     public function review_action($material_id = null)
     {
-        Navigation::activateItem("/lehrmarktplatz/overview");
+        Navigation::activateItem("/lernmarktplatz/overview");
         $this->material = new MarketMaterial($material_id);
         $this->review = LehrmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL", array($material_id, $GLOBALS['user']->id));
         if (!$this->review) {
@@ -132,7 +132,7 @@ class MarketController extends PluginController {
 
     public function discussion_action($review_id)
     {
-        Navigation::activateItem("/lehrmarktplatz/overview");
+        Navigation::activateItem("/lernmarktplatz/overview");
         $this->review = new LehrmarktplatzReview($review_id);
         if (Request::isPost() && Request::get("comment")) {
             $comment = new LehrmarktplatzComment();
@@ -217,7 +217,7 @@ class MarketController extends PluginController {
 
             $this->material->pushDataToIndexServers();
 
-            PageLayout::postMessage(MessageBox::success(_("Lehrmaterial erfolgreich gespeichert.")));
+            PageLayout::postMessage(MessageBox::success(_("Lernmaterial erfolgreich gespeichert.")));
             $this->redirect("market/details/".$this->material->getId());
         }
     }

@@ -16,14 +16,14 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
     public function __construct() {
         parent::__construct();
         if ($GLOBALS['perm']->have_perm("autor")) {
-            $topicon = new Navigation(_("Lehrmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
+            $topicon = new Navigation(_("Lernmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
             $topicon->setImage(Assets::image_path("icons/lightblue/service.svg"));
-            Navigation::addItem("/lehrmarktplatz", $topicon);
-            Navigation::addItem("/lehrmarktplatz/overview", new Navigation(_("Lehrmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
+            Navigation::addItem("/lernmarktplatz", $topicon);
+            Navigation::addItem("/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
         }
         if ($GLOBALS['perm']->have_perm("root")) {
-            $tab = new Navigation(_("Lehrmarktplatz"), PluginEngine::getURL($this, array(), "admin/hosts"));
-            Navigation::addItem("/admin/config/lehrmarktplatz", $tab);
+            $tab = new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "admin/hosts"));
+            Navigation::addItem("/admin/config/lernmarktplatz", $tab);
         }
         if ($GLOBALS['i_page'] === "folder.php" && $GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
             NotificationCenter::addObserver($this, "addToFolderSidebar", "SidebarWillRender");
