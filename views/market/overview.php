@@ -51,7 +51,7 @@
 Sidebar::Get()->setImage($plugin->getPluginURL()."/assets/sidebar-service.png");
 $actions = new ActionsWidget();
 $actions->addLink(
-    _("Eigenes Lehrmaterial hochladen"),
+    _("Eigenes Lernmaterial hochladen"),
     PluginEngine::getURL($plugin, array(), "market/edit"),
     Assets::image_path("icons/blue/add"),
     array('data-dialog' => "1")

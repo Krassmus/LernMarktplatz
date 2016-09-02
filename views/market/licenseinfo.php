@@ -1,4 +1,4 @@
-<h1><?= _("Wozu die Lizenzen in Lehrmarktplatz?") ?></h1>
+<h1><?= _("Wozu die Lizenzen in Lernmarktplatz?") ?></h1>
 
 <p>
     Urheberrecht und Lizenzrecht ist echt kompliziert. In jedem Land der Erde gibt es andere Auslegungen und als
