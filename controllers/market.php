@@ -16,7 +16,7 @@ class MarketController extends PluginController {
         $tag_subtags_number = 6;
 
         if (Request::get("disable_maininfo")) {
-            UserConfig::get($GLOBALS['user']->id)->store("LEHRMARKTPLATZ_DISABLE_MAININFO", 1);
+            UserConfig::get($GLOBALS['user']->id)->store("LERNMARKTPLATZ_DISABLE_MAININFO", 1);
             $this->redirect("market/overview");
         }
 

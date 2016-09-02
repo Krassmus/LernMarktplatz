@@ -71,7 +71,7 @@
             <div class="author_name"><?= htmlReady($user->getFullName()) ?></div>
             <div class="author_host">(<?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?>)</div>
             <div class="description"><?
-                $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+                $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
                 if ($user_description_datafield) {
                     $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($user['user_id'], $user_description_datafield->getId()));
                     echo $datafield_entry && $datafield_entry['content'] ? formatReady($datafield_entry['content']) : "";

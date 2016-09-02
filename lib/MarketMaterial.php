@@ -11,12 +11,12 @@ class MarketMaterial extends SimpleORMap {
     {
         self::fetchRemoteSearch($tag_name, true);
         $statement = DBManager::get()->prepare("
-            SELECT lehrmarktplatz_material.*
-            FROM lehrmarktplatz_material
-                INNER JOIN lehrmarktplatz_tags_material USING (material_id)
-                INNER JOIN lehrmarktplatz_tags USING (tag_hash)
-            WHERE lehrmarktplatz_tags.name = :tag
-            GROUP BY lehrmarktplatz_material.material_id
+            SELECT lernmarktplatz_material.*
+            FROM lernmarktplatz_material
+                INNER JOIN lernmarktplatz_tags_material USING (material_id)
+                INNER JOIN lernmarktplatz_tags USING (tag_hash)
+            WHERE lernmarktplatz_tags.name = :tag
+            GROUP BY lernmarktplatz_material.material_id
         ");
         $statement->execute(array('tag' => $tag_name));
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -31,15 +31,15 @@ class MarketMaterial extends SimpleORMap {
     {
         self::fetchRemoteSearch($text);
         $statement = DBManager::get()->prepare("
-            SELECT lehrmarktplatz_material.*
-            FROM lehrmarktplatz_material
-                LEFT JOIN lehrmarktplatz_tags_material USING (material_id)
-                LEFT JOIN lehrmarktplatz_tags USING (tag_hash)
-            WHERE lehrmarktplatz_material.name LIKE :text
+            SELECT lernmarktplatz_material.*
+            FROM lernmarktplatz_material
+                LEFT JOIN lernmarktplatz_tags_material USING (material_id)
+                LEFT JOIN lernmarktplatz_tags USING (tag_hash)
+            WHERE lernmarktplatz_material.name LIKE :text
                 OR description LIKE :text
                 OR short_description LIKE :text
-                OR lehrmarktplatz_tags.name LIKE :text
-            GROUP BY lehrmarktplatz_material.material_id
+                OR lenrmarktplatz_tags.name LIKE :text
+            GROUP BY lermarktplatz_material.material_id
         ");
         $statement->execute(array(
             'text' => "%".$text."%"
@@ -58,7 +58,7 @@ class MarketMaterial extends SimpleORMap {
         if ($tag) {
             self::fetchRemoteSearch($tag['name'], true);
         }
-        return self::findBySQL("INNER JOIN lehrmarktplatz_tags_material USING (material_id) WHERE lehrmarktplatz_tags_material.tag_hash = ?", array($tag_hash));
+        return self::findBySQL("INNER JOIN lernmarktplatz_tags_material USING (material_id) WHERE lernmarktplatz_tags_material.tag_hash = ?", array($tag_hash));
     }
 
     static public function getFileDataPath() {
@@ -75,7 +75,7 @@ class MarketMaterial extends SimpleORMap {
      * @param bool|false $tag
      */
     static protected function fetchRemoteSearch($text, $tag = false) {
-        $cache_name = "Lehrmarktplatz_remote_searched_for_".md5($text)."_".($tag ? 1 : 0);
+        $cache_name = "Lernmarktplatz_remote_searched_for_".md5($text)."_".($tag ? 1 : 0);
         $already_searched = (bool) StudipCacheFactory::getCache()->read($cache_name);
         if (!$already_searched) {
             $host = MarketHost::findOneBySQL("index_server = '1' AND allowed_as_index_server = '1' ORDER BY RAND()");
@@ -88,7 +88,7 @@ class MarketMaterial extends SimpleORMap {
 
     protected static function configure($config = array())
     {
-        $config['db_table'] = 'lehrmarktplatz_material';
+        $config['db_table'] = 'lernmarktplatz_material';
         $config['belongs_to']['host'] = array(
             'class_name' => 'MarketHost',
             'foreign_key' => 'host_id'
@@ -136,11 +136,11 @@ class MarketMaterial extends SimpleORMap {
     public function getTopics()
     {
         $statement = DBManager::get()->prepare("
-            SELECT lehrmarktplatz_tags.*
-            FROM lehrmarktplatz_tags
-                INNER JOIN lehrmarktplatz_tags_material ON (lehrmarktplatz_tags_material.tag_hash = lehrmarktplatz_tags.tag_hash)
-            WHERE lehrmarktplatz_tags_material.material_id = :material_id
-            ORDER BY lehrmarktplatz_tags.name ASC
+            SELECT lernmarktplatz_tags.*
+            FROM lernmarktplatz_tags
+                INNER JOIN lernmarktplatz_tags_material ON (lernmarktplatz_tags_material.tag_hash = lernmarktplatz_tags.tag_hash)
+            WHERE lernmarktplatz_tags_material.material_id = :material_id
+            ORDER BY lernmarktplatz_tags.name ASC
         ");
         $statement->execute(array('material_id' => $this->getId()));
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -148,17 +148,17 @@ class MarketMaterial extends SimpleORMap {
 
     public function setTopics($tags) {
         $statement = DBManager::get()->prepare("
-            DELETE FROM lehrmarktplatz_tags_material
+            DELETE FROM lernmarktplatz_tags_material
             WHERE material_id = :material_id
         ");
         $statement->execute(array('material_id' => $this->getId()));
         $insert_tag = DBManager::get()->prepare("
-            INSERT IGNORE INTO lehrmarktplatz_tags
+            INSERT IGNORE INTO lernmarktplatz_tags
             SET name = :tag,
                 tag_hash = MD5(:tag)
         ");
         $add_tag = DBManager::get()->prepare("
-            INSERT IGNORE INTO lehrmarktplatz_tags_material
+            INSERT IGNORE INTO lernmarktplatz_tags_material
             SET tag_hash = MD5(:tag),
                 material_id = :material_id
         ");
@@ -264,7 +264,7 @@ class MarketMaterial extends SimpleORMap {
             $tag->store();
         }
         $statement = DBManager::get()->prepare("
-            INSERT IGNORE INTO lehrmarktplatz_tags_material
+            INSERT IGNORE INTO lernmarktplatz_tags_material
             SET tag_hash = :tag_hash,
                 material_id = :material_id
         ");
@@ -289,7 +289,7 @@ class MarketMaterial extends SimpleORMap {
         unset($data['data']['id']);
         unset($data['data']['user_id']);
         unset($data['data']['host_id']);
-        $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+        $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
         if ($user_description_datafield) {
             $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($this['user_id'], $user_description_datafield->getId()));
         }

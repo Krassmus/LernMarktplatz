@@ -51,7 +51,7 @@
     </tbody>
 </table>
 
-<? if (count($hosts) < 2 && !$_SESSION['Lehrmarktplatz_no_thanx']) : ?>
+<? if (count($hosts) < 2 && !$_SESSION['Lernmarktplatz_no_thanx']) : ?>
     <div id="init_first_hosts_dialog" style="display: none;">
         <form action="<?= PluginEngine::getLink($plugin, array(), "admin/add_new_host") ?>" method="post">
             <h2><?= _("Werden Sie Teil des weltweiten Stud.IP Lernmarktplatzes!") ?></h2>

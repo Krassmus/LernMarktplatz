@@ -4,7 +4,7 @@ class InitPlugin extends Migration {
 
     function up() {
         DBManager::get()->exec("
-            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_hosts` (
+            CREATE TABLE IF NOT EXISTS `lernmarktplatz_hosts` (
                 `host_id` varchar(32) NOT NULL PRIMARY KEY,
                 `name` varchar(64) NOT NULL,
                 `url` varchar(200) NOT NULL,
@@ -20,7 +20,7 @@ class InitPlugin extends Migration {
             ) ENGINE=InnoDB
         ");
         DBManager::get()->exec("
-            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_material` (
+            CREATE TABLE IF NOT EXISTS `lernmarktplatz_material` (
                 `material_id` varchar(32) NOT NULL PRIMARY KEY,
                 `foreign_material_id` VARCHAR( 32 ) NULL,
                 `host_id` varchar(32) NULL,
@@ -40,7 +40,7 @@ class InitPlugin extends Migration {
         ");
 
         DBManager::get()->exec("
-            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_tags_material` (
+            CREATE TABLE IF NOT EXISTS `lernmarktplatz_tags_material` (
                 `material_id` varchar(32) NOT NULL,
                 `tag_hash` varchar(32) NOT NULL,
                 UNIQUE KEY `unique_tags` (`material_id`,`tag_hash`),
@@ -49,14 +49,14 @@ class InitPlugin extends Migration {
             ) ENGINE=InnoDB
         ");
         DBManager::get()->exec("
-            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_tags` (
+            CREATE TABLE IF NOT EXISTS `lernmarktplatz_tags` (
                 `tag_hash` varchar(32) NOT NULL,
                 `name` varchar(64) NOT NULL,
                 PRIMARY KEY (`tag_hash`)
             ) ENGINE=InnoDB
         ");
         DBManager::get()->exec("
-            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_user` (
+            CREATE TABLE IF NOT EXISTS `lernmarktplatz_user` (
                 `user_id` varchar(32) NOT NULL,
                 `foreign_user_id` varchar(32) NOT NULL,
                 `host_id` varchar(32) NOT NULL,
@@ -73,7 +73,7 @@ class InitPlugin extends Migration {
         ");
 
         DBManager::get()->exec("
-            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_reviews` (
+            CREATE TABLE IF NOT EXISTS `lernmarktplatz_reviews` (
                 `review_id` varchar(32) NOT NULL,
                 `material_id` varchar(32) NOT NULL,
                 `foreign_review_id` varchar(32) NULL,
@@ -93,7 +93,7 @@ class InitPlugin extends Migration {
         ");
 
         DBmanager::get()->exec("
-            CREATE TABLE IF NOT EXISTS `lehrmarktplatz_comments` (
+            CREATE TABLE IF NOT EXISTS `lernmarktplatz_comments` (
                 `comment_id` varchar(32) NOT NULL,
                 `review_id` varchar(32) NOT NULL,
                 `foreign_comment_id` varchar(32) DEFAULT NULL,
@@ -112,8 +112,8 @@ class InitPlugin extends Migration {
 
         DBManager::get()->exec("
             INSERT IGNORE INTO datafields
-            SET datafield_id = MD5('Lehrmarktplatz-Beschreibung'),
-                name = 'Lehrmarktplatz-Beschreibung',
+            SET datafield_id = MD5('Lernmarktplatz-Beschreibung'),
+                name = 'Lernmarktplatz-Beschreibung',
                 object_type = 'user',
                 edit_perms = 'user',
                 view_perms = 'user',
@@ -127,25 +127,25 @@ class InitPlugin extends Migration {
         DBManager::get()->exec("
             INSERT IGNORE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`)
             VALUES
-                (MD5('LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD'), '', 'LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD', MD5('Lehrmarktplatz-Beschreibung'), MD5('Lehrmarktplatz-Beschreibung'), 'string', 'global', 'LEHRMARKTPLATZ', 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'MD5-Hash or name of datafield that is representing the user-description', '', '')
+                (MD5('LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD'), '', 'LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD', MD5('Lehrmarktplatz-Beschreibung'), MD5('Lehrmarktplatz-Beschreibung'), 'string', 'global', 'LEHRMARKTPLATZ', 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'MD5-Hash or name of datafield that is representing the user-description', '', '')
         ");
     }
 
     function down() {
         DBManager::get()->exec("
-            DROP TABLE IF EXISTS `lehrmarktplatz_hosts`;
+            DROP TABLE IF EXISTS `lernmarktplatz_hosts`;
         ");
         DBManager::get()->exec("
-            DROP TABLE IF EXISTS `lehrmarktplatz_material`;
+            DROP TABLE IF EXISTS `lernmarktplatz_material`;
         ");
         DBManager::get()->exec("
-            DROP TABLE IF EXISTS `lehrmarktplatz_tags_material`;
+            DROP TABLE IF EXISTS `lernmarktplatz_tags_material`;
         ");
         DBManager::get()->exec("
-            DROP TABLE IF EXISTS `lehrmarktplatz_tags`;
+            DROP TABLE IF EXISTS `lernmarktplatz_tags`;
         ");
         DBManager::get()->exec("
-            DROP TABLE IF EXISTS `lehrmarktplatz_user`;
+            DROP TABLE IF EXISTS `lernmarktplatz_user`;
         ");
     }
 }

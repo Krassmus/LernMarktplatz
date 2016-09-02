@@ -4,7 +4,7 @@ class LehrmarktplatzReview extends SimpleORMap {
 
     protected static function configure($config = array())
     {
-        $config['db_table'] = 'lehrmarktplatz_reviews';
+        $config['db_table'] = 'lernmarktplatz_reviews';
         $config['belongs_to']['material'] = array(
             'class_name' => 'MarketMaterial',
             'foreign_key' => 'material_id'
@@ -57,7 +57,7 @@ class LehrmarktplatzReview extends SimpleORMap {
             unset($data['data']['id']);
             unset($data['data']['user_id']);
             unset($data['data']['host_id']);
-            $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+            $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
             if ($user_description_datafield) {
                 $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($this['user_id'], $user_description_datafield->getId()));
             }

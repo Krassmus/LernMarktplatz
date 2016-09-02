@@ -16,7 +16,7 @@
 
     <div style="margin-top: 10px;">
         <?= _("Themen (am besten mindestens 5)") ?>
-        <ul class="clean lehrmarktplatz_tags" style="margin-top: 10px;">
+        <ul class="clean lernmarktplatz_tags" style="margin-top: 10px;">
             <? foreach ($material->getTopics() as $tag) : ?>
             <li>
                 <?= Assets::img("icons/20/black/topic", array('class' => "text-bottom")) ?>

@@ -19,7 +19,7 @@ class EndpointsController extends PluginController {
         $this->render_json(array(
             'name' => $GLOBALS['UNI_NAME_CLEAN'],
             'public_key' => $host['public_key'],
-            'url' => $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/",
+            'url' => $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/",
             'index_server' => $host['index_server']
         ));
     }
@@ -31,8 +31,8 @@ class EndpointsController extends PluginController {
     public function update_server_info_action()
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
-            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]);
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
@@ -70,7 +70,7 @@ class EndpointsController extends PluginController {
             $this->refreshHost(studip_utf8decode(Request::get("from")));
         }
 
-        if (get_config("LEHRMARKTPLATZ_SHOW_KNOWN_HOSTS")) {
+        if (get_config("LERNMARKTPLATZ_SHOW_KNOWN_HOSTS")) {
             foreach (MarketHosts::findAll() as $host) {
                 if (!$host->isMe() && $host['active']) {
                     $output['hosts'][] = array(
@@ -99,7 +99,7 @@ class EndpointsController extends PluginController {
                 $host['public_key'] = $host_data['public_key'];
                 $host['last_updated'] = time();
                 if ($host->isNew()) {
-                    $host['active'] = get_config("LEHRMARKTPLATZ_ACTIVATE_NEW_HOSTS") ? 1 : 0;
+                    $host['active'] = get_config("LERNMARKTPLATZ_ACTIVATE_NEW_HOSTS") ? 1 : 0;
                 }
                 $host->store();
             }
@@ -168,7 +168,7 @@ class EndpointsController extends PluginController {
             foreach ($material->getTopics() as $topic) {
                 $topics[] = $topic['name'];
             }
-            $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+            $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
             if ($user_description_datafield) {
                 $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($material['user_id'], $user_description_datafield->getId()));
             }
@@ -215,7 +215,7 @@ class EndpointsController extends PluginController {
                     'description' => $material['description'],
                     'content_type' => $material['content_type'],
                     'front_image_content_type' => $material['front_image_content_type'],
-                    'url' => ($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lehrmarktplatz/market/download/".$item_id,
+                    'url' => ($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lehrmarktplatz/market/download/".$item_id,
                     'structure' => $material['structure'],
                     'license' => $material['license']
                 ),
@@ -241,8 +241,8 @@ class EndpointsController extends PluginController {
     public function push_data_action()
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
-            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]);
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
@@ -327,8 +327,8 @@ class EndpointsController extends PluginController {
     public function add_review_action($material_id)
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
-            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]);
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]);
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
@@ -393,14 +393,14 @@ class EndpointsController extends PluginController {
     public function add_comment_action($review_id, $host_hash = null)
     {
         if (Request::isPost()) {
-            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])]; //MD5_HASH_OF_RSA_PUBLIC_KEY
-            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'])]); //BASE64_RSA_SIGNATURE
+            $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])]; //MD5_HASH_OF_RSA_PUBLIC_KEY
+            $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]); //BASE64_RSA_SIGNATURE
             $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
                     if ($host_hash) {
-                        /*$review = LehrmarktplatzReview::findOneBySQL("INNER JOIN lehrmarktplatz_hosts ON (lehrmarktplatz_hosts.host_id = lehrmarktplatz_reviews.host_id) WHERE foreign_review_id = :id AND MD5(lehrmarktplatz_hosts.public_key) = :host_hash", array(
+                        /*$review = LehrmarktplatzReview::findOneBySQL("INNER JOIN lernmarktplatz_hosts ON (lernmarktplatz_hosts.host_id = lernmarktplatz_reviews.host_id) WHERE foreign_review_id = :id AND MD5(lernmarktplatz_hosts.public_key) = :host_hash", array(
                             'id' => $review_id,
                             'host_hash' => $host_hash
                         ));*/

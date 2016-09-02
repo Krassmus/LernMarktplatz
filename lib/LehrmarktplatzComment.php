@@ -4,7 +4,7 @@ class LehrmarktplatzComment extends SimpleORMap {
 
     protected static function configure($config = array())
     {
-        $config['db_table'] = 'lehrmarktplatz_comments';
+        $config['db_table'] = 'lernmarktplatz_comments';
         $config['belongs_to']['review'] = array(
             'class_name' => 'LehrmarktplatzReview',
             'foreign_key' => 'review_id'
@@ -41,7 +41,7 @@ class LehrmarktplatzComment extends SimpleORMap {
             //commentor nor the writer of the review
             $statement = DBManager::get()->prepare("
                 SELECT user_id
-                FROM lehrmarktplatz_comments
+                FROM lernmarktplatz_comments
                 WHERE review_id = :review_id
                     AND host_id IS NULL
                 GROUP BY user_id
@@ -76,7 +76,7 @@ class LehrmarktplatzComment extends SimpleORMap {
                 unset($data['data']['id']);
                 unset($data['data']['user_id']);
                 unset($data['data']['host_id']);
-                $user_description_datafield = DataField::find(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LEHRMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+                $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
                 if ($user_description_datafield) {
                     $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($this['user_id'], $user_description_datafield->getId()));
                 }
@@ -89,7 +89,7 @@ class LehrmarktplatzComment extends SimpleORMap {
 
                 $statement = DBManager::get()->prepare("
                     SELECT host_id
-                    FROM lehrmarktplatz_comments
+                    FROM lernmarktplatz_comments
                     WHERE review_id = :review_id
                         AND host_id IS NOT NULL
                     GROUP BY host_id

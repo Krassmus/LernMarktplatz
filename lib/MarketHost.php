@@ -6,7 +6,7 @@ class MarketHost extends MarketIdentity {
     {
         $host = self::findOneBySQL("private_key IS NOT NULL LIMIT 1");
         if ($host) {
-            $host['url'] = $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
+            $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
             if ($host->isFieldDirty("url")) {
                 $host->store();
             }
@@ -14,7 +14,7 @@ class MarketHost extends MarketIdentity {
         } else {
             $host = new MarketHost();
             $host['name'] = $GLOBALS['UNI_NAME_CLEAN'];
-            $host['url'] = $GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
+            $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
             $host['last_updated'] = time();
             $host->store();
             return $host;
@@ -28,7 +28,7 @@ class MarketHost extends MarketIdentity {
 
     protected static function configure($config = array())
     {
-        $config['db_table'] = 'lehrmarktplatz_hosts';
+        $config['db_table'] = 'lernmarktplatz_hosts';
         parent::configure($config);
     }
 
@@ -41,7 +41,7 @@ class MarketHost extends MarketIdentity {
     {
         $endpoint_url = $this['url']."fetch_public_host_key";
         if (true) {
-            $endpoint_url .= "?from=".urlencode(studip_utf8encode($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/"));
+            $endpoint_url .= "?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/"));
         }
         $host_data = @file_get_contents($endpoint_url);
         if ($host_data) {
@@ -53,7 +53,7 @@ class MarketHost extends MarketIdentity {
                 $this['index_server'] = $host_data['index_server'];
                 $host['last_updated'] = time();
                 if ($this->isNew()) {
-                    $host['active'] = get_config("LEHRMARKTPLATZ_ACTIVATE_NEW_HOSTS") ? 1 : 0;
+                    $host['active'] = get_config("LERNMARKTPLATZ_ACTIVATE_NEW_HOSTS") ? 1 : 0;
                 }
             }
         }
@@ -61,7 +61,7 @@ class MarketHost extends MarketIdentity {
 
     public function askKnownHosts() {
         $endpoint_url = $this['url']."fetch_known_hosts"
-            ."?from=".urlencode(studip_utf8encode($GLOBALS['LEHRMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/"));
+            ."?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/"));
         $output = @file_get_contents($endpoint_url);
         if ($output) {
             $output = studip_utf8decode(json_decode($output, true));
@@ -151,8 +151,8 @@ class MarketHost extends MarketIdentity {
         curl_setopt($request, CURLOPT_SSL_VERIFYHOST, false);
 
         $header = array(
-            $GLOBALS['LEHRMARKTPLATZ_HEADER_SIGNATURE'].": ".base64_encode($myHost->createSignature($payload)),
-            $GLOBALS['LEHRMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'].": ".md5($myHost['public_key'])
+            $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'].": ".base64_encode($myHost->createSignature($payload)),
+            $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'].": ".md5($myHost['public_key'])
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
