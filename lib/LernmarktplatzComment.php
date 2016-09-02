@@ -10,7 +10,7 @@ class LernmarktplatzComment extends SimpleORMap {
             'foreign_key' => 'review_id'
         );
         $config['has_one']['host'] = array(
-            'class_name' => 'MarketHost',
+            'class_name' => 'LernmarktplatzHost',
             'foreign_key' => 'host_id',
             'assoc_foreign_key' => 'host_id'
         );
@@ -31,7 +31,7 @@ class LernmarktplatzComment extends SimpleORMap {
                 PersonalNotifications::add(
                     $this->review['user_id'],
                     URLHelper::getURL("plugins.php/lehrmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
-                    sprintf(_("%s hat einen Kommentar zu Ihrem Review geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
+                    sprintf(_("%s hat einen Kommentar zu Ihrem Review geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                     "comment_" . $this->getId(),
                     Assets::image_path("icons/16/blue/support.svg")
                 );
@@ -54,7 +54,7 @@ class LernmarktplatzComment extends SimpleORMap {
                     PersonalNotifications::add(
                         $user_id,
                         URLHelper::getURL("plugins.php/lehrmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
-                        sprintf(_("%s hat auch einen Kommentar geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
+                        sprintf(_("%s hat auch einen Kommentar geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                         "comment_" . $this->getId(),
                         Assets::image_path("icons/16/blue/support.svg")
                     );
@@ -63,7 +63,7 @@ class LernmarktplatzComment extends SimpleORMap {
 
             //only push if the comment is from this server and the material-server is different
             if (!$this['host_id']) {
-                $myHost = MarketHost::thisOne();
+                $myHost = LernmarktplatzHost::thisOne();
                 $data = array();
                 $data['host'] = array(
                     'name' => $myHost['name'],
@@ -105,7 +105,7 @@ class LernmarktplatzComment extends SimpleORMap {
                     $hosts[] = $this->review->material['host_id'];
                 }
                 foreach ($hosts as $host_id) {
-                    $remote = new MarketHost($host_id);
+                    $remote = new LernmarktplatzHost($host_id);
                     if (!$remote->isMe()) {
                         $review_id = ($this->review['foreign_review_id'] ?: $this->review->getId());
                         if ($this->review['foreign_review_id']) {

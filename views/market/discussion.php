@@ -5,7 +5,7 @@
 
 <div class="mainreview">
     <div style="margin-bottom: 10px;">
-        <img width="50px" height="50px" src="<?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->avatar : Avatar::getAvatar($review['user_id'])->getURL(Avatar::MEDIUM)) ?>" style="vertical-align: middle;">
+        <img width="50px" height="50px" src="<?= htmlReady($review['host_id'] ? LernmarktplatzUser::find($review['user_id'])->avatar : Avatar::getAvatar($review['user_id'])->getURL(Avatar::MEDIUM)) ?>" style="vertical-align: middle;">
         <span class="stars" style="vertical-align: middle;">
             <? $rating = round($review['rating'], 1) ?>
             <? $v = $rating >= 0.75 ? 3 : ($rating >= 0.25 ? 2 : "") ?>

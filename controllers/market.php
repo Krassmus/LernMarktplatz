@@ -24,29 +24,29 @@ class MarketController extends PluginController {
             $tags = $this->tag_history = explode(",", Request::get("tags"));
             $this->without_tags = array();
             $tag_to_search_for = array_pop($tags);
-            foreach (MarketTag::findBest($tag_matrix_entries_number, true) as $related_tag) {
+            foreach (LernmarktplatzTag::findBest($tag_matrix_entries_number, true) as $related_tag) {
                 if ($related_tag['tag_hash'] !== $this->tag_history[0]) {
                     $this->without_tags[] = $related_tag['tag_hash'];
                 }
             }
             //array_shift($this->tag_history);
             foreach ($tags as $tag) {
-                foreach (MarketTag::findRelated($tag, $this->without_tags, $tag_subtags_number, true) as $related_tag) {
+                foreach (LernmarktplatzTag::findRelated($tag, $this->without_tags, $tag_subtags_number, true) as $related_tag) {
                     $this->without_tags[] = $related_tag['tag_hash'];
                 }
             }
-            $this->more_tags = MarketTag::findRelated(
+            $this->more_tags = LernmarktplatzTag::findRelated(
                 $tag_to_search_for,
                 $this->without_tags,
                 $tag_subtags_number
             );
-            $this->materialien = MarketMaterial::findByTagHash($tag_to_search_for);
+            $this->materialien = LernmarktplatzMaterial::findByTagHash($tag_to_search_for);
         } elseif(Request::get("search")) {
-            $this->materialien = MarketMaterial::findByText(Request::get("search"));
+            $this->materialien = LernmarktplatzMaterial::findByText(Request::get("search"));
         } elseif(Request::get("tag")) {
-            $this->materialien = MarketMaterial::findByTag(Request::get("tag"));
+            $this->materialien = LernmarktplatzMaterial::findByTag(Request::get("tag"));
         } else {
-            $this->best_nine_tags = MarketTag::findBest($tag_matrix_entries_number);
+            $this->best_nine_tags = LernmarktplatzTag::findBest($tag_matrix_entries_number);
         }
     }
 
@@ -56,29 +56,29 @@ class MarketController extends PluginController {
         $tag_subtags_number = 6;
 
         if (!Request::get("tags")) {
-            $this->topics = MarketTag::findBest($tag_matrix_entries_number);
+            $this->topics = LernmarktplatzTag::findBest($tag_matrix_entries_number);
             $this->materialien = array();
         } else {
             $tags = $this->tag_history = explode(",", Request::get("tags"));
             $this->without_tags = array();
             $tag_to_search_for = array_pop($tags);
-            foreach (MarketTag::findBest($tag_matrix_entries_number, true) as $related_tag) {
+            foreach (LernmarktplatzTag::findBest($tag_matrix_entries_number, true) as $related_tag) {
                 if ($related_tag['tag_hash'] !== $this->tag_history[0]) {
                     $this->without_tags[] = $related_tag['tag_hash'];
                 }
             }
             //array_shift($this->tag_history);
             foreach ($tags as $tag) {
-                foreach (MarketTag::findRelated($tag, $this->without_tags, $tag_subtags_number, true) as $related_tag) {
+                foreach (LernmarktplatzTag::findRelated($tag, $this->without_tags, $tag_subtags_number, true) as $related_tag) {
                     $this->without_tags[] = $related_tag['tag_hash'];
                 }
             }
-            $this->topics = MarketTag::findRelated(
+            $this->topics = LernmarktplatzTag::findRelated(
                 $tag_to_search_for,
                 $this->without_tags,
                 $tag_subtags_number
             );
-            $this->materialien = MarketMaterial::findByTagHash($tag_to_search_for);
+            $this->materialien = LernmarktplatzMaterial::findByTagHash($tag_to_search_for);
         }
 
         $output = array();
@@ -92,7 +92,7 @@ class MarketController extends PluginController {
     public function details_action($material_id)
     {
         Navigation::activateItem("/lernmarktplatz/overview");
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
         if ($this->material['host_id']) {
             $success = $this->material->fetchData();
             if ($success === false) {
@@ -111,7 +111,7 @@ class MarketController extends PluginController {
     public function review_action($material_id = null)
     {
         Navigation::activateItem("/lernmarktplatz/overview");
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
         $this->review = LernmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL", array($material_id, $GLOBALS['user']->id));
         if (!$this->review) {
             $this->review = new LernmarktplatzReview();
@@ -160,7 +160,7 @@ class MarketController extends PluginController {
 
     public function download_action($material_id, $disposition = "inline")
     {
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
         $this->set_content_type($this->material['content_type']);
         $this->response->add_header('Content-Disposition', $disposition.';filename="' . addslashes($this->material['filename']) . '"');
         $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
@@ -169,7 +169,7 @@ class MarketController extends PluginController {
 
 
     public function edit_action($material_id = null) {
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
         if ($this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
             throw new AccessDeniedException();
         }
@@ -229,7 +229,7 @@ class MarketController extends PluginController {
 
     public function add_to_course_action($material_id)
     {
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
     }
 
     protected function getFolderStructure($folder) {

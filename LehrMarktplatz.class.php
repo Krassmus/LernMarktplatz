@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__."/lib/MarketIdentity.php";
-require_once __DIR__."/lib/MarketHost.php";
-require_once __DIR__."/lib/MarketUser.php";
-require_once __DIR__."/lib/MarketMaterial.php";
-require_once __DIR__."/lib/MarketTag.php";
+require_once __DIR__."/lib/LernmarktplatzIdentity.php";
+require_once __DIR__."/lib/LernmarktplatzHost.php";
+require_once __DIR__."/lib/LernmarktplatzUser.php";
+require_once __DIR__."/lib/LernmarktplatzMaterial.php";
+require_once __DIR__."/lib/LernmarktplatzTag.php";
 require_once __DIR__."/lib/LernmarktplatzReview.php";
 require_once __DIR__."/lib/LernmarktplatzComment.php";
 

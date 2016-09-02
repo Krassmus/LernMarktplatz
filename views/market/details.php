@@ -55,7 +55,7 @@
 <h2><?= _("Zum Autor") ?></h2>
 <div class="author_information">
     <? if ($material['host_id']) : ?>
-        <? $user = $material['host_id'] ? MarketUser::find($material['user_id']) : User::find($material['user_id']) ?>
+        <? $user = $material['host_id'] ? LernmarktplatzUser::find($material['user_id']) : User::find($material['user_id']) ?>
         <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
         <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
@@ -149,7 +149,7 @@
         <? foreach ($material->reviews as $review) : ?>
             <li id="review_<?= $review->getId() ?>" class="review">
                 <div class="avatar">
-                    <img width="50px" height="50px" src="<?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->avatar : Avatar::getAvatar($review['user_id'])->getURL(Avatar::MEDIUM)) ?>">
+                    <img width="50px" height="50px" src="<?= htmlReady($review['host_id'] ? LernmarktplatzUser::find($review['user_id'])->avatar : Avatar::getAvatar($review['user_id'])->getURL(Avatar::MEDIUM)) ?>">
                 </div>
                 <div class="content">
                     <div class="timestamp">
@@ -158,7 +158,7 @@
                         </a>
                         <?= date("j.n.Y G:i", $review['chdate']) ?>
                     </div>
-                    <strong><?= htmlReady($review['host_id'] ? MarketUser::find($review['user_id'])->name : get_fullname($review['user_id'])) ?></strong>
+                    <strong><?= htmlReady($review['host_id'] ? LernmarktplatzUser::find($review['user_id'])->name : get_fullname($review['user_id'])) ?></strong>
                     <span class="origin">(<?= htmlReady($review['host_id'] ? $review->host['name'] : $GLOBALS['UNI_NAME_CLEAN']) ?>)</span>
                     <div class="review_text">
                         <?= formatReady($review['review']) ?>

@@ -1,6 +1,6 @@
 <?php
 
-class MarketMaterial extends SimpleORMap {
+class LernmarktplatzMaterial extends SimpleORMap {
 
     static public function findAll()
     {
@@ -22,7 +22,7 @@ class MarketMaterial extends SimpleORMap {
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
         $materials = array();
         foreach ($material_data as $data) {
-            $materials[] = MarketMaterial::buildExisting($data);
+            $materials[] = LernmarktplatzMaterial::buildExisting($data);
         }
         return $materials;
     }
@@ -47,14 +47,14 @@ class MarketMaterial extends SimpleORMap {
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
         $materials = array();
         foreach ($material_data as $data) {
-            $materials[] = MarketMaterial::buildExisting($data);
+            $materials[] = LernmarktplatzMaterial::buildExisting($data);
         }
         return $materials;
     }
 
     static public function findByTagHash($tag_hash)
     {
-        $tag = MarketTag::find($tag_hash);
+        $tag = LernmarktplatzTag::find($tag_hash);
         if ($tag) {
             self::fetchRemoteSearch($tag['name'], true);
         }
@@ -78,7 +78,7 @@ class MarketMaterial extends SimpleORMap {
         $cache_name = "Lernmarktplatz_remote_searched_for_".md5($text)."_".($tag ? 1 : 0);
         $already_searched = (bool) StudipCacheFactory::getCache()->read($cache_name);
         if (!$already_searched) {
-            $host = MarketHost::findOneBySQL("index_server = '1' AND allowed_as_index_server = '1' ORDER BY RAND()");
+            $host = LernmarktplatzHost::findOneBySQL("index_server = '1' AND allowed_as_index_server = '1' ORDER BY RAND()");
             if ($host && !$host->isMe()) {
                 $host->fetchRemoteSearch($text, $tag);
             }
@@ -90,7 +90,7 @@ class MarketMaterial extends SimpleORMap {
     {
         $config['db_table'] = 'lernmarktplatz_material';
         $config['belongs_to']['host'] = array(
-            'class_name' => 'MarketHost',
+            'class_name' => 'LernmarktplatzHost',
             'foreign_key' => 'host_id'
         );
         $config['has_many']['reviews'] = array(
@@ -257,8 +257,8 @@ class MarketMaterial extends SimpleORMap {
 
     public function addTag($tag_name) {
         $tag_hash = md5($tag_name);
-        if (!MarketTag::find($tag_hash)) {
-            $tag = new MarketTag();
+        if (!LernmarktplatzTag::find($tag_hash)) {
+            $tag = new LernmarktplatzTag();
             $tag->setId($tag_hash);
             $tag['name'] = $tag_name;
             $tag->store();
@@ -276,7 +276,7 @@ class MarketMaterial extends SimpleORMap {
 
     public function pushDataToIndexServers($delete = false)
     {
-        $myHost = MarketHost::thisOne();
+        $myHost = LernmarktplatzHost::thisOne();
         $data = array();
         $data['host'] = array(
             'name' => $myHost['name'],
@@ -309,7 +309,7 @@ class MarketMaterial extends SimpleORMap {
             $data['delete_material'] = 1;
         }
 
-        foreach (MarketHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
+        foreach (LernmarktplatzHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
             if (!$index_server->isMe()) {
                 $index_server->pushDataToEndpoint("push_data", $data);
             }
@@ -319,7 +319,7 @@ class MarketMaterial extends SimpleORMap {
     public function fetchData()
     {
         if ($this['host_id']) {
-            $host = new MarketHost($this['host_id']);
+            $host = new LernmarktplatzHost($this['host_id']);
             if ($host) {
                 $data = $host->fetchItemData($this['foreign_material_id']);
 
@@ -332,9 +332,9 @@ class MarketMaterial extends SimpleORMap {
                 }
 
                 //user:
-                $user = MarketUser::findOneBySQL("foreign_user_id", array($data['user']['user_id'], $host->getId()));
+                $user = LernmarktplatzUser::findOneBySQL("foreign_user_id", array($data['user']['user_id'], $host->getId()));
                 if (!$user) {
-                    $user = new MarketUser();
+                    $user = new LernmarktplatzUser();
                     $user['foreign_user_id'] = $data['user']['user_id'];
                     $user['host_id'] = $host->getId();
                 }
@@ -355,9 +355,9 @@ class MarketMaterial extends SimpleORMap {
                 $this->setTopics($data['topics']);
 
                 foreach ((array) $data['reviews'] as $review_data) {
-                    $currenthost = MarketHost::findOneByUrl(trim($review_data['host']['url']));
+                    $currenthost = LernmarktplatzHost::findOneByUrl(trim($review_data['host']['url']));
                     if (!$currenthost) {
-                        $currenthost = new MarketHost();
+                        $currenthost = new LernmarktplatzHost();
                         $currenthost['url'] = trim($review_data['host']['url']);
                         $currenthost['last_updated'] = time();
                         $currenthost->fetchPublicKey();
@@ -385,9 +385,9 @@ class MarketMaterial extends SimpleORMap {
                             $review['mkdate'] = $review_data['mkdate'];
                         }
 
-                        $user = MarketUser::findOneBySQL("foreign_user_id", array($review_data['user']['user_id'], $currenthost->getId()));
+                        $user = LernmarktplatzUser::findOneBySQL("foreign_user_id", array($review_data['user']['user_id'], $currenthost->getId()));
                         if (!$user) {
-                            $user = new MarketUser();
+                            $user = new LernmarktplatzUser();
                             $user['foreign_user_id'] = $review_data['user']['user_id'];
                             $user['host_id'] = $currenthost->getId();
                         }

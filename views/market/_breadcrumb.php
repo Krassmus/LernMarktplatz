@@ -10,7 +10,7 @@
             <? $breadcrump_tags[] = $tag ?>
             <? $new_tag_history = implode(",", $breadcrump_tags) ?>
             <a href="<?= PluginEngine::getLink($plugin, array('tags' => $new_tag_history), "market/overview") ?>"  data-tags="<?= $new_tag_history ?>">
-                <?= htmlReady(MarketTag::find($tag)->name) ?>
+                <?= htmlReady(LernmarktplatzTag::find($tag)->name) ?>
             </a>
         </li>
     <? endforeach ?>

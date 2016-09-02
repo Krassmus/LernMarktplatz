@@ -16,8 +16,8 @@ class AdminController extends PluginController {
     public function hosts_action()
     {
         //init
-        MarketHost::thisOne();
-        $this->hosts = MarketHost::findAll();
+        LernmarktplatzHost::thisOne();
+        $this->hosts = LernmarktplatzHost::findAll();
 
         if (!function_exists("curl_init")) {
             PageLayout::postMessage(MessageBox::error(_("Ihr PHP hat kein aktiviertes cURL-Modul.")));
@@ -41,9 +41,9 @@ class AdminController extends PluginController {
         if (Request::submitted("nothanx")) {
             $_SESSION['Lernmarktplatz_no_thanx'] = true;
         } elseif (Request::isPost()) {
-            $host = MarketHost::findOneByUrl(trim(Request::get("url")));
+            $host = LernmarktplatzHost::findOneByUrl(trim(Request::get("url")));
             if (!$host) {
-                $host = new MarketHost();
+                $host = new LernmarktplatzHost();
                 $host['url'] = trim(Request::get("url"));
                 $host['last_updated'] = time();
                 $host->fetchPublicKey();
@@ -63,7 +63,7 @@ class AdminController extends PluginController {
     }
 
     public function ask_for_hosts_action($host_id) {
-        $host = new MarketHost($host_id);
+        $host = new LernmarktplatzHost($host_id);
         $added = $this->askForHosts($host);
         if ($added > 0) {
             PageLayout::postMessage(MessageBox::success(sprintf(_("%s neue Server hinzugefügt."), $added)));
@@ -78,9 +78,9 @@ class AdminController extends PluginController {
         $added = 0;
         if ($data['hosts']) {
             foreach ($data['hosts'] as $host_data) {
-                $host = MarketHost::findByUrl($host_data['url']);
+                $host = LernmarktplatzHost::findByUrl($host_data['url']);
                 if (!$host) {
-                    $host = new MarketHost();
+                    $host = new LernmarktplatzHost();
                     $host['url'] = $host_data['url'];
                     $host->fetchPublicKey();
                     if ($host['public_key']) {
@@ -95,7 +95,7 @@ class AdminController extends PluginController {
 
     public function toggle_index_server_action() {
         if (Request::isPost()) {
-            $host = new MarketHost(Request::option("host_id"));
+            $host = new LernmarktplatzHost(Request::option("host_id"));
             if ($host->isMe()) {
                 $host['index_server'] = Request::int("active", 0);
                 $host->store();
@@ -109,14 +109,14 @@ class AdminController extends PluginController {
                     )
                 );
 
-                foreach (MarketHost::findAll() as $remote) {
+                foreach (LernmarktplatzHost::findAll() as $remote) {
                     if (!$remote->isMe()) {
                         $remote->pushDataToEndpoint("update_server_info", $data);
                     }
                 }
                 /*$curl_multi_handle = curl_multi_init();
                 $requests = array();
-                foreach (MarketHost::findAll() as $remote) {
+                foreach (LernmarktplatzHost::findAll() as $remote) {
                     if (!$remote->isMe()) {
                         $request = $remote->pushDataToEndpoint("update_server_info", $data, true);
                         curl_multi_add_handle($curl_multi_handle, $request);

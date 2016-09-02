@@ -18,12 +18,12 @@ class MymaterialController extends PluginController {
     public function details_action($material_id)
     {
         Navigation::activateItem("/lernmarktplatz/overview");
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
     }
 
 
     public function edit_action($material_id = null) {
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
         if ($this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
             throw new AccessDeniedException();
         }
@@ -84,7 +84,7 @@ class MymaterialController extends PluginController {
         if (!Request::isPost()) {
             throw new AccessDeniedException();
         }
-        $this->material = new MarketMaterial(Request::option("material_id"));
+        $this->material = new LernmarktplatzMaterial(Request::option("material_id"));
         $this->render_nothing();
     }
 

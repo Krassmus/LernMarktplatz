@@ -6,11 +6,11 @@ class LernmarktplatzReview extends SimpleORMap {
     {
         $config['db_table'] = 'lernmarktplatz_reviews';
         $config['belongs_to']['material'] = array(
-            'class_name' => 'MarketMaterial',
+            'class_name' => 'LernmarktplatzMaterial',
             'foreign_key' => 'material_id'
         );
         $config['has_one']['host'] = array(
-            'class_name' => 'MarketHost',
+            'class_name' => 'LernmarktplatzHost',
             'foreign_key' => 'host_id',
             'assoc_foreign_key' => 'host_id'
         );
@@ -35,16 +35,16 @@ class LernmarktplatzReview extends SimpleORMap {
                 $this->material['user_id'],
                 URLHelper::getURL("plugins.php/lehrmarktplatz/market/details/".$this->material->getId()."#review_".$this->getId()),
                 $this->isNew()
-                    ? sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name'])
-                    : sprintf(_("%s hat ein Review zu '%s' verändert."), $this['host_id'] ? MarketUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name']),
+                    ? sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name'])
+                    : sprintf(_("%s hat ein Review zu '%s' verändert."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name']),
                 "review_".$this->getId(),
                 Assets::image_path("icons/blue/service.svg")
             );
         }
         //only push if the comment is from this server and the material-server is different
         if ($this->material['host_id'] && !$this['host_id'] && $this->isDirty()) {
-            $remote = new MarketHost($this->material['host_id']);
-            $myHost = MarketHost::thisOne();
+            $remote = new LernmarktplatzHost($this->material['host_id']);
+            $myHost = LernmarktplatzHost::thisOne();
             $data = array();
             $data['host'] = array(
                 'name' => $myHost['name'],

@@ -12,7 +12,7 @@ class EndpointsController extends PluginController {
      * Returns the public key.
      */
     public function fetch_public_host_key_action() {
-        $host = MarketHost::thisOne();
+        $host = LernmarktplatzHost::thisOne();
         if (Request::get("from")) {
             $this->refreshHost(studip_utf8decode(Request::get("from")));
         }
@@ -33,7 +33,7 @@ class EndpointsController extends PluginController {
         if (Request::isPost()) {
             $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
             $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]);
-            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            $host = LernmarktplatzHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
@@ -71,7 +71,7 @@ class EndpointsController extends PluginController {
         }
 
         if (get_config("LERNMARKTPLATZ_SHOW_KNOWN_HOSTS")) {
-            foreach (MarketHosts::findAll() as $host) {
+            foreach (LernmarktplatzHosts::findAll() as $host) {
                 if (!$host->isMe() && $host['active']) {
                     $output['hosts'][] = array(
                         'name' => $host['name'],
@@ -90,9 +90,9 @@ class EndpointsController extends PluginController {
         if ($host_data) {
             $host_data = studip_utf8decode(json_decode($host_data, true));
             if ($host_data) {
-                $host = MarketHost::findOneByPublic_key($host_data['public_key']);
+                $host = LernmarktplatzHost::findOneByPublic_key($host_data['public_key']);
                 if (!$host) {
-                    $host = new MarketHost();
+                    $host = new LernmarktplatzHost();
                 }
                 $host['name'] = $host_data['name'];
                 $host['url'] = Request::get("from");
@@ -107,11 +107,11 @@ class EndpointsController extends PluginController {
     }
 
     public function search_items_action() {
-        $host = MarketHost::thisOne();
+        $host = LernmarktplatzHost::thisOne();
         if (Request::get("text")) {
-            $this->materialien = MarketMaterial::findByText(studip_utf8decode(Request::get("text")));
+            $this->materialien = LernmarktplatzMaterial::findByText(studip_utf8decode(Request::get("text")));
         } elseif (Request::get("tag")) {
-            $this->materialien = MarketMaterial::findByTag(studip_utf8decode(Request::get("tag")));
+            $this->materialien = LernmarktplatzMaterial::findByTag(studip_utf8decode(Request::get("tag")));
         }
 
         $output = array('results' => array());
@@ -125,7 +125,7 @@ class EndpointsController extends PluginController {
             $data['data'] = $material->toArray();
             unset($data['data']['material_id']);
             if ($material->host) {
-                $foreign_user = MarketUser::find($material['user_id']);
+                $foreign_user = LernmarktplatzUser::find($material['user_id']);
                 $data['user'] = array(
                     'user_id' => $foreign_user ? $foreign_user->foreign_user_id : "unbekannt",
                     'name' => $foreign_user ? $foreign_user->name : "unbekannt",
@@ -133,7 +133,7 @@ class EndpointsController extends PluginController {
                 );
             } else {
                 $data['user'] = array(
-                    'user_id' => $material->host ? MarketUser::find($material['user_id'])->foreign_user_id : $material['user_id'],
+                    'user_id' => $material->host ? LernmarktplatzUser::find($material['user_id'])->foreign_user_id : $material['user_id'],
                     'name' => get_fullname($material['user_id']),
                     'avatar' => Avatar::getAvatar($material['user_id'])->getURL(Avatar::NORMAL)
                 );
@@ -157,13 +157,13 @@ class EndpointsController extends PluginController {
      */
     public function get_item_data_action($item_id)
     {
-        $material = new MarketMaterial($item_id);
+        $material = new LernmarktplatzMaterial($item_id);
         if ($material->isNew()) {
             $this->render_json(array(
                 'deleted' => 1
             ));
         } elseif (!$material['foreign_material_id']) {
-            $me = MarketHost::thisOne();
+            $me = LernmarktplatzHost::thisOne();
             $topics = array();
             foreach ($material->getTopics() as $topic) {
                 $topics[] = $topic['name'];
@@ -176,7 +176,7 @@ class EndpointsController extends PluginController {
             $reviews = array();
             foreach ($material->reviews as $review) {
                 if ($review['host_id']) {
-                    $user = MarketUser::findOneBySQL("user_id = ?", array($review['user_id']));
+                    $user = LernmarktplatzUser::findOneBySQL("user_id = ?", array($review['user_id']));
                     $user = array(
                         'user_id' => $review['user_id'],
                         'name' => $user['name'],
@@ -229,7 +229,7 @@ class EndpointsController extends PluginController {
                 'reviews' => $reviews
             ));
         } else {
-            $host = new MarketHost($material['host_id']);
+            $host = new LernmarktplatzHost($material['host_id']);
             header("Location: ".$host['url']."get_item_data/".$item_id);
             return;
         }
@@ -243,17 +243,17 @@ class EndpointsController extends PluginController {
         if (Request::isPost()) {
             $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
             $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]);
-            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            $host = LernmarktplatzHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
                     $data = studip_utf8decode(json_decode($body, true));
-                    $material = MarketMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
+                    $material = LernmarktplatzMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
                         $host->getId(),
                         $data['data']['foreign_material_id']
                     ));
                     if (!$material) {
-                        $material = new MarketMaterial();
+                        $material = new LernmarktplatzMaterial();
                     }
                     if ($data['delete_material']) {
                         $material->delete();
@@ -263,12 +263,12 @@ class EndpointsController extends PluginController {
                         $material['host_id'] = $host->getId();
 
                         //update user
-                        $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                        $user = LernmarktplatzUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
                             $host->getId(),
                             $data['user']['user_id']
                         ));
                         if (!$user) {
-                            $user = new MarketUser();
+                            $user = new LernmarktplatzUser();
                             $user['host_id'] = $host->getId();
                             $user['foreign_user_id'] = $data['user']['user_id'];
                         }
@@ -298,7 +298,7 @@ class EndpointsController extends PluginController {
      */
     public function download_action($material_id)
     {
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
         $this->set_content_type($this->material['content_type']);
         $this->response->add_header('Content-Disposition', 'inline;filename="' . addslashes($this->material['filename']) . '"');
         $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
@@ -311,7 +311,7 @@ class EndpointsController extends PluginController {
      */
     public function download_front_image_action($material_id)
     {
-        $this->material = new MarketMaterial($material_id);
+        $this->material = new LernmarktplatzMaterial($material_id);
         $this->set_content_type($this->material['front_image_content_type']);
         $this->response->add_header('Content-Disposition', 'inline');
         $this->response->add_header('Content-Length', filesize($this->material->getFrontImageFilePath()));
@@ -329,22 +329,22 @@ class EndpointsController extends PluginController {
         if (Request::isPost()) {
             $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])];
             $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]);
-            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            $host = LernmarktplatzHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
                     $data = studip_utf8decode(json_decode($body, true));
-                    $material = new MarketMaterial($material_id);
+                    $material = new LernmarktplatzMaterial($material_id);
                     if ($material->isNew() || $material['host_id']) {
                         throw new Exception("Unknown material.");
                     }
 
-                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                    $user = LernmarktplatzUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
                         $host->getId(),
                         $data['user']['user_id']
                     ));
                     if (!$user) {
-                        $user = new MarketUser();
+                        $user = new LernmarktplatzUser();
                         $user['host_id'] = $host->getId();
                         $user['foreign_user_id'] = $data['user']['user_id'];
                     }
@@ -395,7 +395,7 @@ class EndpointsController extends PluginController {
         if (Request::isPost()) {
             $public_key_hash = $_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'])]; //MD5_HASH_OF_RSA_PUBLIC_KEY
             $signature = base64_decode($_SERVER['HTTP_'.str_replace("-", "_", $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE'])]); //BASE64_RSA_SIGNATURE
-            $host = MarketHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
+            $host = LernmarktplatzHost::findOneBySQL("MD5(public_key) = ?", array($public_key_hash));
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
@@ -413,12 +413,12 @@ class EndpointsController extends PluginController {
                     }
 
                     $data = studip_utf8decode(json_decode($body, true));
-                    $user = MarketUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
+                    $user = LernmarktplatzUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
                         $host->getId(),
                         $data['user']['user_id']
                     ));
                     if (!$user) {
-                        $user = new MarketUser();
+                        $user = new LernmarktplatzUser();
                         $user['host_id'] = $host->getId();
                         $user['foreign_user_id'] = $data['user']['user_id'];
                     }

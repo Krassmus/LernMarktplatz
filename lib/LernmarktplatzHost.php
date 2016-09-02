@@ -1,6 +1,6 @@
 <?php
 
-class MarketHost extends MarketIdentity {
+class LernmarktplatzHost extends LernmarktplatzIdentity {
 
     static public function thisOne()
     {
@@ -12,7 +12,7 @@ class MarketHost extends MarketIdentity {
             }
             return $host;
         } else {
-            $host = new MarketHost();
+            $host = new LernmarktplatzHost();
             $host['name'] = $GLOBALS['UNI_NAME_CLEAN'];
             $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
             $host['last_updated'] = time();
@@ -66,9 +66,9 @@ class MarketHost extends MarketIdentity {
         if ($output) {
             $output = studip_utf8decode(json_decode($output, true));
             foreach ((array) $output['hosts'] as $host_data) {
-                $host = MarketHost::findByPublic_key($host_data['public_key']);
+                $host = LernmarktplatzHost::findByPublic_key($host_data['public_key']);
                 if (!$host) {
-                    $host = new MarketHost();
+                    $host = new LernmarktplatzHost();
                     $host['public_key'] = $host_data['public_key'];
                     $host['url'] = $host_data['url'];
                 }
@@ -91,18 +91,18 @@ class MarketHost extends MarketIdentity {
         if ($output) {
             $output = studip_utf8decode(json_decode($output, true));
             foreach ((array) $output['results'] as $material_data) {
-                $host = MarketHost::findOneBySQL("public_key = ?", array($material_data['host']['public_key']));
+                $host = LernmarktplatzHost::findOneBySQL("public_key = ?", array($material_data['host']['public_key']));
                 if (!$host) {
-                    $host = new MarketHost();
+                    $host = new LernmarktplatzHost();
                     $host['url'] = $material_data['host']['url'];
                     $host->fetchPublicKey();
                     $host->store();
                 }
                 if (!$host->isMe()) {
                     //set user:
-                    $user = MarketUser::findOneBySQL("foreign_user_id", array($material_data['user']['user_id'], $host->getId()));
+                    $user = LernmarktplatzUser::findOneBySQL("foreign_user_id", array($material_data['user']['user_id'], $host->getId()));
                     if (!$user) {
-                        $user = new MarketUser();
+                        $user = new LernmarktplatzUser();
                         $user['foreign_user_id'] = $material_data['user']['user_id'];
                         $user['host_id'] = $host->getId();
                     }
@@ -112,12 +112,12 @@ class MarketHost extends MarketIdentity {
 
                     //set material:
                     $material_data['data']['foreign_material_id'] = $material_data['data']['id'];
-                    $material = MarketMaterial::findOneBySQL("foreign_material_id = ? AND host_id = ?", array(
+                    $material = LernmarktplatzMaterial::findOneBySQL("foreign_material_id = ? AND host_id = ?", array(
                         $material_data['data']['foreign_material_id'],
                         $host->getId()
                     ));
                     if (!$material) {
-                        $material = new MarketMaterial();
+                        $material = new LernmarktplatzMaterial();
                     }
                     unset($material_data['data']['id']);
                     $material->setData($material_data['data']);
@@ -137,7 +137,7 @@ class MarketHost extends MarketIdentity {
         $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
-        $myHost = MarketHost::thisOne();
+        $myHost = LernmarktplatzHost::thisOne();
         $endpoint_url = $this['url'].$endpoint;
 
         $request = curl_init();

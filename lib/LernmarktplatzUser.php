@@ -1,6 +1,6 @@
 <?php
 
-class MarketUser extends SimpleORMap {
+class LernmarktplatzUser extends SimpleORMap {
 
     protected static function configure($config = array())
     {

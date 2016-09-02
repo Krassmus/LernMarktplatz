@@ -1,6 +1,6 @@
 <?php
 
-class MarketTag extends SimpleORMap {
+class LernmarktplatzTag extends SimpleORMap {
 
     static public function findBest($number = 9, $raw = false)
     {

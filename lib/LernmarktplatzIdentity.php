@@ -5,7 +5,7 @@ require_once __DIR__.'/../vendor/Crypt/Random.php';
 require_once __DIR__.'/../vendor/Crypt/Hash.php';
 require_once __DIR__.'/../vendor/Crypt/RSA.php';
 
-class MarketIdentity extends SimpleORMap {
+class LernmarktplatzIdentity extends SimpleORMap {
 
     public function createSignature($text) {
         $rsa = new Crypt_RSA();

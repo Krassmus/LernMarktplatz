@@ -11,11 +11,11 @@
     <tbody>
         <tr>
             <td><?= _("MD5-Hash") ?></td>
-            <td><?= md5(MarketHost::thisOne()->public_key) ?></td>
+            <td><?= md5(LernmarktplatzHost::thisOne()->public_key) ?></td>
         </tr>
         <tr>
             <td><?= _("Key") ?></td>
-            <td><?= nl2br(htmlReady(MarketHost::thisOne()->public_key)) ?></td>
+            <td><?= nl2br(htmlReady(LernmarktplatzHost::thisOne()->public_key)) ?></td>
         </tr>
     </tbody>
 </table>
@@ -25,15 +25,15 @@
 <table class="default nohover">
     <tr>
         <td><?= _("Anzahl verbundener Server") ?></td>
-        <td><?= MarketHost::countBySQL("1=1") - 1  ?></td>
+        <td><?= LernmarktplatzHost::countBySQL("1=1") - 1  ?></td>
     </tr>
     <tr>
         <td><?= _("Anzahl eigener Materialien") ?></td>
-        <td><?= MarketMaterial::countBySQL("host_id IS NULL") ?></td>
+        <td><?= LernmarktplatzMaterial::countBySQL("host_id IS NULL") ?></td>
     </tr>
     <tr>
         <td><?= _("Anzahl Materialien von anderen Servern") ?></td>
-        <td><?= MarketMaterial::countBySQL("host_id IS NOT NULL") ?></td>
+        <td><?= LernmarktplatzMaterial::countBySQL("host_id IS NOT NULL") ?></td>
     </tr>
 </table>
 
