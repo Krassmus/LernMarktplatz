@@ -207,6 +207,8 @@ class MarketMaterial extends SimpleORMap {
             return Assets::image_path("icons/$color/folder-full.svg");
         } elseif($this->isImage()) {
             return Assets::image_path("icons/$color/file-pic.svg");
+        } elseif($this->isPDF()) {
+            return Assets::image_path("icons/$color/file-pdf.svg");
         } elseif($this->isPresentation()) {
             return Assets::image_path("icons/$color/file-ppt.svg");
         } elseif($this->isStudipQuestionnaire()) {
@@ -225,6 +227,11 @@ class MarketMaterial extends SimpleORMap {
     public function isImage()
     {
         return stripos($this['content_type'], "image") === 0;
+    }
+
+    public function isPDF()
+    {
+        return $this['content_type'] === "application/pdf";
     }
 
     protected function getFileEnding()
