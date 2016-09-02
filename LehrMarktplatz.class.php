@@ -47,7 +47,7 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin {
                     'html' => $template->render()
                 );
             }
-            UpdateInformation::setInformation("Lehrmarktplatz.update", $output);
+            UpdateInformation::setInformation("Lernmarktplatz.update", $output);
         }
     }
 

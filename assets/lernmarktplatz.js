@@ -1,5 +1,5 @@
 
-STUDIP.Lehrmarktplatz = {
+STUDIP.Lernmarktplatz = {
     periodicalPushData: function () {
         if (jQuery(".comments").length) {
             return {
@@ -55,7 +55,7 @@ jQuery(document).on("change", ".lernmarktplatz_tags li input", function () {
 
 
 jQuery(document).on("click", ".matrix a", function () {
-    jQuery(this).closest(".matrix").hide("puff");
+    jQuery(this).closest(".matrix").fadeOut();
     jQuery(".maininfo").slideUp();
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/market/matrixnavigation",
@@ -66,15 +66,15 @@ jQuery(document).on("click", ".matrix a", function () {
         "dataType": "json",
         "success": function (output) {
             jQuery(".breadcrumb").replaceWith(output.breadcrumb);
-            jQuery(".matrix").replaceWith(output.matrix);
-            jQuery(".material_overview").html(output.materials);
+            jQuery(".matrix").replaceWith(output.matrix).hide().fadeIn();
+            jQuery(".material_overview").html(output.materials).hide().fadeIn();
         }
     });
     return false;
 });
 
 jQuery(document).on("click", ".breadcrumb a", function () {
-    jQuery(".matrix").hide("scale");
+    jQuery(".matrix").fadeOut();
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/market/matrixnavigation",
         "data": {
@@ -84,8 +84,8 @@ jQuery(document).on("click", ".breadcrumb a", function () {
         "dataType": "json",
         "success": function (output) {
             jQuery(".breadcrumb").replaceWith(output.breadcrumb);
-            jQuery(".matrix").replaceWith(output.matrix);
-            jQuery(".material_overview").html(output.materials);
+            jQuery(".matrix").replaceWith(output.matrix).hide().fadeIn();
+            jQuery(".material_overview").html(output.materials).hide().fadeIn();
         }
     });
     return false;

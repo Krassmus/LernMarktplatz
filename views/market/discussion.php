@@ -33,6 +33,6 @@
 <form action="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>" method="post" class="default">
     <textarea name="comment" data-review_id="<?= htmlReady($review->getId()) ?>"></textarea>
     <div>
-        <?= \Studip\LinkButton::create(_("Abschicken"), "#", array('onclick' => "return STUDIP.Lehrmarktplatz.addComment();")) ?>
+        <?= \Studip\LinkButton::create(_("Abschicken"), "#", array('onclick' => "return STUDIP.Lernmarktplatz.addComment();")) ?>
     </div>
 </form>
