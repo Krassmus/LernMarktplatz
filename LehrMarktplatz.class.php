@@ -70,8 +70,8 @@ class LehrMarktplatz extends StudIPPlugin implements SystemPlugin {
     }
 
     public function perform($unconsumed_path) {
-        $this->addStylesheet("assets/lehrmarktplatz.less");
-        PageLayout::addScript($this->getPluginURL()."/assets/lehrmarktplatz.js");
+        $this->addStylesheet("assets/lernmarktplatz.less");
+        PageLayout::addScript($this->getPluginURL()."/assets/lernmarktplatz.js");
         parent::perform($unconsumed_path);
     }
 
