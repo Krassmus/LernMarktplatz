@@ -21,7 +21,7 @@
     <? endif ?>
 </div>
 
-<div>
+<div style="margin-top: 17px;">
     <?= formatReady($material['description'] ?: $material['short_description']) ?>
 </div>
 

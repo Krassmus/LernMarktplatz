@@ -230,6 +230,50 @@ class MarketController extends PluginController {
     public function add_to_course_action($material_id)
     {
         $this->material = new LernmarktplatzMaterial($material_id);
+        if (Request::isPost() && Request::option("seminar_id") && $GLOBALS['perm']->have_studip_perm("autor", Request::option("seminar_id"))) {
+            //$course = new Course(Request::option("seminar_id"));
+            $query = "SELECT folder_id FROM folder WHERE range_id = ? ORDER BY name";
+            $statement = DBManager::get()->prepare($query);
+            $statement->execute(array(Request::option("seminar_id")));
+            $folder_id = $statement->fetch(PDO::FETCH_COLUMN, 0);
+            if ($folder_id && ($GLOBALS['perm']->have_studip_perm("tutor", Request::option("seminar_id")) || in_array("writable", DocumentFolder::find($folder_id)->getPermissions()))) {
+                if ($this->material['host_id']) {
+                    $path = $GLOBALS['TMP_PATH']."/tmp_download_".md5(uniqid());
+                    file_put_contents($path, file_get_contents($this->material->host->url."download/".$this->material['foreign_material_id']));
+                } else {
+                    $path = $this->material->getFilePath();
+                }
+                $document = StudipDocument::createWithFile($path, array(
+                    'name' => $this->material['name'],
+                    'range_id' => $folder_id,
+                    'user_id' => $GLOBALS['user']->id,
+                    'seminar_id' => Request::option("seminar_id"),
+                    'description' => $this->material['description'] ?: $this->material['short_description'],
+                    'filename' => $this->material['filename'],
+                    'filesize' => filesize($path),
+                    'author_name' => get_fullname()
+                ));
+                PageLayout::postMessage(MessageBox::success(_("Datei wurde erfolgreich kopiert.")));
+                $this->redirect(URLHelper::getURL("folder.php#anker", array(
+                    'cid' => Request::option("seminar_id"),
+                    'data' => array(
+                        'cmd' => "tree",
+                        'open' => array(
+                            $folder_id => 1,
+                            $document->getId() => 1
+                        )
+                    ),
+                    'open' => $document->getId()
+                )));
+                if ($this->material['host_id']) { //cleanup
+                    @unlink($path);
+                }
+            } else {
+                PageLayout::postMessage(MessageBox::error(_("Veranstaltung hat keinen allgemeinen Dateiordner.")));
+                $this->redirect(PluginEngine::getURL($this->plugin, array(), "market/details/".$material_id));
+            }
+        }
+        $this->courses = Course::findBySQL("INNER JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = ? ORDER BY seminare.mkdate DESC", array($GLOBALS['user']->id));
     }
 
     protected function getFolderStructure($folder) {
