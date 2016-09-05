@@ -201,7 +201,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
             if ($this['host_id']) {
                 return $this->host['url']."download_front_image/".$this['foreign_material_id'];
             } else {
-                return URLHelper::getURL("plugins.php/lehrmarktplatz/endpoints/download_front_image/".$this->getId());
+                return URLHelper::getURL("plugins.php/lernmarktplatz/endpoints/download_front_image/".$this->getId());
             }
         } elseif ($this->isFolder()) {
             return Assets::image_path("icons/$color/folder-full.svg");
