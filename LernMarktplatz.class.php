@@ -46,7 +46,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin {
                     'comment_id' => $comment->getId(),
                     'html' => $template->render()
                 );
-            }
+            } 
             UpdateInformation::setInformation("Lernmarktplatz.update", $output);
         }
     }
