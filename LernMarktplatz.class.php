@@ -11,7 +11,7 @@ require_once __DIR__."/lib/LernmarktplatzComment.php";
 $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'] = "X-RASMUS";    //MD5-hash of the armored public key of the server
 $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE']       = "X-SIGNATURE"; //the base64 encoded signature provided by the public key over the body of the message
 
-class LehrMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin {
+class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin {
 
     public function __construct() {
         parent::__construct();
