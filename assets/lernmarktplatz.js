@@ -21,7 +21,7 @@ STUDIP.Lernmarktplatz = {
         var review_id = jQuery("[name=comment]").data("review_id");
         if (comment.length) {
             jQuery.ajax({
-                'url': STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/market/comment/" + review_id,
+                'url': STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/market/comment/" + review_id,
                 'type': "post",
                 'data': {
                     'comment': comment,
@@ -58,7 +58,7 @@ jQuery(document).on("click", ".matrix a", function () {
     jQuery(this).closest(".matrix").fadeOut();
     jQuery(".maininfo").slideUp();
     jQuery.ajax({
-        "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/market/matrixnavigation",
+        "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/market/matrixnavigation",
         "data": {
             'tags': jQuery(this).data("tags")
         },
@@ -77,7 +77,7 @@ jQuery(document).on("click", ".breadcrumb a", function () {
     jQuery(".matrix").fadeOut();
     jQuery(".material_overview").fadeOut();
     jQuery.ajax({
-        "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/market/matrixnavigation",
+        "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/market/matrixnavigation",
         "data": {
             'tags': jQuery(this).data("tags")
         },
@@ -99,7 +99,7 @@ jQuery(function () {
         var active = jQuery(this).is(".checked") ? 0 : 1;
         var a = this;
         jQuery.ajax({
-            "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lehrmarktplatz/admin/toggle_index_server",
+            "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/admin/toggle_index_server",
             "data": {
                 'host_id': host_id,
                 'active': active
