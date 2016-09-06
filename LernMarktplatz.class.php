@@ -11,7 +11,7 @@ require_once __DIR__."/lib/LernmarktplatzComment.php";
 $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'] = "X-RASMUS";    //MD5-hash of the armored public key of the server
 $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE']       = "X-SIGNATURE"; //the base64 encoded signature provided by the public key over the body of the message
 
-class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin {
+class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin, HomepagePlugin {
 
     public function __construct() {
         parent::__construct();
@@ -141,6 +141,21 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin {
                 break;
         }
         return $icon;
+    }
+
+    public function getHomepageTemplate($user_id) {
+        $materialien = LernmarktplatzMaterial::findMine($user_id);
+        if (count($materialien)) {
+            $template_factory = new Flexi_TemplateFactory(__DIR__."/views");
+            $template = $template_factory->open("mymaterial/_material_list");
+            $template->set_attribute("plugin", $this);
+            $template->set_attribute("materialien", $materialien);
+            $template->set_attribute("title", _("Lernmaterialien"));
+            $template->set_attribute("icon_url", Assets::image_path("icons/blue/service.svg"));
+            return $template;
+        } else {
+            return null;
+        }
     }
     
 }
