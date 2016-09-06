@@ -6,7 +6,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
     {
         $host = self::findOneBySQL("private_key IS NOT NULL LIMIT 1");
         if ($host) {
-            $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
+            $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/";
             if ($host->isFieldDirty("url")) {
                 $host->store();
             }
@@ -14,7 +14,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
         } else {
             $host = new LernmarktplatzHost();
             $host['name'] = $GLOBALS['UNI_NAME_CLEAN'];
-            $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/";
+            $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/";
             $host['last_updated'] = time();
             $host->store();
             return $host;
