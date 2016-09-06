@@ -20,6 +20,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin {
             $topicon->setImage(Assets::image_path("icons/lightblue/service.svg"));
             Navigation::addItem("/lernmarktplatz", $topicon);
             Navigation::addItem("/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
+            Navigation::addItem("/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
         }
         if ($GLOBALS['perm']->have_perm("root")) {
             $tab = new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "admin/hosts"));

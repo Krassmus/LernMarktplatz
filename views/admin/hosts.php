@@ -1,6 +1,6 @@
 <table class="default serversettings">
     <caption>
-        <?= _("Lermmarktplatz-Server") ?>
+        <?= _("Lernmarktplatz-Server") ?>
     </caption>
     <thead>
         <tr>

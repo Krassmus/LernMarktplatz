@@ -7,6 +7,12 @@ class LernmarktplatzMaterial extends SimpleORMap {
         return self::findBySQL("1=1");
     }
 
+    static public function findMine($user_id = null)
+    {
+        $user_id || $user_id = $GLOBALS['user']->id;
+        return self::findBySQL("user_id = ? AND host_id IS NULL ORDER BY mkdate DESC", array($user_id));
+    }
+
     static public function findByTag($tag_name)
     {
         self::fetchRemoteSearch($tag_name, true);

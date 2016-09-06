@@ -11,8 +11,8 @@ class MymaterialController extends PluginController {
     }
 
     public function overview_action() {
-        Navigation::activateItem("/lernmarktplatz/overview");
-
+        Navigation::activateItem("/lernmarktplatz/mymaterial");
+        $this->materialien = LernmarktplatzMaterial::findMine();
     }
 
     public function details_action($material_id)
@@ -24,13 +24,20 @@ class MymaterialController extends PluginController {
 
     public function edit_action($material_id = null) {
         $this->material = new LernmarktplatzMaterial($material_id);
+        Pagelayout::setTitle($this->material->isNew() ? _("Neues Material hochladen") : _("Material bearbeiten"));
         if ($this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
             throw new AccessDeniedException();
         }
-        if (Request::isPost()) {
-            $this->material->setData(Request::getArray("data"));
+        if (Request::submitted("delete") && Request::isPost()) {
+            $this->material->pushDataToIndexServers("delete");
+            $this->material->delete();
+            PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelöscht.")));
+            $this->redirect("market/overview");
+        } elseif (Request::isPost()) {
+            $was_new = $this->material->setData(Request::getArray("data"));
             $this->material['user_id'] = $GLOBALS['user']->id;
             $this->material['host_id'] = null;
+            $this->material['license'] = "CC BY 4.0";
             if ($_FILES['file']['tmp_name']) {
                 $this->material['content_type'] = $_FILES['file']['type'];
                 if (in_array($this->material['content_type'], array("application/x-zip-compressed", "application/zip", "application/x-zip"))) {
@@ -45,14 +52,23 @@ class MymaterialController extends PluginController {
                 $this->material['filename'] = $_FILES['file']['name'];
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
             }
-            if (!$this->material['license']) {
-                $this->material['license'] = "CC BY SA 3.0";
+            if ($_FILES['image']['tmp_name']) {
+                $this->material['front_image_content_type'] = $_FILES['image']['type'];
+                move_uploaded_file($_FILES['image']['tmp_name'], $this->material->getFrontImageFilePath());
+            }
+            if (Request::get("delete_front_image")) {
+                $this->material['front_image_content_type'] = null;
             }
             $this->material->store();
 
-
             //Topics:
-            $this->material->setTopics(Request::getArray("tags"));
+            $topics = Request::getArray("tags");
+            foreach ($topics as $key => $topic) {
+                if (!trim($topic)) {
+                    unset($topics[$key]);
+                }
+            }
+            $this->material->setTopics($topics);
 
             $this->material->pushDataToIndexServers();
 

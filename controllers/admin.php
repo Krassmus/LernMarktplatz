@@ -40,6 +40,7 @@ class AdminController extends PluginController {
         PageLayout::setTitle(_("Neue Lernmaterialien einstellen"));
         if (Request::submitted("nothanx")) {
             $_SESSION['Lernmarktplatz_no_thanx'] = true;
+            $this->redirect("admin/hosts");
         } elseif (Request::isPost()) {
             $host = LernmarktplatzHost::findOneByUrl(trim(Request::get("url")));
             if (!$host) {
