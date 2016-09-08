@@ -9,7 +9,16 @@ class EndpointsController extends PluginController {
     }
 
     /**
-     * Returns the public key.
+     * Returns the public key and some other information of this host.
+     * The returned text is a json-object like
+     * [code]
+     *     {
+     *         "name": "name of this host",
+     *         "public_key": "the armored public key",
+     *         "url": "the preferred URL of this host. May be configured in config_local.inc.php as the variable $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ",
+     *         "index_server": 0 // or 1, 1 if this host is ready to be asked as an index-server, else 0.
+     *     }
+     * [/code]
      */
     public function fetch_public_host_key_action() {
         $host = LernmarktplatzHost::thisOne();
@@ -25,7 +34,7 @@ class EndpointsController extends PluginController {
     }
 
     /**
-     * Called by a remote-server to update its server-information.
+     * Called by a remote-server to update its server-information via post-request.
      * Even the public key could be updated this way!
      */
     public function update_server_info_action()

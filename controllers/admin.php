@@ -22,6 +22,17 @@ class AdminController extends PluginController {
         if (!function_exists("curl_init")) {
             PageLayout::postMessage(MessageBox::error(_("Ihr PHP hat kein aktiviertes cURL-Modul.")));
         }
+        $plugin = PluginManager::getInstance()->getPluginInfo(get_class($this->plugin));
+        $plugin_roles = RolePersistence::getAssignedPluginRoles($plugin['id']);
+        $nobody_allowed = false;
+        foreach ($plugin_roles as $role) {
+            if (strtolower($role->rolename) === "nobody") {
+                $nobody_allowed = true;
+            }
+        }
+        if (!$nobody_allowed) {
+            PageLayout::postMessage(MessageBox::error(_("Dieses Plugin ist nicht für nobody freigegeben.")));
+        }
 
         //zufällig einen Host nach Neuigkeiten fragen:
         if (count($this->hosts) > 1) {
