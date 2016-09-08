@@ -31,7 +31,7 @@ class AdminController extends PluginController {
             }
         }
         if (!$nobody_allowed) {
-            PageLayout::postMessage(MessageBox::error(_("Dieses Plugin ist nicht für nobody freigegeben.")));
+            PageLayout::postMessage(MessageBox::error(_("Dieses Plugin ist nicht für nobody freigegeben. Damit kann sich dieser Marktplatz nicht mit anderen Stud.IP verbinden.")));
         }
 
         //zufällig einen Host nach Neuigkeiten fragen:
