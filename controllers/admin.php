@@ -4,7 +4,7 @@ require_once 'app/controllers/plugin_controller.php';
 
 class AdminController extends PluginController {
 
-    function before_filter($action, $args)
+    function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
         Navigation::activateItem("/admin/config/lernmarktplatz");

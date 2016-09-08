@@ -122,7 +122,7 @@ class InitPlugin extends Migration {
                 chdate = UNIX_TIMESTAMP(),
                 `type` = 'textarea',
                 typeparam = '',
-                description = 'Geben Sie eine kurze Beschreibung für Sich ab, die auf Ihrem Profil im Lehrmarktplatz sichtbar ist.'
+                description = 'Geben Sie eine kurze Beschreibung für Sich ab, die auf Ihrem Profil im Lernmarktplatz sichtbar ist.'
         ");
         DBManager::get()->exec("
             INSERT IGNORE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`)
