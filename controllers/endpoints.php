@@ -19,7 +19,7 @@ class EndpointsController extends PluginController {
         $this->render_json(array(
             'name' => $GLOBALS['UNI_NAME_CLEAN'],
             'public_key' => $host['public_key'],
-            'url' => $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/",
+            'url' => $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/",
             'index_server' => $host['index_server']
         ));
     }
@@ -215,7 +215,7 @@ class EndpointsController extends PluginController {
                     'description' => $material['description'],
                     'content_type' => $material['content_type'],
                     'front_image_content_type' => $material['front_image_content_type'],
-                    'url' => ($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lehrmarktplatz/market/download/".$item_id,
+                    'url' => ($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lernmarktplatz/market/download/".$item_id,
                     'structure' => $material['structure'],
                     'license' => $material['license']
                 ),

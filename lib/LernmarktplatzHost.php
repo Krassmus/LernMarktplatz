@@ -41,7 +41,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
     {
         $endpoint_url = $this['url']."fetch_public_host_key";
         if (true) {
-            $endpoint_url .= "?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/"));
+            $endpoint_url .= "?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/"));
         }
         $host_data = @file_get_contents($endpoint_url);
         if ($host_data) {
@@ -61,7 +61,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
 
     public function askKnownHosts() {
         $endpoint_url = $this['url']."fetch_known_hosts"
-            ."?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lehrmarktplatz/endpoints/"));
+            ."?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/"));
         $output = @file_get_contents($endpoint_url);
         if ($output) {
             $output = studip_utf8decode(json_decode($output, true));

@@ -8,12 +8,12 @@
     Wer bei Facebook oder den anderen Diensten etwas hochlädt, hat in den AGB zugestimmt, dass alle seine/ihre Dateien
     unter einer Speziallizenz veröffentlicht werden. Wer die AGB nicht gelesen hat, weiß nichts davon, weshalb das
     immer so einfach erscheint. De facto gibt man beim Upload eines Fotos auf Facebook aber alle Rechte auf die Datei
-    ab. So einen fiesen Umgang wollen wir bei Stud.IP und insbesondere beim Lehrmarktplatz absolut nicht! Wer Materialien
+    ab. So einen fiesen Umgang wollen wir bei Stud.IP und insbesondere beim Lernmarktplatz absolut nicht! Wer Materialien
     bei uns hoch lädt, soll weiterhin volle Kontrolle über die Nutzung seiner/ihrer Dateien haben.
 </p>
 <h2><?= _("Was ist uns wichtig?") ?></h2>
 <p>
-    Um eine Lizenz kommen wir beim Lehrmaterialienmarktplatz nicht herum. Und illegales Gemauschel wollen wir auch nicht. Wir gehen davon aus, dass jeder, der/die
+    Um eine Lizenz kommen wir beim Lernmaterialienmarktplatz nicht herum. Und illegales Gemauschel wollen wir auch nicht. Wir gehen davon aus, dass jeder, der/die
     auf dem Marktplatz eine Datei frei für alle zur Verfügung stellt, will dass die Datei am Ende auch verwendet wird und
     verwendet werden darf. Selbstverständlich wollen wir:
     <ul>

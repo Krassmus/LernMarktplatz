@@ -127,7 +127,7 @@ class InitPlugin extends Migration {
         DBManager::get()->exec("
             INSERT IGNORE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`)
             VALUES
-                (MD5('LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD'), '', 'LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD', MD5('Lehrmarktplatz-Beschreibung'), MD5('Lehrmarktplatz-Beschreibung'), 'string', 'global', 'LEHRMARKTPLATZ', 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'MD5-Hash or name of datafield that is representing the user-description', '', '')
+                (MD5('LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD'), '', 'LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD', MD5('Lernmarktplatz-Beschreibung'), MD5('Lernmarktplatz-Beschreibung'), 'string', 'global', 'LERNMARKTPLATZ', 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'MD5-Hash or name of datafield that is representing the user-description', '', '')
         "); 
     }
 

@@ -30,7 +30,7 @@ class LernmarktplatzComment extends SimpleORMap {
             if (!$this->review['host_id'] && $this->review['user_id'] !== $this['user_id']) {
                 PersonalNotifications::add(
                     $this->review['user_id'],
-                    URLHelper::getURL("plugins.php/lehrmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
+                    URLHelper::getURL("plugins.php/lernmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
                     sprintf(_("%s hat einen Kommentar zu Ihrem Review geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                     "comment_" . $this->getId(),
                     Assets::image_path("icons/16/blue/support.svg")
@@ -53,7 +53,7 @@ class LernmarktplatzComment extends SimpleORMap {
                 if (!in_array($user_id, array($this->review['user_id'], $this['user_id']))) {
                     PersonalNotifications::add(
                         $user_id,
-                        URLHelper::getURL("plugins.php/lehrmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
+                        URLHelper::getURL("plugins.php/lernmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
                         sprintf(_("%s hat auch einen Kommentar geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                         "comment_" . $this->getId(),
                         Assets::image_path("icons/16/blue/support.svg")

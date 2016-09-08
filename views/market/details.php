@@ -28,7 +28,7 @@
 
 <? if ($material->isFolder()) : ?>
     <h2><?= _("Verzeichnisstruktur") ?></h2>
-    <ol class="lehrmarktplatz structure">
+    <ol class="lernmarktplatz structure">
         <? foreach ($material['structure'] as $filename => $file) : ?>
             <?= $this->render_partial("market/_details_file.php", array('name' => $filename, 'file' => $file)) ?>
         <? endforeach ?>

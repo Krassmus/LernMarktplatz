@@ -1,4 +1,4 @@
-<h1><?= _("Lehrmarktplatz") ?></h1>
+<h1><?= _("Lernmarktplatz") ?></h1>
 
 <h2><?= _("Version") ?></h2>
 <?= _("Stud.IP") ?>: <?= htmlReady($GLOBALS['SOFTWARE_VERSION']) ?>

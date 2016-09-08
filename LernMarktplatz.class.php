@@ -30,10 +30,10 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin, 
             NotificationCenter::addObserver($this, "addToFolderSidebar", "SidebarWillRender");
         }
         if (UpdateInformation::isCollecting()
-                && stripos(Request::get("page"), "plugins.php/lehrmarktplatz/market/discussion/") !== false) {
+                && stripos(Request::get("page"), "plugins.php/lernmarktplatz/market/discussion/") !== false) {
             $data = Request::getArray("page_info");
             $last_update = Request::get("server_timestamp", time() - 30);
-            $review_id = $data['Lehrmarktplatz']['review_id'];
+            $review_id = $data['Lernmarktplatz']['review_id'];
             $output = array('comments' => array());
             $comments = LernmarktplatzComment::findBySQL("review_id = :review_id AND mkdate >= :last_update ORDER BY mkdate ASC", array(
                 'last_update' => $last_update,
@@ -77,15 +77,15 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, ScorePlugin, 
 
     public function addToFolderSidebar() {
         $links = new LinksWidget();
-        $links->setTitle(_("Lehrmarktplatz"));
+        $links->setTitle(_("Lernmarktplatz"));
         $links->addLink(
-            _("Lehrmaterialien herunterladen"),
+            _("Lernmaterialien herunterladen"),
             PluginEngine::getURL($this, array(), "market/overview"),
             null,
             array('data-dialog' => "1")
         );
         $links->addLink(
-            _("Ordner als Lehrmaterialien bereitstellen"),
+            _("Ordner als Lernmaterial bereitstellen"),
             PluginEngine::getURL($this, array(), "market/provide_folder"),
             null,
             array('data-dialog' => "1")
