@@ -25,7 +25,10 @@
                         <?= htmlReady($host['url']) ?>
                     </a>
                 </td>
-                <td><?= $host['public_key'] ? md5($host['public_key']) : "" ?></td>
+                <td>
+                    <?= $host['public_key'] ? md5($host['public_key']) : "" ?>
+                    <? var_dump(strpos($host['public_key'], "\r")) ?>
+                </td>
                 <td style="text-align: center;" class="index_server">
                     <? if ($host->isMe()) : ?>
                         <a href="" title="<?= _("Als Index-Server aktivieren/deaktivieren") ?>" class="<?= $host['index_server'] ? "checked" : "unchecked" ?>">
