@@ -99,7 +99,10 @@ class EndpointsController extends PluginController {
         if ($host_data) {
             $host_data = studip_utf8decode(json_decode($host_data, true));
             if ($host_data) {
-                $host = LernmarktplatzHost::findOneByPublic_key($host_data['public_key']);
+                $host = LernmarktplatzHost::findOneByUrl($url);
+                if (!$host) {
+                    $host = LernmarktplatzHost::findOneByPublic_key($host_data['public_key']);
+                }
                 if (!$host) {
                     $host = new LernmarktplatzHost();
                 }
