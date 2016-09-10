@@ -77,7 +77,6 @@ class AdminController extends PluginController {
     public function ask_for_hosts_action($host_id) {
         $host = new LernmarktplatzHost($host_id);
         $added = $this->askForHosts($host);
-        die();
         if ($added > 0) {
             PageLayout::postMessage(MessageBox::success(sprintf(_("%s neue Server hinzugefügt."), $added)));
         } else {
@@ -101,7 +100,6 @@ class AdminController extends PluginController {
                         $host->store();
                     }
                 } else {
-                    var_dump("hey");
                     $host->fetchPublicKey();
                 }
             }
