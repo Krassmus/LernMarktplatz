@@ -104,7 +104,7 @@ class AdminController extends PluginController {
                     $host->fetchPublicKey();
                 }
             }
-        }
+        }die("");
         return $added;
     }
 
