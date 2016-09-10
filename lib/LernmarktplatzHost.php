@@ -48,7 +48,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
             $host_data = studip_utf8decode(json_decode($host_data, true));
             if ($host_data) {
                 $this['name'] = $host_data['name'];
-                $this['public_key'] = $host_data['public_key'];
+                $this['public_key'] = preg_replace("/\r/", "", $host_data['public_key']);
                 $this['url'] = $host_data['url'];
                 $this['index_server'] = $host_data['index_server'];
                 $host['last_updated'] = time();
@@ -69,7 +69,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
                 $host = LernmarktplatzHost::findByPublic_key($host_data['public_key']);
                 if (!$host) {
                     $host = new LernmarktplatzHost();
-                    $host['public_key'] = $host_data['public_key'];
+                    $host['public_key'] = preg_replace("/\r/", "", $host_data['public_key']);
                     $host['url'] = $host_data['url'];
                 }
                 if ($host['last_updated'] < time() - 60 * 60 * 8) {
