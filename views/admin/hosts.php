@@ -27,7 +27,9 @@
                 </td>
                 <td>
                     <?= $host['public_key'] ? md5($host['public_key']) : "" ?>
-                    <? var_dump(strpos($host['public_key'], "\r")) ?>
+                    <? if (strpos($host['public_key'], "\r") !== false) : ?>
+                        <?= Assets::img("icons/20/red/exclaim", array('class' => "text-bottom", 'title' => _("Der Key hat ein Carriage-Return Zeichen, weshalb der Hash des Public-Keys vermutlich vom Original-Hash abweicht."))) ?>
+                    <? endif ?>
                 </td>
                 <td style="text-align: center;" class="index_server">
                     <? if ($host->isMe()) : ?>
