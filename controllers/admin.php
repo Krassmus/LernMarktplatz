@@ -99,6 +99,8 @@ class AdminController extends PluginController {
                         $added++;
                         $host->store();
                     }
+                } else {
+                    $host->fetchPublicKey();
                 }
             }
         }
