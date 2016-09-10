@@ -100,6 +100,7 @@ class AdminController extends PluginController {
                         $host->store();
                     }
                 } else {
+                    var_dump("hey");
                     $host->fetchPublicKey();
                 }
             }
