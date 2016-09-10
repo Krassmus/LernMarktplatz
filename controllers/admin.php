@@ -89,7 +89,6 @@ class AdminController extends PluginController {
     protected function askForHosts($host) {
         $data = $host->askKnownHosts();
         $added = 0;
-        var_dump($data);
         if ($data['hosts']) {
             foreach ($data['hosts'] as $host_data) {
                 $host = LernmarktplatzHost::findByUrl($host_data['url']);
