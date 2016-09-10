@@ -322,6 +322,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 $index_server->pushDataToEndpoint("push_data", $data);
             }
         }
+        die();
     }
 
     public function fetchData()
