@@ -63,7 +63,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
         $endpoint_url = $this['url']."fetch_known_hosts"
             ."?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/"));
         $output = @file_get_contents($endpoint_url);
-        var_dump($output);
+        var_dump($endpoint_url);
         if ($output) {
             $output = studip_utf8decode(json_decode($output, true));
             foreach ((array) $output['hosts'] as $host_data) {
