@@ -314,9 +314,11 @@ class LernmarktplatzMaterial extends SimpleORMap {
         if ($delete) {
             $data['delete_material'] = 1;
         }
+        var_dump($data);
 
         foreach (LernmarktplatzHost::findBySQL("index_server = '1' AND allowed_as_index_server = '1' ") as $index_server) {
             if (!$index_server->isMe()) {
+                echo " push ";
                 $index_server->pushDataToEndpoint("push_data", $data);
             }
         }
