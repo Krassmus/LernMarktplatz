@@ -168,10 +168,6 @@ class MarketController extends PluginController {
     }
 
 
-    public function edit_action($material_id = null) {
-
-    }
-
     public function licenseinfo_action()
     {
 
