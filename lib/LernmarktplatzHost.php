@@ -156,7 +156,6 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
         );
         curl_setopt($request, CURLOPT_HTTPHEADER, $header);
 
-
         if ($curl_multi_request) {
             return $request;
         } else {
