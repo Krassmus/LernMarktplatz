@@ -18,6 +18,12 @@ class AdminController extends PluginController {
         //init
         LernmarktplatzHost::thisOne();
         $this->hosts = LernmarktplatzHost::findAll();
+        foreach ($this->hosts as $host) {
+            if (strpos($host['public_key'], "\r") !== false) {
+                $host['public_key'] = str_replace("\r", "", $host['public_key']);
+                $host->store();
+            }
+        }
 
         if (!function_exists("curl_init")) {
             PageLayout::postMessage(MessageBox::error(_("Ihr PHP hat kein aktiviertes cURL-Modul.")));
