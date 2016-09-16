@@ -1,12 +1,12 @@
 <h1><?= htmlReady($material['name']) ?></h1>
 
-<? if ($material['front_image_content_type']) : ?>
-    <img src="<?= $material->getLogoURL() ?>" style="display: block; max-width: 100%; max-height: 200px; height: 200px; margin-left: auto; margin-right: auto;">
+<? if (!$material->isVideo() && $material['front_image_content_type']) : ?>
+    <img src="<?= htmlReady($material->getLogoURL()) ?>" style="display: block; max-width: 100%; max-height: 200px; height: 200px; margin-left: auto; margin-right: auto;">
 <? endif ?>
 
 <div style="text-align: center;">
-    <? $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getLink($plugin, array(), "market/download/".$material->getId()) ?>
-    <a class="button download_link" href="<?= $url ?>" title="<?= _("Download") ?>">
+    <? $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getURL($plugin, array(), "market/download/".$material->getId()) ?>
+    <a class="button download_link" href="<?= htmlReady($url) ?>" title="<?= _("Download") ?>">
         <?= Assets::img("icons/35/blue/download", array('class' => "blue")) ?>
         <?= Assets::img("icons/35/white/download", array('class' => "whitebutton")) ?>
         <div class="filename"><?= htmlReady($material['filename']) ?></div>
@@ -20,6 +20,14 @@
         </div>
     <? endif ?>
 </div>
+
+<? if ($material->isVideo()) : ?>
+    <video controls
+            <?= $material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : "" ?>
+           crossorigin="anonymous"
+           src="<?= htmlReady($url) ?>"
+           style="display: block; margin-left: auto; margin-right: auto; width: 500px;"></video>
+<? endif ?>
 
 <div style="margin-top: 17px;">
     <?= formatReady($material['description'] ?: $material['short_description']) ?>
