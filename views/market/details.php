@@ -26,7 +26,7 @@
             <?= $material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : "" ?>
            crossorigin="anonymous"
            src="<?= htmlReady($url) ?>"
-           style="display: block; margin-left: auto; margin-right: auto; width: 500px;"></video>
+           style="display: block; margin-left: auto; margin-right: auto; width: 500px; max-width: 96vw;"></video>
 <? endif ?>
 
 <div style="margin-top: 17px;">
