@@ -11,7 +11,9 @@ class MarketController extends PluginController {
     }
 
     public function overview_action() {
-        Navigation::activateItem("/lernmarktplatz/overview");
+        if (Navigation::hasItem("/lernmarktplatz/overview")) {
+            Navigation::activateItem("/lernmarktplatz/overview");
+        }
         $tag_matrix_entries_number = 9;
         $tag_subtags_number = 6;
 
@@ -91,7 +93,9 @@ class MarketController extends PluginController {
 
     public function details_action($material_id)
     {
-        Navigation::activateItem("/lernmarktplatz/overview");
+        if (Navigation::hasItem("/lernmarktplatz/overview")) {
+            Navigation::activateItem("/lernmarktplatz/overview");
+        }
         $this->material = new LernmarktplatzMaterial($material_id);
         if ($this->material['host_id']) {
             $success = $this->material->fetchData();
@@ -132,7 +136,9 @@ class MarketController extends PluginController {
 
     public function discussion_action($review_id)
     {
-        Navigation::activateItem("/lernmarktplatz/overview");
+        if (Navigation::hasItem("/lernmarktplatz/overview")) {
+            Navigation::activateItem("/lernmarktplatz/overview");
+        }
         $this->review = new LernmarktplatzReview($review_id);
         if (Request::isPost() && Request::get("comment")) {
             $comment = new LernmarktplatzComment();

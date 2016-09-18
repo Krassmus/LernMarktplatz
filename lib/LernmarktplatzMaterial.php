@@ -235,6 +235,11 @@ class LernmarktplatzMaterial extends SimpleORMap {
         return stripos($this['content_type'], "image") === 0;
     }
 
+    public function isVideo()
+    {
+        return stripos($this['content_type'], "video") === 0;
+    }
+
     public function isPDF()
     {
         return $this['content_type'] === "application/pdf";
