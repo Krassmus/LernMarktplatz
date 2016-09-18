@@ -7,7 +7,8 @@ require_once __DIR__."/lib/LernmarktplatzMaterial.php";
 require_once __DIR__."/lib/LernmarktplatzTag.php";
 require_once __DIR__."/lib/LernmarktplatzReview.php";
 require_once __DIR__."/lib/LernmarktplatzComment.php";
- 
+require_once __DIR__."/lib/LernmarktplatzLog.php";
+
 //These two HTTP-headers are non-conformant custom HTTP-headers for requests
 $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'] = "Publickey-Hash";    //MD5-hash of the armored public key of the server
 $GLOBALS['LERNMARKTPLATZ_HEADER_SIGNATURE']       = "RSA-Signature-Base64"; //the base64 encoded signature provided by the public key over the body of the message
