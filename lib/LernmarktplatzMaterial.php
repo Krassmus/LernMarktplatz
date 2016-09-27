@@ -23,6 +23,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 INNER JOIN lernmarktplatz_tags USING (tag_hash)
             WHERE lernmarktplatz_tags.name = :tag
             GROUP BY lernmarktplatz_material.material_id
+            ORDER BY lernmarktplatz_material.mkdate DESC
         ");
         $statement->execute(array('tag' => $tag_name));
         $material_data = $statement->fetchAll(PDO::FETCH_ASSOC);
