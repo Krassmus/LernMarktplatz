@@ -174,7 +174,19 @@
                         </a>
                         <?= date("j.n.Y G:i", $review['chdate']) ?>
                     </div>
-                    <strong><?= htmlReady($review['host_id'] ? LernmarktplatzUser::find($review['user_id'])->name : get_fullname($review['user_id'])) ?></strong>
+                    <strong>
+                        <? if ($review['host_id']) : ?>
+                            <? $user = LernmarktplatzUser::find($review['user_id']) ?>
+                            <a href="<?= PluginEngine::getLink($plugin, array(), "market/profile/".$user->getId()) ?>">
+                                <?= htmlReady($user->name) ?>
+                            </a>
+                        <? else : ?>
+                            <? $user = new User($review['user_id']) ?>
+                            <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $user['username'])) ?>">
+                                <?= htmlReady($user->getFullName()) ?>
+                            </a>
+                        <? endif ?>
+                    </strong>
                     <span class="origin">(<?= htmlReady($review['host_id'] ? $review->host['name'] : $GLOBALS['UNI_NAME_CLEAN']) ?>)</span>
                     <div class="review_text">
                         <?= formatReady($review['review']) ?>
