@@ -228,6 +228,16 @@ class MarketController extends PluginController {
         $this->courses = Course::findBySQL("INNER JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = ? ORDER BY seminare.mkdate DESC", array($GLOBALS['user']->id));
     }
 
+    public function profile($external_user_id) {
+        $this->user = new LernmarktplatzUser($external_user_id);
+        if ($this->user->isNew()) {
+            throw new Exception(_("Nutzer ist nicht erfasst."));
+        }
+        $this->materials = LernmarktplatzMaterial::findBySQL("user_id = ? AND host_id IS NOT NULL ORDER BY mkdate DESC", array(
+            $external_user_id
+        ));
+    }
+
     protected function getFolderStructure($folder) {
         $structure = array();
         foreach (scandir($folder) as $file) {
