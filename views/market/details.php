@@ -67,7 +67,11 @@
         <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
         <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
-            <div class="author_name"><?= htmlReady($user['name']) ?></div>
+            <div class="author_name">
+                <a href="<?= PluginEngine::getLink($plugin, array(), "market/profile/".$user->getId()) ?>">
+                    <?= htmlReady($user['name']) ?>
+                </a>
+            </div>
             <div class="author_host">(<?= htmlReady($material->host->name) ?>)</div>
             <div class="description"><?= formatReady($user['description']) ?></div>
         </div>
@@ -76,7 +80,11 @@
         <? $image = Avatar::getAvatar($material['user_id'])->getURL(Avatar::MEDIUM) ?>
         <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
         <div>
-            <div class="author_name"><?= htmlReady($user->getFullName()) ?></div>
+            <div class="author_name">
+                <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $user['username'])) ?>">
+                    <?= htmlReady($user->getFullName()) ?>
+                </a>
+            </div>
             <div class="author_host">(<?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?>)</div>
             <div class="description"><?
                 $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
