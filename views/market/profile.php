@@ -1,6 +1,6 @@
 <div style="display: flex; width: 100%; margin-bottom: 20px;">
     <div>
-        <img src="<?= htmlReady($user['avatar']) ?>">
+        <img class="avatar-normal" src="<?= htmlReady($user['avatar']) ?>">
     </div>
     <div style="width: 100%; padding-left: 10px;">
         <h1><?= htmlReady($user['name']) ?></h1>
