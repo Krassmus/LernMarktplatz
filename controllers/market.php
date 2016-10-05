@@ -219,7 +219,7 @@ class MarketController extends PluginController {
                 )));
                 if ($this->material['host_id']) { //cleanup
                     @unlink($path);
-                } 
+                }
             } else {
                 PageLayout::postMessage(MessageBox::error(_("Veranstaltung hat keinen allgemeinen Dateiordner.")));
                 $this->redirect(PluginEngine::getURL($this->plugin, array(), "market/details/".$material_id));

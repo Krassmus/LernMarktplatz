@@ -10,12 +10,15 @@
     </div>
 </div>
 
-<ul class="clean">
-    <? foreach ($materials as $material) : ?>
-        <li>
-            <a href="<?= PluginEngine::getLink($plugin, array(), "market/details/".$material->getId()) ?>">
-                <?= htmlReady($material['name']) ?>
-            </a>
-        </li>
-    <? endforeach ?>
-</ul>
+<section class="contentbox">
+    <header>
+        <h1>
+            <?= Assets::img("icons/16/blue/service") ?>
+            <?= _("Lernmaterialien") ?>
+        </h1>
+    </header>
+    <section>
+        <?= $this->render_partial("mymaterial/_material_list.php", array('materialien' => $materials)) ?>
+    </section>
+</section>
+
