@@ -1,7 +1,7 @@
 <div class="maininfo">
     <div style="float: right;">
         <a href="<?= URLHelper::getLink("?", array('disable_maininfo' => 1)) ?>">
-            <?= Icon::create("decline", "clickable")->asImg("20px") ?>
+            <?= Assets::img("icons/blue/20/decline") ?>
         </a>
     </div>
     <div style="text-align: center;">
