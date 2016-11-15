@@ -33,7 +33,9 @@ class LernmarktplatzComment extends SimpleORMap {
                     URLHelper::getURL("plugins.php/lernmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
                     sprintf(_("%s hat einen Kommentar zu Ihrem Review geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                     "comment_" . $this->getId(),
-                    Assets::image_path("icons/16/blue/support.svg")
+                    version_compare($GLOBALS['SOFTWARE_VERSION'], "3.3", ">=")
+                        ? Icon::create("support", "clickable")
+                        : Assets::image_path("icons/16/blue/support.svg")
                 );
             }
 
@@ -56,7 +58,9 @@ class LernmarktplatzComment extends SimpleORMap {
                         URLHelper::getURL("plugins.php/lernmarktplatz/market/discussion/" . $this['review_id'] . "#comment_" . $this->getId()),
                         sprintf(_("%s hat auch einen Kommentar geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id'])),
                         "comment_" . $this->getId(),
-                        Assets::image_path("icons/16/blue/support.svg")
+                        version_compare($GLOBALS['SOFTWARE_VERSION'], "3.3", ">=")
+                            ? Icon::create("support", "clickable")
+                            : Assets::image_path("icons/16/blue/support.svg")
                     );
                 }
             }

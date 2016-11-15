@@ -38,7 +38,9 @@ class LernmarktplatzReview extends SimpleORMap {
                     ? sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name'])
                     : sprintf(_("%s hat ein Review zu '%s' verändert."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name']),
                 "review_".$this->getId(),
-                Assets::image_path("icons/blue/service.svg")
+                version_compare($GLOBALS['SOFTWARE_VERSION'], "3.3", ">=")
+                    ? Icon::create("support", "clickable")
+                    : Assets::image_path("icons/16/blue/support.svg")
             );
         }
         //only push if the comment is from this server and the material-server is different

@@ -19,7 +19,10 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
         parent::__construct();
         if ($GLOBALS['perm']->have_perm("autor")) {
             $topicon = new Navigation(_("Lernmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
-            $topicon->setImage(Icon::create('service', 'navigation'));
+            $topicon->setImage(version_compare($GLOBALS['SOFTWARE_VERSION'], "3.3", ">=")
+                ? Icon::create('service', 'navigation')
+                : Assets::image_path("icons/lightblue/service.svg")
+            );
             Navigation::addItem("/lernmarktplatz", $topicon);
             Navigation::addItem("/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
             Navigation::addItem("/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
@@ -27,9 +30,6 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
         if ($GLOBALS['perm']->have_perm("root")) {
             $tab = new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "admin/hosts"));
             Navigation::addItem("/admin/config/lernmarktplatz", $tab);
-        }
-        if ($GLOBALS['i_page'] === "folder.php" && $GLOBALS['perm']->have_studip_perm("tutor", $_SESSION['SessionSeminar'])) {
-            NotificationCenter::addObserver($this, "addToFolderSidebar", "SidebarWillRender");
         }
         if (UpdateInformation::isCollecting()
                 && stripos(Request::get("page"), "plugins.php/lernmarktplatz/market/discussion/") !== false) {
@@ -75,24 +75,6 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
                 'where' => "host_id IS NULL"
             )
         );
-    }
-
-    public function addToFolderSidebar() {
-        $links = new LinksWidget();
-        $links->setTitle(_("Lernmarktplatz"));
-        $links->addLink(
-            _("Lernmaterialien herunterladen"),
-            PluginEngine::getURL($this, array(), "market/overview"),
-            null,
-            array('data-dialog' => "1")
-        );
-        $links->addLink(
-            _("Ordner als Lernmaterial bereitstellen"),
-            PluginEngine::getURL($this, array(), "market/provide_folder"),
-            null,
-            array('data-dialog' => "1")
-        );
-        Sidebar::Get()->addWidget($links);
     }
 
     public function perform($unconsumed_path) {
