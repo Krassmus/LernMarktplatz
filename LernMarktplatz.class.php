@@ -19,7 +19,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
         parent::__construct();
         if ($GLOBALS['perm']->have_perm("autor")) {
             $topicon = new Navigation(_("Lernmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
-            $topicon->setImage(Assets::image_path("icons/lightblue/service.svg"));
+            $topicon->setImage(Icon::create('service', 'navigation'));
             Navigation::addItem("/lernmarktplatz", $topicon);
             Navigation::addItem("/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
             Navigation::addItem("/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
