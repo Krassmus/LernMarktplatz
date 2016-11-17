@@ -212,17 +212,17 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 return URLHelper::getURL("plugins.php/lernmarktplatz/endpoints/download_front_image/".$this->getId());
             }
         } elseif ($this->isFolder()) {
-            return Assets::image_path("icons/$color/folder-full.svg");
+            return Icon::create("folder-full", "clickable")->asImagePath();
         } elseif($this->isImage()) {
-            return Assets::image_path("icons/$color/file-pic.svg");
+            return Icon::create("file-pic", "clickable")->asImagePath();
         } elseif($this->isPDF()) {
-            return Assets::image_path("icons/$color/file-pdf.svg");
+            return Icon::create("file-pdf", "clickable")->asImagePath();
         } elseif($this->isPresentation()) {
-            return Assets::image_path("icons/$color/file-ppt.svg");
+            return Icon::create("file-ppt", "clickable")->asImagePath();
         } elseif($this->isStudipQuestionnaire()) {
-            return Assets::image_path("icons/$color/vote.svg");
+            return Icon::create("vote", "clickable")->asImagePath();
         } else {
-            return Assets::image_path("icons/$color/file.svg");
+            return Icon::create("file", "clickable")->asImagePath();
         }
 
     }

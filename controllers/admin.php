@@ -167,9 +167,7 @@ class AdminController extends PluginController {
         }
 
         $this->render_text((
-            version_compare($GLOBALS['SOFTWARE_VERSION'], "3.3", ">=")
-                ? Icon::create("checkbox-".(Request::int("active") ? "" : "un")."checked")
-                : Assets::img("icons/20/blue/checkbox-".(Request::int("active") ? "" : "un")."checked")
+            Icon::create("checkbox-".(Request::int("active") ? "" : "un")."checked")
         ));
     }
 

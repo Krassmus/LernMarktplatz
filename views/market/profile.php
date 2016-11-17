@@ -14,7 +14,7 @@
     <section class="contentbox">
         <header>
             <h1>
-                <?= Assets::img("icons/16/blue/service") ?>
+                <?= Icon::create("service", "clickable")->asImg("16px") ?>
                 <?= _("Lernmaterialien") ?>
             </h1>
         </header>

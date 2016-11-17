@@ -19,10 +19,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
         parent::__construct();
         if ($GLOBALS['perm']->have_perm("autor")) {
             $topicon = new Navigation(_("Lernmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
-            $topicon->setImage(version_compare($GLOBALS['SOFTWARE_VERSION'], "3.3", ">=")
-                ? Icon::create('service', 'navigation')
-                : Assets::image_path("icons/lightblue/service.svg")
-            );
+            $topicon->setImage(Icon::create('service', 'navigation'));
             Navigation::addItem("/lernmarktplatz", $topicon);
             Navigation::addItem("/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
             Navigation::addItem("/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
@@ -92,7 +89,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             case 'doc':
             case 'docx':
             case 'odt':
-                $icon = 'icons/20/black/file-text.png';
+                $icon = 'file-text';
                 break;
             case 'xls':
             case 'xlsx':
@@ -101,16 +98,16 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             case 'ppt':
             case 'pptx':
             case 'odp':
-                $icon = 'icons/20/black/file-office.png';
+                $icon = 'file-office';
                 break;
             case 'zip':
             case 'tgz':
             case 'gz':
             case 'bz2':
-                $icon = 'icons/20/black/file-archive.png';
+                $icon = 'file-archive';
                 break;
             case 'pdf':
-                $icon = 'icons/20/black/file-pdf.png';
+                $icon = 'file-pdf';
                 break;
             case 'gif':
             case 'jpg':
@@ -118,13 +115,13 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             case 'jpeg':
             case 'png':
             case 'bmp':
-                $icon = 'icons/20/black/file-pic.png';
+                $icon = 'file-pic';
                 break;
             default:
-                $icon = 'icons/20/black/file-generic.png';
+                $icon = 'file-generic';
                 break;
         }
-        return $icon;
+        return Icon::create($icon, "info");
     }
 
     public function getHomepageTemplate($user_id) {
@@ -135,7 +132,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             $template->set_attribute("plugin", $this);
             $template->set_attribute("materialien", $materialien);
             $template->set_attribute("title", _("Lernmaterialien"));
-            $template->set_attribute("icon_url", Assets::image_path("icons/blue/service.svg"));
+            $template->set_attribute("icon_url", Icon::create("service", "clickable")->asImagePath());
             return $template;
         } else {
             return null;

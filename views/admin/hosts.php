@@ -16,12 +16,12 @@
             <tr id="host_<?= $host->getId() ?>" data-host_id="<?= $host->getId() ?>">
                 <td>
                     <? if ($host->isMe()) : ?>
-                        <?= Assets::img("icons/16/black/home", array('class' => "text-bottom", 'title' => _("Das ist Ihr Stud.IP"))) ?>
+                        <?= Icon::create("home", "info")->asImg(20, array('class' => "text-bottom", 'title' => _("Das ist Ihr Stud.IP"))) ?>
                     <? endif ?>
                     <?= htmlReady($host['name']) ?></td>
                 <td>
                     <a href="<?= htmlReady($host['url']) ?>" target="_blank">
-                        <?= Assets::img("icons/16/blue/link-extern", array('class' => "text-bottom")) ?>
+                        <?= Icon::create("link-extern", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                         <?= htmlReady($host['url']) ?>
                     </a>
                 </td>
@@ -34,12 +34,12 @@
                 <td style="text-align: center;" class="index_server">
                     <? if ($host->isMe()) : ?>
                         <a href="" title="<?= _("Als Index-Server aktivieren/deaktivieren") ?>" class="<?= $host['index_server'] ? "checked" : "unchecked" ?>">
-                            <?= Assets::img("icons/20/blue/checkbox-".($host['index_server'] ? "" : "un")."checked") ?>
+                            <?= Icon::create("checkbox-".($host['index_server'] ? "" : "un")."checked", "clickable")->asImg(20) ?>
                         </a>
                     <? else : ?>
                         <? if ($host['index_server']) : ?>
                             <a href="" class="<?= $host['allowed_as_index_server'] ? "checked" : "unchecked" ?>">
-                                <?= Assets::img("icons/20/blue/checkbox-".($host['allowed_as_index_server'] ? "" : "un")."checked") ?>
+                                <?= Icon::create("checkbox-".($host['allowed_as_index_server'] ? "" : "un")."checked", "clickable")->asImg(20) ?>
                             </a>
                         <? endif ?>
                     <? endif ?>
@@ -47,7 +47,7 @@
                 <td>
                     <? if (!$host->isMe()) : ?>
                         <a href="<?= PluginEngine::getLink($plugin, array(), "admin/ask_for_hosts/".$host->getId()) ?>" title="<?= _("Diesen Server nach weiteren bekannten Hosts fragen.") ?>">
-                            <?= Assets::img($this->plugin->getPluginURL()."/assets/social_blue.svg", array('width' => "20px", 'class' => "text-bottom")) ?>
+                            <?= Icon::create($this->plugin->getPluginURL()."/assets/social_blue.svg", array('width' => "20px", 'class' => "text-bottom")) ?>
                         </a>
                     <? endif ?>
                 </td>
@@ -96,7 +96,7 @@ $actions = new ActionsWidget();
 $actions->addLink(
     _("Server hinzufügen"),
     PluginEngine::getURL($plugin, array(), "admin/add_new_host"),
-    Assets::image_path("icons/blue/add"),
+    Icon::create("add", "clickable"),
     array('data-dialog' => "1")
 );
 

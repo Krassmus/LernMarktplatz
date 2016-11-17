@@ -54,9 +54,7 @@ if ($GLOBALS['perm']->have_perm("autor")) {
     $actions->addLink(
         _("Eigenes Lernmaterial hochladen"),
         PluginEngine::getURL($plugin, array(), "mymaterial/edit"),
-        version_compare($GLOBALS['SOFTWARE_VERSION'], "3.3", ">=")
-            ? Icon::create("add", "clickable")
-            : Assets::image_path("icons/blue/add"),
+        Icon::create("add", "clickable"),
         array('data-dialog' => "1")
     );
     Sidebar::Get()->addWidget($actions);

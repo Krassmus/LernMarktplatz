@@ -7,14 +7,14 @@
 <div style="text-align: center;">
     <? $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getURL($plugin, array(), "market/download/".$material->getId()) ?>
     <a class="button download_link" href="<?= htmlReady($url) ?>" title="<?= _("Download") ?>">
-        <?= Assets::img("icons/35/blue/download", array('class' => "blue")) ?>
-        <?= Assets::img("icons/35/white/download", array('class' => "whitebutton")) ?>
+        <?= Icon::create("download", "clickable")->asImg(35, array('class' => "blue")) ?>
+        <?= Icon::create("download", "info_alt")->asImg(35, array('class' => "whitebutton")) ?>
         <div class="filename"><?= htmlReady($material['filename']) ?></div>
     </a>
     <? if ($GLOBALS['perm']->have_perm("tutor")) : ?>
         <div>
             <a href="<?= PluginEngine::getLink($plugin, array(), "market/add_to_course/".$material->getId()) ?>" data-dialog>
-                <?= Assets::img("icons/16/blue/move_down/seminar", array('class' => "text-bottom")) ?>
+                <?= Icon::create("seminar+move_down", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                 <?= _("Zu Veranstaltung hinzufügen") ?>
             </a>
         </div>
@@ -51,7 +51,7 @@
             <? foreach ($tags as $tag) : ?>
                 <li>
                     <a href="<?= PluginEngine::getLink($plugin, array('tag' => $tag['name']), "market/overview") ?>">
-                        <?= Assets::img("icons/20/blue/topic", array('class' => "text-bottom")) ?>
+                        <?= Icon::create("topic", "clickable")->asImg(20, array('class' => "text-bottom")) ?>
                         <?= htmlReady($tag['name']) ?>
                     </a>
                 </li>
@@ -94,7 +94,7 @@
 
                     if ($material['user_id'] === $GLOBALS['user']->id) : ?>
                         <a href="<?= URLHelper::getLink("dispatch.php/settings/details#datafields_".$user_description_datafield->getId()) ?>" title="<?= _("Text bearbeiten") ?>">
-                            <?= Assets::img("icons/20/blue/edit", array('class' => "text-bottom")) ?>
+                            <?= Icon::create("edit", "clickable")->asImg(20, array('class' => "text-bottom")) ?>
                         </a>
                     <? endif;
                 }
@@ -132,11 +132,11 @@
             <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
                 <a style="opacity: 0.3;" title="<?= $GLOBALS['perm']->have_perm("autor") ? _("Geben Sie die erste Bewertung ab.") : _("Noch keine bewertung abgegeben.") ?>" href="<?= PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()) ?>" data-dialog>
             <? endif ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => "50px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
             <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
                 </a>
             <? endif ?>
@@ -146,15 +146,15 @@
             <? endif ?>
             <? $material['rating'] = round($material['rating'], 1) / 2 ?>
             <? $v = $material['rating'] >= 0.75 ? 3 : ($material['rating'] >= 0.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(50) ?>
             <? $v = $material['rating'] >= 1.75 ? 3 : ($material['rating'] >= 1.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(50) ?>
             <? $v = $material['rating'] >= 2.75 ? 3 : ($material['rating'] >= 2.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(50) ?>
             <? $v = $material['rating'] >= 3.75 ? 3 : ($material['rating'] >= 3.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(50) ?>
             <? $v = $material['rating'] >= 4.75 ? 3 : ($material['rating'] >= 4.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "50px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(50) ?>
             <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
                 </a>
             <? endif ?>
@@ -170,7 +170,7 @@
                 <div class="content">
                     <div class="timestamp">
                         <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>" title="<?= _("Schreiben Sie einen Kommentar dazu.") ?>">
-                            <?= Assets::img("icons/14/grey/comment", array('class' => "text-bottom")) ?>
+                            <?= Icon::create("comment", "inactive")->asImg(14, array('class' => "text-bottom")) ?>
                         </a>
                         <?= date("j.n.Y G:i", $review['chdate']) ?>
                     </div>
@@ -194,25 +194,25 @@
                     <div class="stars">
                         <? $rating = round($review['rating'], 1) ?>
                         <? $v = $rating >= 0.75 ? 3 : ($rating >= 0.25 ? 2 : "") ?>
-                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
                         <? $v = $rating >= 1.75 ? 3 : ($rating >= 1.25 ? 2 : "") ?>
-                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
                         <? $v = $rating >= 2.75 ? 3 : ($rating >= 2.25 ? 2 : "") ?>
-                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
                         <? $v = $rating >= 3.75 ? 3 : ($rating >= 3.25 ? 2 : "") ?>
-                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
                         <? $v = $rating >= 4.75 ? 3 : ($rating >= 4.25 ? 2 : "") ?>
-                        <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "16px")) ?>
+                        <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
                     </div>
                     <div class="comments" style="text-align: center;">
                         <? if (count($review->comments)) : ?>
                             <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>">
-                                <?= Assets::img("icons/16/blue/comment", array('class' => "text-bottom")) ?>
+                                <?= Icon::create("comment", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                                 <?= sprintf(_("%s Kommentare dazu"), count($review->comments)) ?>
                             </a>
                         <? elseif ($material['user_id'] === $GLOBALS['user']->id) : ?>
                             <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>">
-                                <?= Assets::img("icons/16/blue/comment", array('class' => "text-bottom")) ?>
+                                <?= Icon::create("comment", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                                 <?= _("Dazu einen Kommentar schreiben") ?>
                             </a>
                         <? endif ?>
@@ -238,7 +238,7 @@ if ($GLOBALS['perm']->have_perm("autor")) {
     $actions->addLink(
         _("Eigenes Lernmaterial hochladen"),
         PluginEngine::getURL($plugin, array(), "mymaterial/edit"),
-        Assets::image_path("icons/blue/add"),
+        Icon::create("add", "clickable"),
         array('data-dialog' => "1")
     );
     Sidebar::Get()->addWidget($actions);
