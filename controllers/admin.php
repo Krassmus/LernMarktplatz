@@ -167,7 +167,7 @@ class AdminController extends PluginController {
         }
 
         $this->render_text((
-            Assets::img("icons/20/blue/checkbox-".(Request::int("active") ? "" : "un")."checked")
+            Icon::create("checkbox-".(Request::int("active") ? "" : "un")."checked")
         ));
     }
 

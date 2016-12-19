@@ -1,5 +1,5 @@
 <a href="<?= PluginEngine::getLink($plugin, array(), "market/details/".$review['material_id']) ?>">
-    <?= Assets::img("icons/16/blue/arr_1left", array('class' => "text-bottom")) ?>
+    <?= Icon::create("arr_1left", "clickable")->asImg("20px", array('class' => "text-bottom")) ?>
     <?= _("Zurück") ?>
 </a>
 
@@ -9,15 +9,15 @@
         <span class="stars" style="vertical-align: middle;">
             <? $rating = round($review['rating'], 1) ?>
             <? $v = $rating >= 0.75 ? 3 : ($rating >= 0.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(25) ?>
             <? $v = $rating >= 1.75 ? 3 : ($rating >= 1.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(25) ?>
             <? $v = $rating >= 2.75 ? 3 : ($rating >= 2.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(25) ?>
             <? $v = $rating >= 3.75 ? 3 : ($rating >= 3.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(25) ?>
             <? $v = $rating >= 4.75 ? 3 : ($rating >= 4.25 ? 2 : "") ?>
-            <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => "25px")) ?>
+            <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(25) ?>
         </span>
     </div>
     <?= formatReady($review['review']) ?>

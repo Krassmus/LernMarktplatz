@@ -6,7 +6,7 @@ $actions = new ActionsWidget();
 $actions->addLink(
     _("Eigenes Lernmaterial hochladen"),
     PluginEngine::getURL($plugin, array(), "mymaterial/edit"),
-    Assets::image_path("icons/blue/add"),
+    Icon::create("add", "clickable"),
     array('data-dialog' => "1")
 );
 

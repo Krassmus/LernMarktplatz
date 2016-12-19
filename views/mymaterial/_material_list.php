@@ -17,29 +17,29 @@
             </td>
             <td>
                 <? if ($material['rating'] === null) : ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => $starwidth)) ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => $starwidth)) ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => $starwidth)) ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => $starwidth)) ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star.svg", array('width' => $starwidth)) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg($starwidth) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg($starwidth) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg($starwidth) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg($starwidth) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg($starwidth) ?>
                 <? else : ?>
                     <? $material['rating'] = round($material['rating'], 1) / 2 ?>
                     <? $v = $material['rating'] >= 0.75 ? 3 : ($material['rating'] >= 0.25 ? 2 : "") ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => $starwidth)) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg($starwidth) ?>
                     <? $v = $material['rating'] >= 1.75 ? 3 : ($material['rating'] >= 1.25 ? 2 : "") ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => $starwidth)) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg($starwidth) ?>
                     <? $v = $material['rating'] >= 2.75 ? 3 : ($material['rating'] >= 2.25 ? 2 : "") ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => $starwidth)) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg($starwidth) ?>
                     <? $v = $material['rating'] >= 3.75 ? 3 : ($material['rating'] >= 3.25 ? 2 : "") ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => $starwidth)) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg($starwidth) ?>
                     <? $v = $material['rating'] >= 4.75 ? 3 : ($material['rating'] >= 4.25 ? 2 : "") ?>
-                    <?= Assets::img($plugin->getPluginURL()."/assets/star$v.svg", array('width' => $starwidth)) ?>
+                    <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg($starwidth) ?>
                 <? endif ?>
             </td>
             <td>
                 <? if ($material['user_id'] === $GLOBALS['user']->id) : ?>
                     <a href="<?= PluginEngine::getLink($plugin, array(), "mymaterial/edit/".$material->getId()) ?>" data-dialog title="<?= _("Lernmaterial bearbeiten") ?>">
-                        <?= Assets::img("icons/20/blue/edit") ?>
+                        <?= Icon::create("edit", "clickable")->asImg(20) ?>
                     </a>
                 <? endif ?>
             </td>

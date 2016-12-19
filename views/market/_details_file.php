@@ -1,6 +1,6 @@
 <? if ($file['is_folder']) : ?>
     <li class="folder">
-        <?= Assets::img("icons/20/black/folder-full", array('class' => "text-bottom")) ?>
+        <?= Icon::create("folder-full", "info")->asImg("20px", array('class' => "text-bottom")) ?>
         <?= htmlReady($name) ?>
         <ol>
             <? foreach ($file['structure'] as $name => $subfile) : ?>
@@ -11,7 +11,7 @@
 <? else : ?>
     <li>
         <div class="size" style="float: right"><?= htmlReady(number_format($file['size'] / 1024, 2)) ?> KB</div>
-        <?= Assets::img($plugin->get_file_icon(substr($name, strrpos($name, ".") + 1)), array('class' => "text-bottom")) ?>
+        <?= $plugin->get_file_icon(substr($name, strrpos($name, ".") + 1))->asImg("20px", array('class' => "text-bottom")) ?>
         <?= htmlReady($name) ?>
     </li>
 <? endif ?>
