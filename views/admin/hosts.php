@@ -61,7 +61,7 @@
         <form action="<?= PluginEngine::getLink($plugin, array(), "admin/add_new_host") ?>" method="post">
             <h2><?= _("Werden Sie Teil des weltweiten Stud.IP Lernmarktplatzes!") ?></h2>
             <div>
-                <?= _("Der Lernmarktplatz ist ein Ort des Austauschs von kostenlosen und freien Lernmaterialien. Daher wäre es schade, wenn er nur auf Ihr einzelnes Stud.IP beschränkt wäre. Der Lernmarktplatz ist daher als dezentrales Netzwerk konzipiert, bei dem alle Nutzer aller Stud.IPs sich gegenseitig Lenrmaterialien tauschen können und nach Lernmaterialien anderer Nutzer suchen können. <i>Dezentral</i> heißt dieses Netzwerk, weil es nicht einen einzigen zentralen Server gibt, der wie eine große Suchmaschine alle Informationen bereit hält. Stattdessen sind im besten Fall alle Stud.IPs mit allen anderen Stud.IPs direkt vernetzt. So ein dezentrales Netz ist sehr ausfallsicher und es passt zur Opensource-Idee von Stud.IP, weil man sich von keiner zentralen Institution abhängig macht. Aber Ihr Stud.IP muss irgendwo einen ersten Kontakt zum großen Netzwerk aller Lernmarktplätze finden, um loslegen zu können. Wählen Sie dazu irgendeinen der unten aufgeführten Server aus. Sie werden Index-Server genannt und bilden das Tor zum Rest des ganzen Netzwerks. Achten Sie darauf, dass Sie mit mindestens einem, aber auch nicht zuvielen Indexservern verbunden sind.") ?>
+                <?= _("Der Lernmarktplatz ist ein Ort des Austauschs von kostenlosen und freien Lernmaterialien. Daher wÃ¤re es schade, wenn er nur auf Ihr einzelnes Stud.IP beschrÃ¤nkt wÃ¤re. Der Lernmarktplatz ist daher als dezentrales Netzwerk konzipiert, bei dem alle Nutzer aller Stud.IPs sich gegenseitig Lenrmaterialien tauschen kÃ¶nnen und nach Lernmaterialien anderer Nutzer suchen kÃ¶nnen. <i>Dezentral</i> heiÃŸt dieses Netzwerk, weil es nicht einen einzigen zentralen Server gibt, der wie eine groÃŸe Suchmaschine alle Informationen bereit hÃ¤lt. Stattdessen sind im besten Fall alle Stud.IPs mit allen anderen Stud.IPs direkt vernetzt. So ein dezentrales Netz ist sehr ausfallsicher und es passt zur Opensource-Idee von Stud.IP, weil man sich von keiner zentralen Institution abhÃ¤ngig macht. Aber Ihr Stud.IP muss irgendwo einen ersten Kontakt zum groÃŸen Netzwerk aller LernmarktplÃ¤tze finden, um loslegen zu kÃ¶nnen. WÃ¤hlen Sie dazu irgendeinen der unten aufgefÃ¼hrten Server aus. Sie werden Index-Server genannt und bilden das Tor zum Rest des ganzen Netzwerks. Achten Sie darauf, dass Sie mit mindestens einem, aber auch nicht zuvielen Indexservern verbunden sind.") ?>
             </div>
 
             <ul class="clean" style="text-align: center;">
@@ -84,7 +84,7 @@
         jQuery(function () {
             jQuery('#init_first_hosts_dialog').dialog({
                 'modal': true,
-                'title': '<?= _("Index-Server hinzufügen") ?>',
+                'title': '<?= _("Index-Server hinzufÃ¼gen") ?>',
                 'width': "80%"
             });
         });
@@ -94,7 +94,7 @@
 <?
 $actions = new ActionsWidget();
 $actions->addLink(
-    _("Server hinzufügen"),
+    _("Server hinzufÃ¼gen"),
     PluginEngine::getURL($plugin, array(), "admin/add_new_host"),
     Icon::create("add", "clickable"),
     array('data-dialog' => "1")

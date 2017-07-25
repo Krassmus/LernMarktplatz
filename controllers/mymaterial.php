@@ -31,7 +31,7 @@ class MymaterialController extends PluginController {
         if (Request::submitted("delete") && Request::isPost()) {
             $this->material->pushDataToIndexServers("delete");
             $this->material->delete();
-            PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelöscht.")));
+            PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelÃ¶scht.")));
             $this->redirect("market/overview");
         } elseif (Request::isPost()) {
             $was_new = $this->material->setData(Request::getArray("data"));

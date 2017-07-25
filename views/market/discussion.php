@@ -1,6 +1,6 @@
 <a href="<?= PluginEngine::getLink($plugin, array(), "market/details/".$review['material_id']) ?>">
     <?= Icon::create("arr_1left", "clickable")->asImg("20px", array('class' => "text-bottom")) ?>
-    <?= _("Zurück") ?>
+    <?= _("ZurÃ¼ck") ?>
 </a>
 
 <div class="mainreview">
