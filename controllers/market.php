@@ -11,8 +11,11 @@ class MarketController extends PluginController {
     }
 
     public function overview_action() {
-        if (Navigation::hasItem("/lernmarktplatz/overview")) {
-            Navigation::activateItem("/lernmarktplatz/overview");
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
+            Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         }
         $tag_matrix_entries_number = 9;
         $tag_subtags_number = 6;
@@ -93,8 +96,11 @@ class MarketController extends PluginController {
 
     public function details_action($material_id)
     {
-        if (Navigation::hasItem("/lernmarktplatz/overview")) {
-            Navigation::activateItem("/lernmarktplatz/overview");
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
+            Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         }
         $this->material = new LernmarktplatzMaterial($material_id);
         if ($this->material['host_id']) {
@@ -105,7 +111,7 @@ class MarketController extends PluginController {
                 $material = clone $this->material;
                 $this->material->delete();
                 $this->material = $material;
-                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelöscht worden und wird gleich aus dem Cache verschwinden.")));
+                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelÃ¶scht worden und wird gleich aus dem Cache verschwinden.")));
             }
         }
         $this->material['rating'] = $this->material->calculateRating();
@@ -114,7 +120,10 @@ class MarketController extends PluginController {
 
     public function review_action($material_id = null)
     {
-        Navigation::activateItem("/lernmarktplatz/overview");
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         $this->material = new LernmarktplatzMaterial($material_id);
         $this->review = LernmarktplatzReview::findOneBySQL("material_id = ? AND user_id = ? AND host_id IS NULL", array($material_id, $GLOBALS['user']->id));
         if (!$this->review) {
@@ -129,15 +138,18 @@ class MarketController extends PluginController {
 
             $this->material['rating'] = $this->material->calculateRating();
             $this->material->store();
-            PageLayout::postMessage(MessageBox::success(_("Danke für das Review!")));
+            PageLayout::postMessage(MessageBox::success(_("Danke fÃ¼r das Review!")));
             $this->redirect("market/details/".$material_id);
         }
     }
 
     public function discussion_action($review_id)
     {
-        if (Navigation::hasItem("/lernmarktplatz/overview")) {
-            Navigation::activateItem("/lernmarktplatz/overview");
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
+            Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         }
         $this->review = new LernmarktplatzReview($review_id);
         if (Request::isPost() && Request::get("comment")) {

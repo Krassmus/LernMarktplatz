@@ -37,10 +37,10 @@ class AdminController extends PluginController {
             }
         }
         if (!$nobody_allowed) {
-            PageLayout::postMessage(MessageBox::error(_("Dieses Plugin ist nicht für nobody freigegeben. Damit kann sich dieser Marktplatz nicht mit anderen Stud.IP verbinden.")));
+            PageLayout::postMessage(MessageBox::error(_("Dieses Plugin ist nicht fÃ¼r nobody freigegeben. Damit kann sich dieser Marktplatz nicht mit anderen Stud.IP verbinden.")));
         }
 
-        //zufällig einen Host nach Neuigkeiten fragen:
+        //zufÃ¤llig einen Host nach Neuigkeiten fragen:
         if (count($this->hosts) > 1) {
             $index = rand(0, count($this->hosts) - 1);
             while($this->hosts[$index]->isMe()) {
@@ -67,7 +67,7 @@ class AdminController extends PluginController {
                 $host->fetchPublicKey();
                 if ($host['public_key']) {
                     $host->store();
-                    PageLayout::postMessage(MessageBox::success(_("Server wurde gefunden und hinzugefügt.")));
+                    PageLayout::postMessage(MessageBox::success(_("Server wurde gefunden und hinzugefÃ¼gt.")));
                 } else {
                     PageLayout::postMessage(MessageBox::error(_("Server ist nicht erreichbar oder hat die Anfrage abgelehnt.")));
                 }
@@ -84,7 +84,7 @@ class AdminController extends PluginController {
         $host = new LernmarktplatzHost($host_id);
         $added = $this->askForHosts($host);
         if ($added > 0) {
-            PageLayout::postMessage(MessageBox::success(sprintf(_("%s neue Server hinzugefügt."), $added)));
+            PageLayout::postMessage(MessageBox::success(sprintf(_("%s neue Server hinzugefÃ¼gt."), $added)));
         } else {
             PageLayout::postMessage(MessageBox::info(_("Keine neuen Server gefunden.")));
         }

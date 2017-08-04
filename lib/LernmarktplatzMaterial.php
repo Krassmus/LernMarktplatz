@@ -346,7 +346,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 }
 
                 //user:
-                $user = LernmarktplatzUser::findOneBySQL("foreign_user_id", array($data['user']['user_id'], $host->getId()));
+                $user = LernmarktplatzUser::findOneBySQL("foreign_user_id = ? AND host_id = ?", array($data['user']['user_id'], $host->getId()));
                 if (!$user) {
                     $user = new LernmarktplatzUser();
                     $user['foreign_user_id'] = $data['user']['user_id'];
@@ -399,7 +399,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
                             $review['mkdate'] = $review_data['mkdate'];
                         }
 
-                        $user = LernmarktplatzUser::findOneBySQL("foreign_user_id", array($review_data['user']['user_id'], $currenthost->getId()));
+                        $user = LernmarktplatzUser::findOneBySQL("foreign_user_id = ? AND host_id = ?", array($review_data['user']['user_id'], $currenthost->getId()));
                         if (!$user) {
                             $user = new LernmarktplatzUser();
                             $user['foreign_user_id'] = $review_data['user']['user_id'];

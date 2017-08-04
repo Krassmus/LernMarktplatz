@@ -18,11 +18,16 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
     public function __construct() {
         parent::__construct();
         if ($GLOBALS['perm']->have_perm("autor")) {
+            $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+                ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+                : "";
             $topicon = new Navigation(_("Lernmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
-            $topicon->setImage(Icon::create('service', 'navigation'));
-            Navigation::addItem("/lernmarktplatz", $topicon);
-            Navigation::addItem("/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
-            Navigation::addItem("/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
+            if (!$main_navigation) {
+                $topicon->setImage(Icon::create('service', 'navigation'));
+            }
+            Navigation::addItem($main_navigation."/lernmarktplatz", $topicon);
+            Navigation::addItem($main_navigation."/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
+            Navigation::addItem($main_navigation."/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
         }
         if ($GLOBALS['perm']->have_perm("root")) {
             $tab = new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "admin/hosts"));
