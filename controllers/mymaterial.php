@@ -11,13 +11,19 @@ class MymaterialController extends PluginController {
     }
 
     public function overview_action() {
-        Navigation::activateItem("/lernmarktplatz/mymaterial");
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        Navigation::activateItem($main_navigation."/lernmarktplatz/mymaterial");
         $this->materialien = LernmarktplatzMaterial::findMine();
     }
 
     public function details_action($material_id)
     {
-        Navigation::activateItem("/lernmarktplatz/overview");
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         $this->material = new LernmarktplatzMaterial($material_id);
     }
 
