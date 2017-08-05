@@ -37,7 +37,7 @@ class MymaterialController extends PluginController {
         if (Request::submitted("delete") && Request::isPost()) {
             $this->material->pushDataToIndexServers("delete");
             $this->material->delete();
-            PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelÃ¶scht.")));
+            PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelöscht.")));
             $this->redirect("market/overview");
         } elseif (Request::isPost()) {
             $was_new = $this->material->setData(Request::getArray("data"));
@@ -80,6 +80,15 @@ class MymaterialController extends PluginController {
 
             PageLayout::postMessage(MessageBox::success(_("Lernmaterial erfolgreich gespeichert.")));
             $this->redirect("market/details/".$this->material->getId());
+        }
+        if (Config::get()->LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD) {
+            $user_description_datafield = DataField::find(Config::get()->LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD) ?: DataField::findOneBySQL("name = ?", array(Config::get()->LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD));
+            if ($user_description_datafield) {
+                $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($GLOBALS['user']->id, $user_description_datafield->getId()));
+            }
+            if (!$datafield_entry || !$datafield_entry['content']) {
+                PageLayout::postMessage(MessageBox::info(sprintf(_("Sie haben noch keine Beschreibung zu sich selbst eingegeben. Das können Sie %sunter Ihrem Profil%s machen, damit Nutzer des Marktplatzes leicht sehen, wer Sie sind und wie sie Sie kontaktieren können."), '<a href="'.URLhelper::getLink("dispatch.php/settings/details#datafields_".$user_description_datafield->getId()).'" target="_blank">', '</a>')));
+            }
         }
     }
 
