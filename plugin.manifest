@@ -1,6 +1,6 @@
 pluginname=LernMarktplatz
 pluginclassname=LernMarktplatz
-version=3.5.0
+version=4.0.2
 origin=RasmusFuhse
-studipMinVersion=3.5
-studipMaxVersion=3.5.99
+studipMinVersion=4.0
+studipMaxVersion=4.0.99
