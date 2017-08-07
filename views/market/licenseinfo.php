@@ -2,20 +2,20 @@
 
 <p>
     Urheberrecht und Lizenzrecht ist echt kompliziert. In jedem Land der Erde gibt es andere Auslegungen und als
-    normaler Internetnutzer ist man schnell Ã¼berfordert mit den MÃ¶glichkeiten, aber auch mit den Pflichten.
+    normaler Internetnutzer ist man schnell überfordert mit den Möglichkeiten, aber auch mit den Pflichten.
 </p>
 <p>
-    Wer bei Facebook oder den anderen Diensten etwas hochlÃ¤dt, hat in den AGB zugestimmt, dass alle seine/ihre Dateien
-    unter einer Speziallizenz verÃ¶ffentlicht werden. Wer die AGB nicht gelesen hat, weiÃŸ nichts davon, weshalb das
+    Wer bei Facebook oder den anderen Diensten etwas hochlädt, hat in den AGB zugestimmt, dass alle seine/ihre Dateien
+    unter einer Speziallizenz veröffentlicht werden. Wer die AGB nicht gelesen hat, weiß nichts davon, weshalb das
     immer so einfach erscheint. De facto gibt man beim Upload eines Fotos auf Facebook aber alle Rechte auf die Datei
     ab. So einen fiesen Umgang wollen wir bei Stud.IP und insbesondere beim Lernmarktplatz absolut nicht! Wer Materialien
-    bei uns hoch lÃ¤dt, soll weiterhin volle Kontrolle Ã¼ber die Nutzung seiner/ihrer Dateien haben.
+    bei uns hoch lädt, soll weiterhin volle Kontrolle über die Nutzung seiner/ihrer Dateien haben.
 </p>
 <h2><?= _("Was ist uns wichtig?") ?></h2>
 <p>
     Um eine Lizenz kommen wir beim Lernmaterialienmarktplatz nicht herum. Und illegales Gemauschel wollen wir auch nicht. Wir gehen davon aus, dass jeder, der/die
-    auf dem Marktplatz eine Datei frei fÃ¼r alle zur VerfÃ¼gung stellt, will dass die Datei am Ende auch verwendet wird und
-    verwendet werden darf. SelbstverstÃ¤ndlich wollen wir:
+    auf dem Marktplatz eine Datei frei für alle zur Verfügung stellt, will dass die Datei am Ende auch verwendet wird und
+    verwendet werden darf. Selbstverständlich wollen wir:
     <ul>
         <li>Dateien sollen zum Selbstlernen verwendet werden.</li>
         <li>Die Dateien sollen im Rahmen von Veranstaltungen zum Einsatz kommen zum Beispiel als Vorlesungsfolien.</li>
@@ -25,36 +25,36 @@
 </p>
 <h2><?= _("Lizenzen auf dem Marktplatz") ?></h2>
 <p>
-    Zum GlÃ¼ck gibt es kluge Menschen, die sich zu dem Thema kluge Gedanken gemacht haben. Daher gibt es die sogenannten
-    CreativeCommons-Lizenzen. Die sind international gÃ¼ltig und besagen genau das, was oben gefordert ist. Damit haben
-    alle Nutzer des Marktplatzes absolute Rechtssicherheit. Diese Lizenzen kommen auch auÃŸerhalb des Marktplatzes
+    Zum Glück gibt es kluge Menschen, die sich zu dem Thema kluge Gedanken gemacht haben. Daher gibt es die sogenannten
+    CreativeCommons-Lizenzen. Die sind international gültig und besagen genau das, was oben gefordert ist. Damit haben
+    alle Nutzer des Marktplatzes absolute Rechtssicherheit. Diese Lizenzen kommen auch außerhalb des Marktplatzes
     sehr oft zum Einsatz. Musiker lizensieren ihre Musikrohdateien damit, Hobbyschreiber ihre Gedichte und Lehrende
-    auch ganz natÃ¼rlich ihre Vorlesungsfolien. Die einzige echte Auflage ist, dass bei Weitergabe oder bei der Bearbeitung
-    der Materialien alle Autoren in irgendeiner Form transparent genannt werden mÃ¼ssen!
+    auch ganz natürlich ihre Vorlesungsfolien. Die einzige echte Auflage ist, dass bei Weitergabe oder bei der Bearbeitung
+    der Materialien alle Autoren in irgendeiner Form transparent genannt werden müssen!
 </p>
 <p>
-    Dabei eine kleine Warnung: Wenn Sie vor haben, mit ihren Vorlesungsfolien oder ÃœbungsblÃ¤ttern und MusterlÃ¶sungen
+    Dabei eine kleine Warnung: Wenn Sie vor haben, mit ihren Vorlesungsfolien oder Übungsblättern und Musterlösungen
     noch Millionen Euro zu verdienen, dann stellen Sie diese Materialien nicht auf den Marktplatz, denn die Nutzung aller
-    Materialien ist unentgeldlich (selbstverstÃ¤ndlich verdienen auch wir nichts damit) und die Materialien kÃ¶nnen, wenn
+    Materialien ist unentgeldlich (selbstverständlich verdienen auch wir nichts damit) und die Materialien können, wenn
     sie einmal heruntergeladen worden sind, auch noch beliebig weiter verteilt werden. Es gibt zwar eine CreativeCommons-Lizenz,
-    die kommerzielle Nutzung ausschlieÃŸt. Die ist aber explizit fÃ¼r den Marktplatz nicht praktikabel. Denn stellen Sie
+    die kommerzielle Nutzung ausschließt. Die ist aber explizit für den Marktplatz nicht praktikabel. Denn stellen Sie
     sich diese Frage: Wenn ein Professor ein Material vom Marktplatz innerhalb seiner Veranstaltung als Infobild auf den
     Projektor wirft, ist das dann eine kommerzielle Nutzung? Ja, irgendwie schon. Wie gesagt, wir legen besonderen
     Wert auf die Rechtssicherheit aller Nutzer. Deswegen kommen auf unseren Marktplatz keine Materialien, die die
-    kommerzielle Nutzung ausschlieÃŸen. Nichtsdestotrotz haben Sie weiterhin alle Rechte, ihre Vorlesungsfolien
-    auf anderem Wege Ã¼ber einen Verlag zu verÃ¶ffentlichen und Tantiemen zu bekommen.
+    kommerzielle Nutzung ausschließen. Nichtsdestotrotz haben Sie weiterhin alle Rechte, ihre Vorlesungsfolien
+    auf anderem Wege über einen Verlag zu veröffentlichen und Tantiemen zu bekommen.
 </p>
 <h2><?= _("Was darf ich mit den Materialien machen?") ?></h2>
 <p>
-    GrundsÃ¤tzlich kÃ¶nnen Sie also mit Materialien im Marktplatz immer:
+    Grundsätzlich können Sie also mit Materialien im Marktplatz immer:
     <ul>
-        <li>Die Dateien kÃ¶nnen Sie selbst nutzen.</li>
-        <li>Die Dateien kÃ¶nnen Sie an andere Menschen weiter geben, sogar selbst auf anderen Seiten hochladen.</li>
-        <li>Dabei mÃ¼ssen Sie immer den Originalautor der Datei nennen. Tun sie das in einem Beschreibungstext oder innerhalb der Datei.</li>
-        <li>Sie kÃ¶nnen die Materialien auch verÃ¤ndern und verbessern.</li>
-        <li>Auch dabei mÃ¼ssen Sie den Originalautor bzw. alle vorherigen Autoren des Materials nennen und das neue Werk unter dieselbe Lizenz (CC BY SA) stellen.</li>
+        <li>Die Dateien können Sie selbst nutzen.</li>
+        <li>Die Dateien können Sie an andere Menschen weiter geben, sogar selbst auf anderen Seiten hochladen.</li>
+        <li>Dabei müssen Sie immer den Originalautor der Datei nennen. Tun sie das in einem Beschreibungstext oder innerhalb der Datei.</li>
+        <li>Sie können die Materialien auch verändern und verbessern.</li>
+        <li>Auch dabei müssen Sie den Originalautor bzw. alle vorherigen Autoren des Materials nennen und das neue Werk unter dieselbe Lizenz (CC BY SA) stellen.</li>
     </ul>
-    Wie gesagt: wir hoffen, dass dieser Weg fÃ¼r alle ein sehr intuitiver Weg ist, Materialien zu verbreiten und zu nutzen.
+    Wie gesagt: wir hoffen, dass dieser Weg für alle ein sehr intuitiver Weg ist, Materialien zu verbreiten und zu nutzen.
     Die meisten Menschen wollen sich keine Gedanken um Rechten und Pflichten von sowas machen. Wir hoffen, dass wir
     diesen Menschen eine Freude mit dem Marktplatz gemacht haben.
 </p>
