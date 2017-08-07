@@ -15,7 +15,7 @@
         <div>
             <a href="<?= PluginEngine::getLink($plugin, array(), "market/add_to_course/".$material->getId()) ?>" data-dialog>
                 <?= Icon::create("seminar+move_down", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
-                <?= _("Zu Veranstaltung hinzufÃ¼gen") ?>
+                <?= _("Zu Veranstaltung hinzufügen") ?>
             </a>
         </div>
     <? endif ?>
@@ -111,7 +111,7 @@
         <img src="<?= $plugin->getPluginURL()."/assets/cc-by-sa.svg" ?>" width="80px">
     </a>
     <a href="<?= PluginEngine::getLink($plugin, array(), "market/licenseinfo") ?>" data-dialog>
-        <?= _("Was heiÃŸt das?") ?>
+        <?= _("Was heißt das?") ?>
     </a>
 </div>
 
@@ -119,7 +119,7 @@
     <? if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) : ?>
         <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "mymaterial/edit/".$material->getId()), array('data-dialog' => "1")) ?>
         <form action="<?= PluginEngine::getLink($plugin, array(), "mymaterial/edit/".$material->getId()) ?>" method="post" style="display: inline;">
-            <?= \Studip\Button::create(_("LÃ¶schen"), "delete", array('value' => 1, 'onclick' => "return window.confirm('"._("Wirklich lÃ¶schen?")."');")) ?>
+            <?= \Studip\Button::create(_("Löschen"), "delete", array('value' => 1, 'onclick' => "return window.confirm('"._("Wirklich löschen?")."');")) ?>
         </form>
     <? endif ?>
 </div>
