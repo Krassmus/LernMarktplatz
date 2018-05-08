@@ -31,7 +31,7 @@
     </div>
 
     <label class="file-upload" style="margin-top: 20px;">
-        <?= _("Datei (gerne auch eine ZIP) auswählen") ?>
+        <?= _("Datei (gerne auch eine ZIP) auswÃ¤hlen") ?>
         <input type="file" name="file"<? $material->isNew() ? "required" : "" ?>>
     </label>
 
@@ -43,14 +43,14 @@
     <? if ($material['front_image_content_type']) : ?>
         <label>
             <input type="checkbox" name="delete_front_image" value="1">
-            <?= _("Logo löschen") ?>
+            <?= _("Logo lÃ¶schen") ?>
         </label>
     <? endif ?>
 
     <? if ($material->isNew()) : ?>
         <div style="margin-top: 20px;">
             <?= sprintf(
-                _("Ich erkläre mich bereit, dass meine Lernmaterialien unter der %s Lizenz an alle Nutzer freigegeben werden. Ich bestätige zudem, dass ich das Recht habe, diese Dateien frei zu veröffentlichen, weil entweder ich selbst sie angefertigt habe, oder sie von anderen Quellen mit ähnlicher Lizenz stammen."),
+                _("Ich erklÃ¤re mich bereit, dass meine Lernmaterialien unter der %s Lizenz an alle Nutzer freigegeben werden. Ich bestÃ¤tige zudem, dass ich das Recht habe, diese Dateien frei zu verÃ¶ffentlichen, weil entweder ich selbst sie angefertigt habe, oder sie von anderen Quellen mit Ã¤hnlicher Lizenz stammen."),
                 '<a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank">'.Icon::create("link-extern", "clickable")->asImg("20px", array('class' => "text-bottom")).' CC BY SA 3.0</a>'
             ) ?>
         </div>

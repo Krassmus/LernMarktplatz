@@ -105,7 +105,7 @@ class MarketController extends PluginController {
                 $material = clone $this->material;
                 $this->material->delete();
                 $this->material = $material;
-                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelöscht worden und wird gleich aus dem Cache verschwinden.")));
+                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelÃ¶scht worden und wird gleich aus dem Cache verschwinden.")));
             }
         }
         $this->material['rating'] = $this->material->calculateRating();
@@ -129,7 +129,7 @@ class MarketController extends PluginController {
 
             $this->material['rating'] = $this->material->calculateRating();
             $this->material->store();
-            PageLayout::postMessage(MessageBox::success(_("Danke für das Review!")));
+            PageLayout::postMessage(MessageBox::success(_("Danke fÃ¼r das Review!")));
             $this->redirect("market/details/".$material_id);
         }
     }

@@ -196,7 +196,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      * @param $file_id : The id for the file in the given filesystem of the plugin.
      * @return array : the already prepared File just like a file-upload-array
      */
-    public function getPreparedFile($file_id) {
+    public function getPreparedFile($file_id, $with_blob = false) {
 
     }
 
