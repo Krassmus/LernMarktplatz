@@ -13,7 +13,7 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
             return $host;
         } else {
             $host = new LernmarktplatzHost();
-            $host['name'] = $GLOBALS['UNI_NAME_CLEAN'];
+            $host['name'] = Config::get()->UNI_NAME_CLEAN;
             $host['url'] = $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/";
             $host['last_updated'] = time();
             $host->store();
@@ -41,11 +41,11 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
     {
         $endpoint_url = $this['url']."fetch_public_host_key";
         if (true) {
-            $endpoint_url .= "?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/"));
+            $endpoint_url .= "?from=".urlencode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/");
         }
         $host_data = @file_get_contents($endpoint_url);
         if ($host_data) {
-            $host_data = studip_utf8decode(json_decode($host_data, true));
+            $host_data = json_decode($host_data, true);
             if ($host_data) {
                 $this['name'] = $host_data['name'];
                 $this['public_key'] = preg_replace("/\r/", "", $host_data['public_key']);
@@ -61,10 +61,10 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
 
     public function askKnownHosts() {
         $endpoint_url = $this['url']."fetch_known_hosts"
-            ."?from=".urlencode(studip_utf8encode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/"));
+            ."?from=".urlencode($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/");
         $output = @file_get_contents($endpoint_url);
         if ($output) {
-            $output = studip_utf8decode(json_decode($output, true));
+            $output = json_decode($output, true);
             foreach ((array) $output['hosts'] as $host_data) {
                 $host = LernmarktplatzHost::findByPublic_key($host_data['public_key']);
                 if (!$host) {
@@ -83,13 +83,13 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
     public function fetchRemoteSearch($text, $tag = false) {
         $endpoint_url = $this['url']."search_items";
         if ($tag) {
-            $endpoint_url .= "?tag=".urlencode(studip_utf8encode($text));
+            $endpoint_url .= "?tag=".urlencode($text);
         } else {
-            $endpoint_url .= "?text=".urlencode(studip_utf8encode($text));
+            $endpoint_url .= "?text=".urlencode($text);
         }
         $output = @file_get_contents($endpoint_url);
         if ($output) {
-            $output = studip_utf8decode(json_decode($output, true));
+            $output = json_decode($output, true);
             foreach ((array) $output['results'] as $material_data) {
                 $host = LernmarktplatzHost::findOneBySQL("public_key = ?", array($material_data['host']['public_key']));
                 if (!$host) {
@@ -134,7 +134,6 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
 
 
     public function pushDataToEndpoint($endpoint, $data, $curl_multi_request = false) {
-        $data = studip_utf8encode($data);
         $payload = json_encode($data);
 
         $myHost = LernmarktplatzHost::thisOne();
@@ -168,10 +167,10 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
 
     public function fetchItemData($foreign_material_id)
     {
-        $endpoint_url = $this['url']."get_item_data/".urlencode(studip_utf8encode($foreign_material_id));
+        $endpoint_url = $this['url']."get_item_data/".urlencode($foreign_material_id);
         $output = @file_get_contents($endpoint_url);
         if ($output) {
-            $output = studip_utf8decode(json_decode($output, true));
+            $output = json_decode($output, true);
             if ($output) {
                 return $output;
             }

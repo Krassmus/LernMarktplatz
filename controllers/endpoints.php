@@ -23,10 +23,10 @@ class EndpointsController extends PluginController {
     public function fetch_public_host_key_action() {
         $host = LernmarktplatzHost::thisOne();
         if (Request::get("from")) {
-            $this->refreshHost(studip_utf8decode(Request::get("from")));
+            $this->refreshHost(Request::get("from"));
         }
         $this->render_json(array(
-            'name' => $GLOBALS['UNI_NAME_CLEAN'],
+            'name' => Config::get()->UNI_NAME_CLEAN,
             'public_key' => $host['public_key'],
             'url' => $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/endpoints/",
             'index_server' => $host['index_server']
@@ -46,7 +46,7 @@ class EndpointsController extends PluginController {
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
-                    $data = studip_utf8decode(json_decode($body, true));
+                    $data = json_decode($body, true);
 
                     $host['name'] = $data['data']['name'];
                     $host['index_server'] = $data['data']['index_server'];
@@ -76,7 +76,7 @@ class EndpointsController extends PluginController {
         $output = array();
 
         if (Request::get("from")) {
-            $this->refreshHost(studip_utf8decode(Request::get("from")));
+            $this->refreshHost(Request::get("from"));
         }
 
         if (get_config("LERNMARKTPLATZ_SHOW_KNOWN_HOSTS")) {
@@ -97,7 +97,7 @@ class EndpointsController extends PluginController {
     {
         $host_data = file_get_contents($url."fetch_public_host_key");
         if ($host_data) {
-            $host_data = studip_utf8decode(json_decode($host_data, true));
+            $host_data = json_decode($host_data, true);
             if ($host_data) {
                 $host = LernmarktplatzHost::findOneByUrl($url);
                 if (!$host) {
@@ -121,9 +121,9 @@ class EndpointsController extends PluginController {
     public function search_items_action() {
         $host = LernmarktplatzHost::thisOne();
         if (Request::get("text")) {
-            $this->materialien = LernmarktplatzMaterial::findByText(studip_utf8decode(Request::get("text")));
+            $this->materialien = LernmarktplatzMaterial::findByText(Request::get("text"));
         } elseif (Request::get("tag")) {
-            $this->materialien = LernmarktplatzMaterial::findByTag(studip_utf8decode(Request::get("tag")));
+            $this->materialien = LernmarktplatzMaterial::findByTag(Request::get("tag"));
         }
 
         $output = array('results' => array());
@@ -228,7 +228,7 @@ class EndpointsController extends PluginController {
                     'content_type' => $material['content_type'],
                     'front_image_content_type' => $material['front_image_content_type'],
                     'url' => ($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lernmarktplatz/market/download/".$item_id,
-                    'structure' => $material['structure'],
+                    'structure' => $material['structure']->getArrayCopy(),
                     'license' => $material['license']
                 ),
                 'user' => array(
@@ -259,7 +259,7 @@ class EndpointsController extends PluginController {
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
-                    $data = studip_utf8decode(json_decode($body, true));
+                    $data = json_decode($body, true);
                     $material = LernmarktplatzMaterial::findOneBySQL("host_id = ? AND foreign_material_id = ?", array(
                         $host->getId(),
                         $data['data']['foreign_material_id']
@@ -345,7 +345,7 @@ class EndpointsController extends PluginController {
             if ($host && !$host->isMe()) {
                 $body = file_get_contents('php://input');
                 if ($host->verifySignature($body, $signature)) {
-                    $data = studip_utf8decode(json_decode($body, true));
+                    $data = json_decode($body, true);
                     $material = new LernmarktplatzMaterial($material_id);
                     if ($material->isNew() || $material['host_id']) {
                         throw new Exception("Unknown material.");
@@ -424,7 +424,7 @@ class EndpointsController extends PluginController {
                         throw new Exception("Unknown material.");
                     }
 
-                    $data = studip_utf8decode(json_decode($body, true));
+                    $data = json_decode($body, true);
                     $user = LernmarktplatzUser::findOneBySQL("host_id = ? AND foreign_user_id = ?", array(
                         $host->getId(),
                         $data['user']['user_id']

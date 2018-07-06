@@ -14,13 +14,8 @@ class LernmarktplatzComment extends SimpleORMap {
             'foreign_key' => 'host_id',
             'assoc_foreign_key' => 'host_id'
         );
+        $config['registered_callbacks']['after_store'][] = 'afterStoreCallback';
         parent::configure($config);
-    }
-
-    function __construct($id = null)
-    {
-        $this->registerCallback('after_store', 'afterStoreCallback');
-        parent::__construct($id);
     }
 
     public function afterStoreCallback()

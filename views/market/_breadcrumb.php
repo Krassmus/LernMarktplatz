@@ -5,7 +5,7 @@
             <?= _("Zum Anfang") ?>
         </a>
     </li>
-    <? foreach ($tag_history as $key => $tag) : ?>
+    <? foreach ((array) $tag_history as $key => $tag) : ?>
         <li>
             <? $breadcrump_tags[] = $tag ?>
             <? $new_tag_history = implode(",", $breadcrump_tags) ?>

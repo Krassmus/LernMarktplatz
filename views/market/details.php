@@ -85,7 +85,7 @@
                     <?= htmlReady($user->getFullName()) ?>
                 </a>
             </div>
-            <div class="author_host">(<?= htmlReady($GLOBALS['UNI_NAME_CLEAN']) ?>)</div>
+            <div class="author_host">(<?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>)</div>
             <div class="description"><?
                 $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
                 if ($user_description_datafield) {
@@ -169,9 +169,6 @@
                 </div>
                 <div class="content">
                     <div class="timestamp">
-                        <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>" title="<?= _("Schreiben Sie einen Kommentar dazu.") ?>">
-                            <?= Icon::create("comment", "inactive")->asImg(14, array('class' => "text-bottom")) ?>
-                        </a>
                         <?= date("j.n.Y G:i", $review['chdate']) ?>
                     </div>
                     <strong>
@@ -187,7 +184,7 @@
                             </a>
                         <? endif ?>
                     </strong>
-                    <span class="origin">(<?= htmlReady($review['host_id'] ? $review->host['name'] : $GLOBALS['UNI_NAME_CLEAN']) ?>)</span>
+                    <span class="origin">(<?= htmlReady($review['host_id'] ? $review->host['name'] : Config::get()->UNI_NAME_CLEAN) ?>)</span>
                     <div class="review_text">
                         <?= formatReady($review['review']) ?>
                     </div>
@@ -203,6 +200,12 @@
                         <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
                         <? $v = $rating >= 4.75 ? 3 : ($rating >= 4.25 ? 2 : "") ?>
                         <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
+
+                        <? if (!count($review->comments)) : ?>
+                            <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>" style="font-size: 0.8em;">
+                                <?= _("Darauf antworten") ?>
+                            </a>
+                        <? endif ?>
                     </div>
                     <div class="comments" style="text-align: center;">
                         <? if (count($review->comments)) : ?>

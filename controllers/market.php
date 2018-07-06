@@ -167,7 +167,7 @@ class MarketController extends PluginController {
         if (Request::isPost() && Request::get("comment")) {
             $this->comment = new LernmarktplatzComment();
             $this->comment['review_id'] = $review_id;
-            $this->comment['comment'] = studip_utf8decode(Request::get("comment"));
+            $this->comment['comment'] = Request::get("comment");
             $this->comment['user_id'] = $GLOBALS['user']->id;
             $this->comment->store();
             $comment_html = $this->render_template_as_string("market/_comment");

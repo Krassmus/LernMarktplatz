@@ -7,7 +7,7 @@
             <?= date("j.n.Y G:i", $comment['chdate']) ?>
         </div>
         <strong><?= htmlReady($comment['host_id'] ? LernmarktplatzUser::find($comment['user_id'])->name : get_fullname($comment['user_id'])) ?></strong>
-        <span class="origin">(<?= htmlReady($comment['host_id'] ? $comment->host['name'] : $GLOBALS['UNI_NAME_CLEAN']) ?>)</span>
+        <span class="origin">(<?= htmlReady($comment['host_id'] ? $comment->host['name'] : Config::get()->UNI_NAME_CLEAN) ?>)</span>
         <div class="review_text">
             <?= formatReady($comment['comment']) ?>
         </div>

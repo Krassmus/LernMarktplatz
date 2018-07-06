@@ -3,6 +3,6 @@
     <input type="hidden" name="material_id" value="<?= $this->material->getId() ?>">
 
     <div data-dialog-button>
-        <?= \Studip\Button::create(_("Hinzufügen")) ?>
+        <?= \Studip\Button::create(_("HinzufÃ¼gen")) ?>
     </div>
 </form>

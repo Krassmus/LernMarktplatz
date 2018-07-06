@@ -19,13 +19,8 @@ class LernmarktplatzReview extends SimpleORMap {
             'foreign_key' => 'review_id',
             'order_by' => "ORDER BY mkdate ASC"
         );
+        $config['registered_callbacks']['after_store'][] = 'afterStoreCallback';
         parent::configure($config);
-    }
-
-    function __construct($id = null)
-    {
-        $this->registerCallback('after_store', 'afterStoreCallback');
-        parent::__construct($id);
     }
 
     public function afterStoreCallback()
