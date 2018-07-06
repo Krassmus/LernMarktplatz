@@ -124,11 +124,16 @@ class InitPlugin extends Migration {
                 typeparam = '',
                 description = 'Geben Sie eine kurze Beschreibung für Sich ab, die auf Ihrem Profil im Lernmarktplatz sichtbar ist.'
         ");
-        DBManager::get()->exec("
-            INSERT IGNORE INTO `config` (`config_id`, `parent_id`, `field`, `value`, `is_default`, `type`, `range`, `section`, `position`, `mkdate`, `chdate`, `description`, `comment`, `message_template`)
-            VALUES
-                (MD5('LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD'), '', 'LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD', MD5('Lernmarktplatz-Beschreibung'), MD5('Lernmarktplatz-Beschreibung'), 'string', 'global', 'LERNMARKTPLATZ', 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 'MD5-Hash or name of datafield that is representing the user-description', '', '')
-        "); 
+        Config::get()->create(
+            "LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD",
+            array(
+                'value' => MD5("Lernmarktplatz-Beschreibung"),
+                'type' => "string",
+                'range' => "global",
+                'section' => "LERNMARKTPLATZ",
+                'description' => "MD5-Hash or name of datafield that is representing the user-description"
+            )
+        );
     }
 
     function down() {
@@ -147,5 +152,6 @@ class InitPlugin extends Migration {
         DBManager::get()->exec("
             DROP TABLE IF EXISTS `lernmarktplatz_user`;
         ");
+        Config::get()->delete("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD");
     }
 }
