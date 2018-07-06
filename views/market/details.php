@@ -129,7 +129,7 @@
 <div>
     <div style="text-align: center;">
         <? if ($material['rating'] === null) : ?>
-            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+            <? if (($material['host_id'] || ($material['user_id'] !== $GLOBALS['user']->id)) && $GLOBALS['perm']->have_perm("autor")) : ?>
                 <a style="opacity: 0.3;" title="<?= $GLOBALS['perm']->have_perm("autor") ? _("Geben Sie die erste Bewertung ab.") : _("Noch keine bewertung abgegeben.") ?>" href="<?= PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()) ?>" data-dialog>
             <? endif ?>
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
@@ -137,7 +137,7 @@
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
-            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+            <? if (($material['host_id'] || ($material['user_id'] !== $GLOBALS['user']->id)) && $GLOBALS['perm']->have_perm("autor")) : ?>
                 </a>
             <? endif ?>
         <? else : ?>
@@ -201,7 +201,7 @@
                         <? $v = $rating >= 4.75 ? 3 : ($rating >= 4.25 ? 2 : "") ?>
                         <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(16) ?>
 
-                        <? if (!count($review->comments)) : ?>
+                        <? if ($GLOBALS['perm']->have_perm("autor") && !count($review->comments)) : ?>
                             <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>" style="font-size: 0.8em;">
                                 <?= _("Darauf antworten") ?>
                             </a>
@@ -213,7 +213,7 @@
                                 <?= Icon::create("comment", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                                 <?= sprintf(_("%s Kommentare dazu"), count($review->comments)) ?>
                             </a>
-                        <? elseif ($material['user_id'] === $GLOBALS['user']->id) : ?>
+                        <? elseif (($material['user_id'] === $GLOBALS['user']->id) && $GLOBALS['perm']->have_perm("autor")) : ?>
                             <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>">
                                 <?= Icon::create("comment", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                                 <?= _("Dazu einen Kommentar schreiben") ?>
@@ -226,7 +226,7 @@
     </ul>
 
     <div style="text-align: center;">
-        <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+        <? if ($GLOBALS['perm']->have_perm("autor") && ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id)) : ?>
             <?= \Studip\LinkButton::create(_("Review schreiben"), PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()), array('data-dialog' => 1)) ?>
         <? endif ?>
     </div>
