@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2002-06-01T19:20:30Z</responseDate>
-  <request verb="ListIdentifiers" from="1998-01-15" 
+  <responseDate><?= $currentDate ?></responseDate>
+  <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
            metadataPrefix="oldarXiv"
            set="physics:hep">http://an.oa.org/OAI-script</request>
   <ListIdentifiers>

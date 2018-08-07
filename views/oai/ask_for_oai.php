@@ -121,5 +121,6 @@
         </record>
 
         <resumptionToken expirationDate="2019-12-31T23:00:00Z" completeListSize="100" cursor="0">continue100-example</resumptionToken>
+        <metadata>
     </ListRecords>
 </OAI-PMH>
