@@ -3,15 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2002-02-08T12:00:01Z</responseDate>
-  <request verb="Identify">http://memory.loc.gov/cgi-bin/oai</request>
+  <responseDate><?= $currentDate ?></responseDate>
+  <request verb=<?='"'.$verb.'"' ?>><?= $task_repo = $GLOBALS['_SERVER']['REQUEST_URI']; ?></request>
+
   <Identify>
-    <repositoryName>Library of Congress Open Archive Initiative 
-                    Repository 1</repositoryName>
-    <baseURL>http://memory.loc.gov/cgi-bin/oai</baseURL>
+    <repositoryName>Lernmaterialien vom StudIP-Lernmarktplatz - Unter angabe von folgenden Materialgruppen erhalten Sie frei zugängliche Materialien.</repositoryName>
+    <? foreach ($identifier as $identity) : ?>
+    <materialGroupId><?= $identity->name."-".$identity->tag_hash ?></identifier>
+    <? endforeach ?>
+    
+    <baseURL>http://localhost/studip/plugins.php/lernmarktplatz/oai?verb=ListIdentifiers&metadataPrefix=oai_lom-de&set={materialGroupId}</baseURL>
     <protocolVersion>2.0</protocolVersion>
-    <adminEmail>somebody@loc.gov</adminEmail>
-    <adminEmail>anybody@loc.gov</adminEmail>
+    <adminEmail>root@studip.de</adminEmail>
     <earliestDatestamp>1990-02-01T12:00:00Z</earliestDatestamp>
     <deletedRecord>transient</deletedRecord>
     <granularity>YYYY-MM-DDThh:mm:ssZ</granularity>
@@ -51,8 +54,6 @@
           xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/friends/
          http://www.openarchives.org/OAI/2.0/friends.xsd">
        <baseURL>http://oai.east.org/foo/</baseURL>
-       <baseURL>http://oai.hq.org/bar/</baseURL>
-       <baseURL>http://oai.south.org/repo.cgi</baseURL>
      </friends>
    </description>
  </Identify>
