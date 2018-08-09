@@ -59,8 +59,8 @@ class OaiController extends PluginController
             case 'listRecords': 
                 $this->prepareListRecords($set);
                 break;
-            case 'ListSets':
-                //TODO
+            case 'listSets':
+                $this->prepareListSets();
                 break;
                 
         }
@@ -113,6 +113,13 @@ class OaiController extends PluginController
         } else {
             //TODO THROW SMTH
         }
+    }
+    
+    public function prepareListSets() 
+    {
+        $tags = LernmarktplatzTag::findBySQL('1');
+        $this->tags = $tags;
+        $this->renderResponse($this->verb);
     }
 
     public function calcDuration ($mkdate) 
