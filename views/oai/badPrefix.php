@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2002-05-01T09:18:29Z</responseDate>
-  <request>http://arXiv.org/oai2</request>
+         <responseDate><?= $currentDate ?></responseDate>
+  <request verb=<?='"'.$verb.'"' ?>><?= $task_repo = $GLOBALS['_SERVER']['REQUEST_URI']; ?></request>
   <error code="badPrefix">Illegal metadata prefix</error>
 </OAI-PMH>

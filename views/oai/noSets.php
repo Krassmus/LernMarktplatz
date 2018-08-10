@@ -5,5 +5,5 @@
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
          <responseDate><?= $currentDate ?></responseDate>
   <request verb=<?='"'.$verb.'"' ?>><?= $task_repo = $GLOBALS['_SERVER']['REQUEST_URI']; ?></request>
-  <error code="badVerb">Illegal OAI verb</error>
+  <error code="noSetHierarchy">No sets found</error>
 </OAI-PMH>

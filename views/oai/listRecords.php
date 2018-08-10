@@ -79,7 +79,7 @@
     <technical>
       <format><?= $targetMaterial->content_type ?></format>
       <size>?</size>
-      <location><?= "localhost/studip/plugins.php/lernmarktplatz/market/download/".$targetMaterial->id ?></location>
+      <location><?= $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/market/download/".$targetMaterial->id ?></location>
       <duration><?= $duration->s.":".$duration->i.":".$duration->h.":".$duration->d.":".$duration->m.":".$duration->y?></duration>
     </technical>
 

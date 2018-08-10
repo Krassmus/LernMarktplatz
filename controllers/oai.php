@@ -38,7 +38,8 @@ class OaiController extends PluginController
         }  
     }
 
-    public function prepareRequest($request, $verb, $metadataPrefix){
+    public function prepareRequest($request, $verb, $metadataPrefix)
+    {
         $this->currentDate = date(DATE_ATOM, time());
         $this->from = $request->offsetGet('from');
         $set = $request->offsetGet('set');
@@ -61,8 +62,7 @@ class OaiController extends PluginController
                 break;
             case 'listSets':
                 $this->prepareListSets();
-                break;
-                
+                break;        
         }
     } 
 
@@ -75,24 +75,33 @@ class OaiController extends PluginController
             $this->duration = $this->calcDuration($targetMaterial->mkdate);
             $this->renderResponse($this->verb);
         } else {
-            //TODO THROW SMTH
+            $this->render_template("oai/idNotExists");
         }
     }
 
-    public function prepareListRecords($set) {
+    public function prepareListRecords($set) 
+    {
         $tags = [];
-        $this->records = LernMarktplatzMaterial::findByTag($set);
-        foreach ($this->records as $targetRecord) {
-            $this->tags = $targetRecord->getTopics();
+        if ($this->records = LernMarktplatzMaterial::findByTag($set)) {
+            foreach ($this->records as $targetRecord) {
+                $this->tags = $targetRecord->getTopics();
+                $this->duration = $this->calcDuration($targetRecord->mkdate);
+    
+            }
+            $this->renderResponse($this->verb);
+        } else {
+            $this->render_template("oai/noRecordsMatch");
         }
-        $this->renderResponse($this->verb);
     }
 
     public function prepareIdentifier() 
     {
-        $identifier = LernmarktplatzTag::findBySQL('1');
-        $this->identifier = $identifier;
-        $this->renderResponse($this->verb);
+        if ($identifier = LernmarktplatzTag::findBySQL('1')) {
+            $this->identifier = $identifier;
+            $this->renderResponse($this->verb);
+        } else {
+            $this->render_template("oai/noSets");
+        }
     }
 
     public function prepareListIdentifiers($set) 
@@ -100,8 +109,10 @@ class OaiController extends PluginController
         if (!empty($set)) {
             $this->set = $set;
             $this->records = LernMarktplatzMaterial::findByTag($set);
+            $this->renderResponse($this->verb);
+        } else {
+            $this->render_template("oai/noSets");
         }
-        $this->renderResponse($this->verb);
     }
 
     public function prepareListMetadataFormats($request) 
@@ -111,15 +122,17 @@ class OaiController extends PluginController
             $this->targetMaterial = $targetMaterial;
             $this->renderResponse($this->verb);
         } else {
-            //TODO THROW SMTH
+            $this->render_template("oai/idNotExists");
         }
     }
     
     public function prepareListSets() 
     {
-        $tags = LernmarktplatzTag::findBySQL('1');
-        $this->tags = $tags;
-        $this->renderResponse($this->verb);
+        if ($tags = LernmarktplatzTag::findBySQL('1')) {
+            $this->tags = $tags;
+            $this->renderResponse($this->verb);
+        }
+        $this->render_template("oai/noSets");
     }
 
     public function calcDuration ($mkdate) 
