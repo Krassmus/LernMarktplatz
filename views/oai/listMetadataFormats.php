@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate>2002-02-08T14:27:19Z</responseDate>
-  <request verb="ListMetadataFormats"
-    identifier="oai:perseus.tufts.edu:Perseus:text:1999.02.0119">
-    http://www.perseus.tufts.edu/cgi-bin/pdataprov</request>
+  <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
+    identifier=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
+    <?=htmlReady(Request::url()) ?> 
+  </request>
   <ListMetadataFormats>
  
     <metadataFormat>

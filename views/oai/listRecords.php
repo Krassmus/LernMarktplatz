@@ -5,14 +5,14 @@
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate>2002-02-08T08:55:46Z</responseDate>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
-    metadataPrefix=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
-    <?= $task_repo = $GLOBALS['_SERVER']['REQUEST_URI']; ?> 
+    identifier=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
+    <?=htmlReady(Request::url()) ?> 
   </request>
   <ListRecords>
     <? foreach ($records as $key=>$targetMaterial) : ?>
     <record> 
     <header>
-      <identifier><?= $targetMaterial->name."-".$targetMaterial->id?></identifier> 
+      <identifier><?= "oai:studip:".$targetMaterial->id?></identifier> 
       <datestamp><?= $targetMaterial->mkdate ?></datestamp>
       <? foreach ($tags[$key] as $tag) : ?>
       <setSpec><?= $tag->name ?></setSpec> 
@@ -58,7 +58,7 @@
       <contribute>
         <role>
           <source>LOMv1.0</source>
-          <value><?= User::findCurrent()->perms ?></value>
+          <value>Author</value>
         </role>
         <entity>
 

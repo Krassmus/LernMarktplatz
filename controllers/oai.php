@@ -13,6 +13,7 @@ class OaiController extends PluginController
  
     public function index_action() 
     {
+        $this->set_content_type('text/xml;charset=utf-8');
         $allowed_verbs = ['GetRecord', 'Identify', 'ListIdentifiers', 'ListMetadataFormats', 'ListRecords', 'ListSets'];
         $allowed_prefix = ['oai_lom-de'];
         $this->allowed_prefix = $allowed_prefix;
@@ -84,9 +85,7 @@ class OaiController extends PluginController
         $tags = [];
         if ($this->records = LernMarktplatzMaterial::findByTag($set)) {
             foreach ($this->records as $targetRecord) {
-                $this->tags = $targetRecord->getTopics();
-                $this->duration = $this->calcDuration($targetRecord->mkdate);
-    
+                $this->tags = $targetRecord->getTopics();    
             }
             $this->renderResponse($this->verb);
         } else {
@@ -131,19 +130,9 @@ class OaiController extends PluginController
         if ($tags = LernmarktplatzTag::findBySQL('1')) {
             $this->tags = $tags;
             $this->renderResponse($this->verb);
+        } else {
+            $this->render_template("oai/noSets");
         }
-        $this->render_template("oai/noSets");
-    }
-
-    public function calcDuration ($mkdate) 
-    {
-        $mkdate = intval($mkdate);
-        $dateCurrent = date('s-i-h-d-m-Y', time());
-        $dateCurrent = DateTime::createFromFormat('s-i-h-d-m-Y', $dateCurrent);
-        $dateCreate = date('s-i-h-d-m-Y', $mkdate);
-        $dateCreate = DateTime::createFromFormat('s-i-h-d-m-Y', $dateCreate);
-        $difference = date_diff($dateCurrent, $dateCreate);
-        return $difference;
     }
 
     public function renderResponse($verb) 

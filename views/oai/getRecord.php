@@ -6,7 +6,7 @@
   <responseDate>2002-02-08T08:55:46Z</responseDate>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
     metadataPrefix=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
-    <?= $task_repo = $GLOBALS['_SERVER']['REQUEST_URI']; ?> 
+    <?=htmlReady(Request::url()) ?> 
   </request>
   <GetRecord>
    <record> 
@@ -28,7 +28,7 @@
       <? foreach ($tags as $tag) : ?>
       <catalog><?= $tag['name'] ?></catalog>
       <? endforeach ?>
-        <entry><?= $targetMaterial->name."-".$targetMaterial->id?></entry>
+        <entry><?= "oai:studip:".$targetMaterial->id?></entry>
       </identifier>
       <title>
         <string language="de"><?= $targetMaterial->name ?></string>
@@ -56,7 +56,7 @@
       <contribute>
         <role>
           <source>LOMv1.0</source>
-          <value><?= User::findCurrent()->perms ?></value>
+          <value>Author</value>
         </role>
         <entity>
 
@@ -78,7 +78,7 @@
       <format><?= $targetMaterial->content_type ?></format>
       <size>?</size>
       <location><?= $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/market/download/".$targetMaterial->id ?></location>
-      <duration><?= $duration->s.":".$duration->i.":".$duration->h.":".$duration->d.":".$duration->m.":".$duration->y?></duration>
+      <duration>00:00:00</duration>
     </technical>
 
     <educational>

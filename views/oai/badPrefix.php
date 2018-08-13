@@ -4,6 +4,6 @@
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
          <responseDate><?= $currentDate ?></responseDate>
-  <request verb=<?='"'.$verb.'"' ?>><?= $task_repo = $GLOBALS['_SERVER']['REQUEST_URI']; ?></request>
+  <request verb=<?='"'.$verb.'"' ?>><?= $task_repo = htmlReady(Request::url()) ?></request>
   <error code="badPrefix">Illegal metadata prefix</error>
 </OAI-PMH>

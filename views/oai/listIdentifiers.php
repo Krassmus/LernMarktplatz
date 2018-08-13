@@ -5,8 +5,8 @@
   http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate><?= $currentDate ?></responseDate>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
-    metadataPrefix=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
-    <?= $task_repo = $GLOBALS['_SERVER']['REQUEST_URI']; ?> 
+    identifier=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
+    <?= $task_repo = htmlReady(Request::url()) ?> 
   </request>
   <ListIdentifiers>
   <? foreach ($records as $record) : ?>
