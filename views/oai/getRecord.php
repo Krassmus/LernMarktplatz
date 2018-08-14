@@ -4,17 +4,17 @@
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate>2002-02-08T08:55:46Z</responseDate>
-  <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
-    metadataPrefix=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
-    <?=htmlReady(Request::url()) ?> 
+  <request verb=<?='"'.htmlReady($verb).'"' ?> from=<?= '"'.htmlReady($currentDate).'"' ?> 
+    metadataPrefix=<?= '"'.htmlReady($metadataPrefix).'"' ?> set=<?= '"'.htmlReady($set).'"' ?>> 
+    <?=htmlReady(Request::url())?> 
   </request>
   <GetRecord>
    <record> 
     <header>
-      <identifier><?= $targetMaterial->name."-".$targetMaterial->id?></identifier> 
-      <datestamp><?= $targetMaterial->mkdate ?></datestamp>
+      <identifier><?= htmlReady($targetMaterial->name)."-".htmlReady($targetMaterial->id)?></identifier> 
+      <datestamp><?= htmlReady($targetMaterial->mkdate) ?></datestamp>
       <? foreach ($tags as $tag) : ?>
-      <setSpec><?= $tag['name'] ?></setSpec> 
+      <setSpec><?= htmlReady($tag['name']) ?></setSpec> 
       <? endforeach ?>
       
     </header>
@@ -26,20 +26,20 @@
     <general>
       <identifier>
       <? foreach ($tags as $tag) : ?>
-      <catalog><?= $tag['name'] ?></catalog>
+      <catalog><?= htmlReady($tag['name']) ?></catalog>
       <? endforeach ?>
-        <entry><?= "oai:studip:".$targetMaterial->id?></entry>
+        <entry><?= "oai:studip:".htmlReady($targetMaterial->id)?></entry>
       </identifier>
       <title>
-        <string language="de"><?= $targetMaterial->name ?></string>
+        <string language="de"><?= htmlReady($targetMaterial->name) ?></string>
       </title>
       <language>de</language>
       <description>
-              <string language="de"><?= $targetMaterial->description ?></string>
+              <string language="de"><?= htmlReady($targetMaterial->description) ?></string>
       </description>
       <keyword>
       <? foreach ($tags as $tag) : ?>
-      <string language="de"><?= $tag['name'] ?></string>
+      <string language="de"><?= htmlReady($tag['name']) ?></string>
       <? endforeach ?>
       </keyword>
       
@@ -69,22 +69,22 @@
           ]]>
         </entity>
         <date>
-          <dateTime><?= $targetMaterial->chdate ?></dateTime>
+          <dateTime><?= htmlReady($targetMaterial->chdate) ?></dateTime>
         </date>
       </contribute>
     </lifeCycle>
 
     <technical>
-      <format><?= $targetMaterial->content_type ?></format>
+      <format><?= htmlReady($targetMaterial->content_type) ?></format>
       <size>?</size>
-      <location><?= $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/market/download/".$targetMaterial->id ?></location>
+      <location><?= htmlReady($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/market/download/".$targetMaterial->id) ?></location>
       <duration>00:00:00</duration>
     </technical>
 
     <educational>
       <learningResourceType>
         <source>LREv3.0</source>
-        <value><?= $targetMaterial->content_type ?></value>
+        <value><?= htmlReady($targetMaterial->content_type) ?></value>
       </learningResourceType>
 
       <intendedEndUserRole>

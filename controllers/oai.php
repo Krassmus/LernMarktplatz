@@ -73,7 +73,6 @@ class OaiController extends PluginController
         if($targetMaterial = LernMarktplatzMaterial::find($identifier)) {
             $this->targetMaterial = $targetMaterial;
             $this->tags = $targetMaterial->getTopics();
-            $this->duration = $this->calcDuration($targetMaterial->mkdate);
             $this->renderResponse($this->verb);
         } else {
             $this->render_template("oai/idNotExists");
