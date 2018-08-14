@@ -73,6 +73,7 @@ class OaiController extends PluginController
         if($targetMaterial = LernMarktplatzMaterial::find($identifier)) {
             $this->targetMaterial = $targetMaterial;
             $this->tags = $targetMaterial->getTopics();
+            $this->vcard = vCard::export(User::find($targetMaterial->user_id));
             $this->renderResponse($this->verb);
         } else {
             $this->render_template("oai/idNotExists");
@@ -81,10 +82,12 @@ class OaiController extends PluginController
 
     public function prepareListRecords($set) 
     {
-        $tags = [];
+        $this->vcards = [];
         if ($this->records = LernMarktplatzMaterial::findByTag($set)) {
             foreach ($this->records as $targetRecord) {
-                $this->tags = $targetRecord->getTopics();    
+                $this->tags = $targetRecord->getTopics();
+                $this->vcards[] = vCard::export(User::find($targetRecord->user_id));
+    
             }
             $this->renderResponse($this->verb);
         } else {

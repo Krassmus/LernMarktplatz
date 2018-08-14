@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2002-02-08T08:55:46Z</responseDate>
+  <responseDate> <?=htmlReady($currentDate)?></responseDate>
   <request verb=<?='"'.htmlReady($verb).'"' ?> from=<?= '"'.htmlReady($currentDate).'"' ?> 
     metadataPrefix=<?= '"'.htmlReady($metadataPrefix).'"' ?> set=<?= '"'.htmlReady($set).'"' ?>> 
     <?=htmlReady(Request::url())?> 
@@ -11,7 +11,7 @@
   <GetRecord>
    <record> 
     <header>
-      <identifier><?= htmlReady($targetMaterial->name)."-".htmlReady($targetMaterial->id)?></identifier> 
+      <identifier><?= "oai:studip:".htmlReady($targetMaterial->id)?></identifier> 
       <datestamp><?= htmlReady($targetMaterial->mkdate) ?></datestamp>
       <? foreach ($tags as $tag) : ?>
       <setSpec><?= htmlReady($tag['name']) ?></setSpec> 
@@ -59,14 +59,7 @@
           <value>Author</value>
         </role>
         <entity>
-
-          <![CDATA[BEGIN:vCard
-          VERSION:3.0
-          N:#@author#
-          EMAIL;TYPE=PREF,INTERNET:#??@??.de
-          FN:#??? #
-          END:vcard
-          ]]>
+          <?= htmlReady($vcard) ?>
         </entity>
         <date>
           <dateTime><?= htmlReady($targetMaterial->chdate) ?></dateTime>
@@ -103,7 +96,7 @@
         <value>yes</value>
       </copyrightAndOtherRestrictions>
       <description>
-        <string language="xt-lic"><?= $targetMaterial->license ?></string>
+        <string language="xt-lic"><?= htmlReady($targetMaterial->license) ?></string>
       </description>
     </rights>
 

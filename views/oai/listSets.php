@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-         <responseDate><?= $currentDate ?></responseDate>
+         <responseDate><?=htmlReady($currentDate)?></responseDate>
          <request verb=<?='"'.$verb.'"' ?>><?= $task_repo = htmlReady(Request::url()) ?></request>
  <ListSets>
  <? foreach ($tags as $tag) : ?>
   <set>
-    <setSpec><?= $tag->id ?></setSpec>
-    <setName><?= $tag->name ?></setName>
+    <setSpec><?= htmlReady($tag->id)?></setSpec>
+    <setName><?= htmlReady($tag->name)?></setName>
   </set>
 <? endforeach ?>
  

@@ -11,9 +11,9 @@
   <ListIdentifiers>
   <? foreach ($records as $record) : ?>
     <header>
-        <identifier><?= $record->name."-".$record->id ?></identifier>
-        <datestamp> <?= $record->mkdate ?> </datestamp>
-        <setSpec> <?= $set ?> </setSpec>
+        <identifier><?= "oai:studip:".htmlReady($targetMaterial->id)?></identifier>
+        <datestamp> <?= htmlReady($record->mkdate)?> </datestamp>
+        <setSpec> <?= htmlReady($set) ?> </setSpec>
       </header>
   <? endforeach ?>
    

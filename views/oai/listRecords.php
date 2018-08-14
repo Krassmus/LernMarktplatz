@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2002-02-08T08:55:46Z</responseDate>
+  <responseDate><?=htmlReady($currentDate)?></responseDate>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
     identifier=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
     <?=htmlReady(Request::url()) ?> 
@@ -30,7 +30,7 @@
       <? foreach ($tags[$key] as $tag) : ?>
       <catalog><?= $tag->name ?></catalog>
       <? endforeach ?>
-        <entry><?= $targetMaterial->name."-".$targetMaterial->id?></entry>
+        <entry><?= "oai:studip:".htmlReady($targetMaterial->id)?></entry>
       </identifier>
       <title>
         <string language="de"><?= $targetMaterial->name ?></string>
@@ -61,14 +61,7 @@
           <value>Author</value>
         </role>
         <entity>
-
-          <![CDATA[BEGIN:vCard
-          VERSION:3.0
-          N:#@author#
-          EMAIL;TYPE=PREF,INTERNET:#??@??.de
-          FN:#??? #
-          END:vcard
-          ]]>
+          <?= htmlReady($vcards[$key]) ?>
         </entity>
         <date>
           <dateTime><?= $targetMaterial->chdate ?></dateTime>
