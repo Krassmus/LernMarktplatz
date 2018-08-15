@@ -14,11 +14,11 @@ class OaiController extends PluginController
     public function index_action() 
     {
         $this->set_content_type('text/xml;charset=utf-8');
+        $this->request_url = Request::url();
         $allowed_verbs = ['GetRecord', 'Identify', 'ListIdentifiers', 'ListMetadataFormats', 'ListRecords', 'ListSets'];
         $allowed_prefix = ['oai_lom-de'];
-        $this->allowed_prefix = $allowed_prefix;
         $request = Request::getInstance();
-        
+        URLHelper::setBaseUrl($GLOBALS['ABSOLUTE_URI_STUDIP']);
         $verb = $request->offsetGet('verb');
         if (!empty($verb) && in_array($verb, $allowed_verbs)) {
             $verb = lcfirst($verb);
@@ -41,7 +41,7 @@ class OaiController extends PluginController
 
     public function prepareRequest($request, $verb, $metadataPrefix)
     {
-        $this->currentDate = date(DATE_ATOM, time());
+        $this->currentDate = gmdate(DATE_ATOM);
         $this->from = $request->offsetGet('from');
         $set = $request->offsetGet('set');
 
@@ -70,6 +70,7 @@ class OaiController extends PluginController
     public function prepareGetRecord($request) 
     {
         $identifier = $request->offsetGet('identifier');
+        
         if($targetMaterial = LernMarktplatzMaterial::find($identifier)) {
             $this->targetMaterial = $targetMaterial;
             $this->tags = $targetMaterial->getTopics();
@@ -82,12 +83,13 @@ class OaiController extends PluginController
 
     public function prepareListRecords($set) 
     {
+
         $this->vcards = [];
         if ($this->records = LernMarktplatzMaterial::findByTag($set)) {
             foreach ($this->records as $targetRecord) {
                 $this->tags = $targetRecord->getTopics();
+                $this->set = $set;
                 $this->vcards[] = vCard::export(User::find($targetRecord->user_id));
-    
             }
             $this->renderResponse($this->verb);
         } else {

@@ -1,22 +1,18 @@
-<?= '<?xml version="1.0" encoding="UTF-8"?>' ?>
+<?='<?xml version="1.0" encoding="UTF-8" ?>'?>
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
-         http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate> <?=htmlReady($currentDate)?></responseDate>
-  <request verb=<?='"'.htmlReady($verb).'"' ?> from=<?= '"'.htmlReady($currentDate).'"' ?> 
-    metadataPrefix=<?= '"'.htmlReady($metadataPrefix).'"' ?> set=<?= '"'.htmlReady($set).'"' ?>> 
-    <?=htmlReady(Request::url())?> 
-  </request>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+  http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  <responseDate><?=htmlReady($currentDate)?></responseDate>
+  <request verb=<?='"'.htmlReady($verb).'"' ?> from=<?= '"'.htmlReady($currentDate).'"' ?> metadataPrefix=<?= '"'.htmlReady($metadataPrefix).'"'?>><?=htmlReady($request_url)?></request>
   <GetRecord>
    <record> 
     <header>
-      <identifier><?= "oai:studip:".htmlReady($targetMaterial->id)?></identifier> 
+      <identifier><?=htmlReady($targetMaterial->id)?></identifier> 
       <datestamp><?= htmlReady($targetMaterial->mkdate) ?></datestamp>
       <? foreach ($tags as $tag) : ?>
       <setSpec><?= htmlReady($tag['name']) ?></setSpec> 
-      <? endforeach ?>
-      
+      <? endforeach ?> 
     </header>
     <metadata>
     <lom xmlns="http://ltsc.ieee.org/xsd/LOM"
@@ -28,7 +24,7 @@
       <? foreach ($tags as $tag) : ?>
       <catalog><?= htmlReady($tag['name']) ?></catalog>
       <? endforeach ?>
-        <entry><?= "oai:studip:".htmlReady($targetMaterial->id)?></entry>
+        <entry><?=htmlReady($targetMaterial->id)?></entry>
       </identifier>
       <title>
         <string language="de"><?= htmlReady($targetMaterial->name) ?></string>
@@ -70,8 +66,8 @@
     <technical>
       <format><?= htmlReady($targetMaterial->content_type) ?></format>
       <size>?</size>
-      <location><?= htmlReady($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/market/download/".$targetMaterial->id) ?></location>
-      <duration>00:00:00</duration>
+      <location><?= $controller->url_for("market/download/".$targetMaterial->id) ?></location>
+      
     </technical>
 
     <educational>

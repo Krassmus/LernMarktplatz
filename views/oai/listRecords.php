@@ -1,18 +1,18 @@
-<?= '<?xml version="1.0" encoding="UTF-8"?>' ?>
+<?='<?xml version="1.0" encoding="UTF-8"?>'?>
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
-         http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+  http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate><?=htmlReady($currentDate)?></responseDate>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
     identifier=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
-    <?=htmlReady(Request::url()) ?> 
+    <?=htmlReady($request_url)?> 
   </request>
   <ListRecords>
     <? foreach ($records as $key=>$targetMaterial) : ?>
     <record> 
     <header>
-      <identifier><?= "oai:studip:".$targetMaterial->id?></identifier> 
+      <identifier><?=htmlReady($targetMaterial->id)?></identifier> 
       <datestamp><?= $targetMaterial->mkdate ?></datestamp>
       <? foreach ($tags[$key] as $tag) : ?>
       <setSpec><?= $tag->name ?></setSpec> 
@@ -30,7 +30,7 @@
       <? foreach ($tags[$key] as $tag) : ?>
       <catalog><?= $tag->name ?></catalog>
       <? endforeach ?>
-        <entry><?= "oai:studip:".htmlReady($targetMaterial->id)?></entry>
+        <entry><?=htmlReady($targetMaterial->id)?></entry>
       </identifier>
       <title>
         <string language="de"><?= $targetMaterial->name ?></string>
@@ -72,8 +72,7 @@
     <technical>
       <format><?= $targetMaterial->content_type ?></format>
       <size>?</size>
-      <location><?= $GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP']."plugins.php/lernmarktplatz/market/download/".$targetMaterial->id ?></location>
-      <duration><?= $duration->s.":".$duration->i.":".$duration->h.":".$duration->d.":".$duration->m.":".$duration->y?></duration>
+      <location><?= $controller->url_for("market/download/".$targetMaterial->id) ?></location>
     </technical>
 
     <educational>
