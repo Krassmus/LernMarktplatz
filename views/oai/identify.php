@@ -9,10 +9,10 @@
   <Identify>
     <repositoryName>Lernmaterialien vom StudIP-Lernmarktplatz - Unter angabe von folgenden Materialgruppen erhalten Sie frei zugängliche Materialien.</repositoryName>
     <? foreach ($identifier as $identity) : ?>
-    <materialGroupId><?= $identity->name."-".$identity->tag_hash ?></identifier>
+      <materialGroupId><?=$identity->name?></materialGroupId>
+      <baseURL><?= htmlReady("http://localhost/studip/plugins.php/lernmarktplatz/oai?verb=ListIdentifiers&metadataPrefix=oai_lom-de&set=".$identity->name)?></baseURL>
     <? endforeach ?>
     
-    <baseURL>http://localhost/studip/plugins.php/lernmarktplatz/oai?verb=ListIdentifiers&metadataPrefix=oai_lom-de&set={materialGroupId}</baseURL>
     <protocolVersion>2.0</protocolVersion>
     <adminEmail>root@studip.de</adminEmail>
     <earliestDatestamp>1990-02-01T12:00:00Z</earliestDatestamp>
@@ -23,8 +23,7 @@
       <oai-identifier 
         xmlns="http://www.openarchives.org/OAI/2.0/oai-identifier"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation=
-            "http://www.openarchives.org/OAI/2.0/oai-identifier
+        xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai-identifier
         http://www.openarchives.org/OAI/2.0/oai-identifier.xsd">
         <scheme>oai</scheme>
         <repositoryIdentifier>lcoa1.loc.gov</repositoryIdentifier>

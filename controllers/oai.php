@@ -15,6 +15,8 @@ class OaiController extends PluginController
     {
         $this->set_content_type('text/xml;charset=utf-8');
         $this->request_url = Request::url();
+        $this->currentDate = gmdate(DATE_ATOM);
+
         $allowed_verbs = ['GetRecord', 'Identify', 'ListIdentifiers', 'ListMetadataFormats', 'ListRecords', 'ListSets'];
         $allowed_prefix = ['oai_lom-de'];
         $request = Request::getInstance();
@@ -31,17 +33,18 @@ class OaiController extends PluginController
         if (empty($metadataPrefix) || in_array($metadataPrefix, $allowed_prefix)) {
             $this->metadataPrefix = $metadataPrefix; 
         } else {
-            $this->render_template("oai/badPrefix");
+            if (empty($this->response->body)) {
+                $this->render_template("oai/badPrefix");
+            }
         }
 
-        if ($this->verb) {
+        if ($this->verb && empty($this->response->body)) {
             $this->prepareRequest($request, $verb, $metadataPrefix);
         }  
     }
 
     public function prepareRequest($request, $verb, $metadataPrefix)
     {
-        $this->currentDate = gmdate(DATE_ATOM);
         $this->from = $request->offsetGet('from');
         $set = $request->offsetGet('set');
 

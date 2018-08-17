@@ -9,7 +9,7 @@
    <record> 
     <header>
       <identifier><?=htmlReady($targetMaterial->id)?></identifier> 
-      <datestamp><?= htmlReady($targetMaterial->mkdate) ?></datestamp>
+      <datestamp><?= htmlReady(gmdate(DATE_ATOM, $targetMaterial->mkdate))?></datestamp>
       <? foreach ($tags as $tag) : ?>
       <setSpec><?= htmlReady($tag['name']) ?></setSpec> 
       <? endforeach ?> 
@@ -58,7 +58,7 @@
           <?= htmlReady($vcard) ?>
         </entity>
         <date>
-          <dateTime><?= htmlReady($targetMaterial->chdate) ?></dateTime>
+          <dateTime><?= htmlReady(gmdate(DATE_ATOM, $targetMaterial->chdate)) ?></dateTime>
         </date>
       </contribute>
     </lifeCycle>

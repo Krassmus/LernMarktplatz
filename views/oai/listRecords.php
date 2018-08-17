@@ -13,7 +13,7 @@
     <record> 
     <header>
       <identifier><?=htmlReady($targetMaterial->id)?></identifier> 
-      <datestamp><?= $targetMaterial->mkdate ?></datestamp>
+      <datestamp><?= gmdate(DATE_ATOM, $targetMaterial->mkdate)?></datestamp>
       <? foreach ($tags[$key] as $tag) : ?>
       <setSpec><?= $tag->name ?></setSpec> 
       <? endforeach ?>
@@ -41,7 +41,7 @@
       </description>
       <keyword>
       <? foreach ($tags[$key] as $tag) : ?>
-      <string language="de"><?= $tag->name ?></string>
+      <string language="de"><?= $tag ?></string>
       <? endforeach ?>
       </keyword>
       
@@ -64,7 +64,7 @@
           <?= htmlReady($vcards[$key]) ?>
         </entity>
         <date>
-          <dateTime><?= $targetMaterial->chdate ?></dateTime>
+          <dateTime><?= gmdate(DATE_ATOM, $targetMaterial->chdate) ?></dateTime>
         </date>
       </contribute>
     </lifeCycle>
