@@ -69,7 +69,7 @@ class OaiController extends PluginController
                 break;        
         }
     } 
-
+    //Prepare responses
     public function prepareGetRecord($request) 
     {
         $identifier = $request->offsetGet('identifier');
@@ -101,7 +101,8 @@ class OaiController extends PluginController
     }
 
     public function prepareIdentifier() 
-    {
+    {   
+        $this->earliest_stamp = $this->getEarliestTime();
         if ($identifier = LernmarktplatzTag::findBySQL('1')) {
             $this->identifier = $identifier;
             $this->renderResponse($this->verb);
@@ -141,10 +142,19 @@ class OaiController extends PluginController
             $this->render_template("oai/noSets");
         }
     }
-
+    //Render
     public function renderResponse($verb) 
     {
         $this->render_template("oai/".$verb);
     }
-
+    //Helper
+    public function getEarliestTime()
+    {
+        $entries = LernmarktplatzHost::findBySQL(
+            '1=1 ORDER BY mkdate asc',
+            []
+        );
+        $entry = $entries[0]->mkdate;
+        return $earliest_stamp = gmdate(DATE_ATOM, $entry);
+    }
 }
