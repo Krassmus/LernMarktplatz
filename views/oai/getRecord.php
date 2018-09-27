@@ -45,10 +45,6 @@
       <version>
         <string language="de">1.0</string>
       </version>
-      <status>
-        <source>LOMv1.0</source>
-        <value>final</value>
-      </status>
       <contribute>
         <role>
           <source>LOMv1.0</source>
@@ -65,7 +61,6 @@
 
     <technical>
       <format><?= htmlReady($targetMaterial->content_type) ?></format>
-      <size>?</size>
       <location><?= $controller->url_for("market/download/".$targetMaterial->id) ?></location>
       
     </technical>
@@ -95,24 +90,6 @@
         <string language="xt-lic"><?= htmlReady($targetMaterial->license) ?></string>
       </description>
     </rights>
-
-    <classification>
-      <purpose>
-        <source>LOMv1.0</source>
-        <value>todo</value>
-      </purpose>
-      <taxonPath>
-        <source>
-          <string language="x-t-eaf">todo</string>
-        </source>
-        <taxon>
-          <id>#todo#</id>
-          <entry>
-            <string language="de">#todo</string>
-          </entry>
-        </taxon>
-      </taxonPath>
-    </classification>
   </lom>
   </metadata>
   </record>

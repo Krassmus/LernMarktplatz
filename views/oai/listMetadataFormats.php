@@ -3,11 +3,17 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
          http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate>2002-02-08T14:27:19Z</responseDate>
-  <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
-    identifier=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
+  <responseDate><? htmlReady($currentDate) ?></responseDate>
+  <? if ($identifier): ?>
+  <request verb=<?='"'.$verb.'"' ?> 
+    identifier=<?= '"'.$identifier.'"'?>> 
     <?=htmlReady($request_url)?> 
   </request>
+  <? else: ?>
+  <request verb=<?='"'.$verb.'"' ?>> 
+    <?=htmlReady($request_url)?> 
+  </request>
+  <? endif ?>
   <ListMetadataFormats>
  
     <metadataFormat>

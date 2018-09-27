@@ -4,19 +4,27 @@
   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
   http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <responseDate><?=htmlReady($currentDate)?></responseDate>
+  <? if ($set): ?>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
-    identifier=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
+    metadataPrefix=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
     <?=htmlReady($request_url)?> 
   </request>
+  <? else: ?>
+  <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
+    identifier=<?= '"'.$metadataPrefix.'"' ?>> 
+    <?=htmlReady($request_url)?> 
+  </request>
+  <? endif ?>
   <ListRecords>
     <? foreach ($records as $key=>$targetMaterial) : ?>
     <record> 
     <header>
       <identifier><?=htmlReady($targetMaterial->id)?></identifier> 
       <datestamp><?= gmdate(DATE_ATOM, $targetMaterial->mkdate)?></datestamp>
-      <? foreach ($tags[$key] as $tag) : ?>
-      <setSpec><?= $tag->name ?></setSpec> 
+      <? foreach ($tag_collection[$key] as $tag) : ?>
+      <setSpec> <?= htmlReady($tag) ?> </setSpec>
       <? endforeach ?>
+      
       
     </header>
     <metadata>
@@ -27,9 +35,10 @@
       http://ltsc.ieee.org/xsd/lomv1.0/lom.xsd">
     <general>
       <identifier>
-      <? foreach ($tags[$key] as $tag) : ?>
-      <catalog><?= $tag->name ?></catalog>
+      <? foreach ($tag_collection[$key] as $tag) : ?>
+      <catalog><?= htmlReady($tag) ?></catalog>
       <? endforeach ?>
+   
         <entry><?=htmlReady($targetMaterial->id)?></entry>
       </identifier>
       <title>
@@ -40,7 +49,7 @@
               <string language="de"><?= $targetMaterial->description ?></string>
       </description>
       <keyword>
-      <? foreach ($tags[$key] as $tag) : ?>
+      <? foreach ($tag_collection[$key] as $tag) : ?>
       <string language="de"><?= $tag ?></string>
       <? endforeach ?>
       </keyword>
@@ -51,10 +60,6 @@
       <version>
         <string language="de">1.0</string>
       </version>
-      <status>
-        <source>LOMv1.0</source>
-        <value>final</value>
-      </status>
       <contribute>
         <role>
           <source>LOMv1.0</source>
@@ -71,7 +76,6 @@
 
     <technical>
       <format><?= $targetMaterial->content_type ?></format>
-      <size>?</size>
       <location><?= $controller->url_for("market/download/".$targetMaterial->id) ?></location>
     </technical>
 
@@ -80,15 +84,6 @@
         <source>LREv3.0</source>
         <value><?= $targetMaterial->content_type ?></value>
       </learningResourceType>
-
-      <intendedEndUserRole>
-        <source>LREv3.0</source>
-        <value>students</value>
-      </intendedEndUserRole>
-      <context>
-        <source>LREv3.0</source>
-        <value>highschool education</value>
-      </context>
     </educational>
 
     <rights>
@@ -101,23 +96,6 @@
       </description>
     </rights>
 
-    <classification>
-      <purpose>
-        <source>LOMv1.0</source>
-        <value>todo</value>
-      </purpose>
-      <taxonPath>
-        <source>
-          <string language="x-t-eaf">todo</string>
-        </source>
-        <taxon>
-          <id>#todo#</id>
-          <entry>
-            <string language="de">#todo</string>
-          </entry>
-        </taxon>
-      </taxonPath>
-    </classification>
   </lom>
   </metadata>
   </record>

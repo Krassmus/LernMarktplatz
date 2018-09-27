@@ -59,7 +59,7 @@ class OaiController extends PluginController
                 $this->prepareListIdentifiers($set);
                 break;
             case 'listMetadataFormats':
-                $this->prepareListMetadataFormats($request);
+                $this->prepareListMetadataFormats($request, $verb);
                 break;
             case 'listRecords': 
                 $this->prepareListRecords($set);
@@ -88,27 +88,57 @@ class OaiController extends PluginController
     {
 
         $this->vcards = [];
-        if ($this->records = LernMarktplatzMaterial::findByTag($set)) {
-            foreach ($this->records as $targetRecord) {
-                $this->tags = $targetRecord->getTopics();
-                $this->set = $set;
-                $this->vcards[] = vCard::export(User::find($targetRecord->user_id));
+        $tag_collection = [];
+        if (!empty($set)) {
+
+            if (empty($target_set = LernmarktplatzTag::findBySQL('name = ?', [$set]))){
+                $this->render_template("oai/noSets");
             }
-            $this->renderResponse($this->verb);
+            if ($this->records = LernMarktplatzMaterial::findByTag($set)) {
+                foreach ($this->records as $key=>$value) {
+                    $tags = $value->getTopics();
+                    for($i=0; $i<sizeof($tags); $i++) {
+                        $tag_collection[$key][$i] = $tags[$i]['name'];
+                    }
+                }
+                $this->tags = $tags;
+                $this->tag_collection = $tag_collection;
+                $this->set = $set;
+                $this->vcards[] = vCard::export(User::find($value->user_id));
+                $this->renderResponse($this->verb);
+            } 
+
         } else {
-            $this->render_template("oai/noRecordsMatch");
+
+            if ($this->records = LernMarktplatzMaterial::findBySQL('1')) {
+                foreach ($this->records as $key=>$value) {
+                    $tags = $value->getTopics();
+                    for($i=0; $i<sizeof($tags); $i++) {
+                        $tag_collection[$key][$i] = $tags[$i]['name'];
+                    }
+                }
+                $this->vcards[] = vCard::export(User::find($value->user_id));
+                $this->tag_collection = $tag_collection;
+                $this->renderResponse($this->verb);
+            } else {
+                $this->render_template("oai/noRecordsMatch");
+            }
+
         }
+        
     }
 
     public function prepareIdentifier() 
     {   
         $this->earliest_stamp = $this->getEarliestTime();
+
         if ($identifier = LernmarktplatzTag::findBySQL('1')) {
             $this->identifier = $identifier;
             $this->renderResponse($this->verb);
         } else {
             $this->render_template("oai/noSets");
         }
+
     }
 
     public function prepareListIdentifiers($set) 
@@ -116,21 +146,44 @@ class OaiController extends PluginController
         if (!empty($set)) {
             $this->set = $set;
             $this->records = LernMarktplatzMaterial::findByTag($set);
-            $this->renderResponse($this->verb);
+            foreach ($this->records as $key=>$value) {
+                $tags = $value->getTopics();
+                for($i=0; $i<sizeof($tags); $i++) {
+                    $tag_collection[$key][$i] = $tags[$i]['name'];
+                }
+            }
         } else {
-            $this->render_template("oai/noSets");
+            $tags = [];
+            $tag_collection = [];
+            $this->records = LernMarktplatzMaterial::findBySQL('1');
+            foreach ($this->records as $key=>$value) {
+                $tags = $value->getTopics();
+                for($i=0; $i<sizeof($tags); $i++) {
+                    $tag_collection[$key][$i] = $tags[$i]['name'];
+                }
+            }
         }
+            $this->tag_collection = $tag_collection;
+            $this->renderResponse($this->verb);
+        
     }
 
-    public function prepareListMetadataFormats($request) 
-    {
-        $identifier = $request->offsetGet('identifier');
-        if($targetMaterial = LernMarktplatzMaterial::find($identifier)) {
-            $this->targetMaterial = $targetMaterial;
-            $this->renderResponse($this->verb);
+    public function prepareListMetadataFormats($request, $verb) 
+    { 
+        
+        //TODO: get the host of current material - meanwhile we take current host
+        if ($identifier = $request->offsetGet('identifier')) {
+            if($targetMaterial = LernMarktplatzMaterial::find($identifier)) {
+                $this->identifier = $identifier;
+                $this->targetMaterial = $targetMaterial;
+                $this->renderResponse($this->verb);
+            } else {
+                $this->render_template("oai/idNotExists");
+            }
         } else {
-            $this->render_template("oai/idNotExists");
+            $this->renderResponse($this->verb);
         }
+        $host = LernMarktplatzHost::thisOne();       
     }
     
     public function prepareListSets() 
