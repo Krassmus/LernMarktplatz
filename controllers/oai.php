@@ -7,8 +7,7 @@ require_once 'app/controllers/plugin_controller.php';
 * Gets initialized due to requests. Validates metadata-prefix and used verb
 * and calls a response-template with specified values.
 */
-class OaiController extends PluginController 
-
+class OaiController extends PluginController
 {
  
     public function index_action() 

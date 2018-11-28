@@ -1,22 +1,22 @@
-<?='<?xml version="1.0" encoding="UTF-8"?>'?>
+<?= '<?xml version="1.0" encoding="UTF-8"?>' ?>
 <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
   http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-  <responseDate><?=htmlReady($currentDate)?></responseDate>
+  <responseDate><?= htmlReady($currentDate) ?></responseDate>
   <? if ($set): ?>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
     metadataPrefix=<?= '"'.$metadataPrefix.'"' ?> set=<?= '"'.$set.'"' ?>> 
-    <?=htmlReady($request_url)?> 
+    <?= htmlReady($request_url) ?>
   </request>
   <? else: ?>
   <request verb=<?='"'.$verb.'"' ?> from=<?= '"'.$currentDate.'"' ?> 
     identifier=<?= '"'.$metadataPrefix.'"' ?>> 
-    <?=htmlReady($request_url)?> 
+    <?= htmlReady($request_url) ?>
   </request>
   <? endif ?>
   <ListRecords>
-    <? foreach ($records as $key=>$targetMaterial) : ?>
+    <? foreach ($records as $key => $targetMaterial) : ?>
     <record> 
     <header>
       <identifier><?=htmlReady($targetMaterial->id)?></identifier> 
@@ -42,15 +42,15 @@
         <entry><?=htmlReady($targetMaterial->id)?></entry>
       </identifier>
       <title>
-        <string language="de"><?= $targetMaterial->name ?></string>
+        <string language="de"><?= htmlReady($targetMaterial->name) ?></string>
       </title>
       <language>de</language>
       <description>
-              <string language="de"><?= $targetMaterial->description ?></string>
+              <string language="de"><?= htmlReady($targetMaterial->description) ?></string>
       </description>
       <keyword>
       <? foreach ($tag_collection[$key] as $tag) : ?>
-      <string language="de"><?= $tag ?></string>
+      <string language="de"><?= htmlReady($tag) ?></string>
       <? endforeach ?>
       </keyword>
       
@@ -75,14 +75,14 @@
     </lifeCycle>
 
     <technical>
-      <format><?= $targetMaterial->content_type ?></format>
+      <format><?= htmlReady($targetMaterial->content_type) ?></format>
       <location><?= $controller->url_for("market/download/".$targetMaterial->id) ?></location>
     </technical>
 
     <educational>
       <learningResourceType>
         <source>LREv3.0</source>
-        <value><?= $targetMaterial->content_type ?></value>
+        <value><?= htmlReady($targetMaterial->content_type) ?></value>
       </learningResourceType>
     </educational>
 
@@ -92,7 +92,7 @@
         <value>yes</value>
       </copyrightAndOtherRestrictions>
       <description>
-        <string language="xt-lic"><?= $targetMaterial->license ?></string>
+        <string language="xt-lic"><?= htmlReady($targetMaterial->license) ?></string>
       </description>
     </rights>
 
