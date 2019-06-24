@@ -111,7 +111,7 @@ class MarketController extends PluginController {
                 $material = clone $this->material;
                 $this->material->delete();
                 $this->material = $material;
-                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelöscht worden und wird gleich aus dem Cache verschwinden.")));
+                PageLayout::postMessage(MessageBox::error(_("Dieses Material ist gelÃ¶scht worden und wird gleich aus dem Cache verschwinden.")));
             }
         }
         $this->material['rating'] = $this->material->calculateRating();
@@ -138,7 +138,7 @@ class MarketController extends PluginController {
 
             $this->material['rating'] = $this->material->calculateRating();
             $this->material->store();
-            PageLayout::postMessage(MessageBox::success(_("Danke für das Review!")));
+            PageLayout::postMessage(MessageBox::success(_("Danke fÃ¼r das Review!")));
             $this->redirect("market/details/".$material_id);
         }
     }
@@ -178,11 +178,64 @@ class MarketController extends PluginController {
 
     public function download_action($material_id, $disposition = "inline")
     {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+        page_close();
         $this->material = new LernmarktplatzMaterial($material_id);
-        $this->set_content_type($this->material['content_type']);
-        $this->response->add_header('Content-Disposition', $disposition.';filename="' . addslashes($this->material['filename']) . '"');
-        $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
-        $this->render_text(file_get_contents($this->material->getFilePath()));
+
+        $filesize = filesize($this->material->getFilePath());
+        header("Accept-Ranges: bytes");
+        $start = 0;
+        $end = $filesize - 1;
+        $length = $filesize;
+        if (isset($_SERVER['HTTP_RANGE'])) {
+            $c_start = $start;
+            $c_end   = $end;
+            list(, $range) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+            if (mb_strpos($range, ',') !== false) {
+                header('HTTP/1.1 416 Requested Range Not Satisfiable');
+                header("Content-Range: bytes $start-$end/$filesize");
+                exit;
+            }
+            if ($range[0] == '-') {
+                $c_start = $filesize - mb_substr($range, 1);
+            } else {
+                $range  = explode('-', $range);
+                $c_start = $range[0];
+                $c_end   = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $filesize;
+            }
+            $c_end = ($c_end > $end) ? $end : $c_end;
+            if ($c_start > $c_end || $c_start > $filesize - 1 || $c_end >= $filesize) {
+                header('HTTP/1.1 416 Requested Range Not Satisfiable');
+                header("Content-Range: bytes $start-$end/$filesize");
+                exit;
+            }
+            $start  = $c_start;
+            $end    = $c_end;
+            $length = $end - $start + 1;
+            header('HTTP/1.1 206 Partial Content');
+            header("Content-Range: bytes $start-$end/$filesize");
+        }
+
+        header("Content-Length: $length");
+
+        header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
+        header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
+        if ($_SERVER['HTTPS'] == "on"){
+            header("Pragma: public");
+            header("Cache-Control: private");
+        } else {
+            header("Pragma: no-cache");
+            header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+        }
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Content-Type: ".$this->material['content_type']);
+        header("Content-Disposition: " . ($disposition ?: "inline") . "; " . $this->encode_header_parameter('filename', $this->material['filename']));
+
+        readfile_chunked($this->material->getFilePath(), $start, $end);
+
+        die();
     }
 
 
@@ -266,6 +319,17 @@ class MarketController extends PluginController {
             }
         }
         return $structure;
+    }
+
+    private function encode_header_parameter($name, $value)
+    {
+        if (preg_match('/[\200-\377]/', $value)) {
+            // use RFC 5987 encoding (ext-parameter)
+            return $name . "*=UTF-8''" . rawurlencode($value);
+        } else {
+            // use RFC 2616 encoding (quoted-string)
+            return $name . '="' . addslashes($value) . '"';
+        }
     }
 
 }

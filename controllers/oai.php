@@ -10,7 +10,7 @@ require_once 'app/controllers/plugin_controller.php';
 class OaiController extends PluginController
 {
  
-    public function index_action() 
+    public function index_action()
     {
         $this->set_content_type('text/xml;charset=utf-8');
         $this->request_url = Request::url();
@@ -23,14 +23,14 @@ class OaiController extends PluginController
         $verb = $request->offsetGet('verb');
         if (!empty($verb) && in_array($verb, $allowed_verbs)) {
             $verb = lcfirst($verb);
-            $this->verb = $verb;   
+            $this->verb = $verb;
         } else {
             $this->render_template("oai/badVerb");
         }
 
         $metadataPrefix = $request->offsetGet('metadataPrefix');
         if (empty($metadataPrefix) || in_array($metadataPrefix, $allowed_prefix)) {
-            $this->metadataPrefix = $metadataPrefix; 
+            $this->metadataPrefix = $metadataPrefix;
         } else {
             if (empty($this->response->body)) {
                 $this->render_template("oai/badPrefix");
@@ -39,7 +39,7 @@ class OaiController extends PluginController
 
         if ($this->verb && empty($this->response->body)) {
             $this->prepareRequest($request, $verb, $metadataPrefix);
-        }  
+        }
     }
 
     public function prepareRequest($request, $verb, $metadataPrefix)
