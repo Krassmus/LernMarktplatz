@@ -57,6 +57,7 @@ jQuery(document).on("change", ".lernmarktplatz_tags li input", function () {
 jQuery(document).on("click", ".matrix a", function () {
     jQuery(this).closest(".matrix").fadeOut();
     jQuery(".maininfo").slideUp();
+    jQuery("#new_ones").fadeOut();
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/market/matrixnavigation",
         "data": {
@@ -67,7 +68,7 @@ jQuery(document).on("click", ".matrix a", function () {
         "success": function (output) {
             jQuery(".breadcrumb").replaceWith(output.breadcrumb);
             jQuery(".matrix").replaceWith(output.matrix).hide().fadeIn();
-            jQuery(".material_overview").html(output.materials).hide().fadeIn();
+            jQuery(".material_overview.mainlist").html(output.materials).hide().fadeIn();
         }
     });
     return false;
@@ -75,7 +76,10 @@ jQuery(document).on("click", ".matrix a", function () {
 
 jQuery(document).on("click", ".breadcrumb a", function () {
     jQuery(".matrix").fadeOut();
-    jQuery(".material_overview").fadeOut();
+    jQuery(".material_overview.mainlist").fadeOut();
+    if (!jQuery(this).data("tags")) {
+        jQuery("#new_ones").fadeIn();
+    }
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/market/matrixnavigation",
         "data": {
@@ -86,7 +90,7 @@ jQuery(document).on("click", ".breadcrumb a", function () {
         "success": function (output) {
             jQuery(".breadcrumb").replaceWith(output.breadcrumb);
             jQuery(".matrix").replaceWith(output.matrix).hide().fadeIn();
-            jQuery(".material_overview").html(output.materials).hide().fadeIn();
+            jQuery(".material_overview.mainlist").html(output.materials).hide().fadeIn();
         }
     });
     return false;

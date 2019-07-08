@@ -1,7 +1,7 @@
 <form action="<?= PluginEngine::getLink($plugin, array(), 'mymaterial/edit/'.$material->getId()) ?>" method="post" class="default" enctype="multipart/form-data">
     <label>
         <?= _("Name") ?>
-        <input type="text" name="data[name]" value="<?= htmlReady($material['name']) ?>">
+        <input type="text" name="data[name]" value="<?= htmlReady($material['name']) ?>" maxlength="64">
     </label>
 
     <label>

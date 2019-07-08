@@ -9,20 +9,20 @@
     </div>
 
     <? if ($materialien) : ?>
-    <ul class="material_overview">
+    <ul class="material_overview mainlist">
         <?= $this->render_partial("market/_materials.php", compact("material", "plugin")) ?>
     </ul>
     <? else : ?>
         <?= MessageBox::info(_("Keine Materialien gefunden")) ?>
     <? endif ?>
 <? elseif ($materialien) : ?>
-    <ul class="material_overview">
+    <ul class="material_overview mainlist">
         <?= $this->render_partial("market/_materials.php", compact("material", "plugin")) ?>
     </ul>
 <? else : ?>
     <form action="<?= PluginEngine::getLink($plugin, array(), "market/overview") ?>" method="GET" style="text-align: center;">
         <div>
-            <input type="text" name="search" value="" style="line-height: 130%; display: inline-block; border: 1px solid #28497c; vertical-align: middle; padding: 5px 5px; font-size: 14px;" placeholder="<?= _("Mathematik, Jura ...") ?>">
+            <input type="text" name="search" value="" style="line-height: 130%; display: inline-block; border: 1px solid #28497c; vertical-align: middle; padding: 5px 5px; font-size: 14px;" placeholder="<?= htmlReady(Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH) ?>">
             <?= \Studip\Button::create(_("Suchen")) ?>
         </div>
 
@@ -38,7 +38,14 @@
         </div>
     <? endif ?>
 
-    <ul class="material_overview"></ul>
+    <? if ($new_ones) : ?>
+        <div id="new_ones">
+            <h2><?= _("Neuste Materialien") ?></h2>
+            <ul class="material_overview">
+                <?= $this->render_partial("market/_materials.php", array('materialien' => $new_ones, 'plugin' => $plugin)) ?>
+            </ul>
+        </div>
+    <? endif ?>
 
 <? endif ?>
 

@@ -53,6 +53,7 @@ class MarketController extends PluginController {
         } else {
             $this->best_nine_tags = LernmarktplatzTag::findBest($tag_matrix_entries_number);
         }
+        $this->new_ones = LernmarktplatzMaterial::findBySQL("1=1 ORDER BY mkdate DESC LIMIT 3");
     }
 
     public function matrixnavigation_action()

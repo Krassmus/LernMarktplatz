@@ -31,7 +31,7 @@ class LernmarktplatzReview extends SimpleORMap {
                 URLHelper::getURL("plugins.php/lernmarktplatz/market/details/".$this->material->getId()."#review_".$this->getId()),
                 $this->isNew()
                     ? sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name'])
-                    : sprintf(_("%s hat ein Review zu '%s' verändert."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name']),
+                    : sprintf(_("%s hat ein Review zu '%s' verÃ¤ndert."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name']),
                 "review_".$this->getId(),
                 Icon::create("support", "clickable")
             );
