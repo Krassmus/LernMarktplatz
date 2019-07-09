@@ -228,6 +228,8 @@ class EndpointsController extends PluginController {
                     'content_type' => $material['content_type'],
                     'front_image_content_type' => $material['front_image_content_type'],
                     'url' => ($GLOBALS['LERNMARKTPLATZ_PREFERRED_URI'] ?: $GLOBALS['ABSOLUTE_URI_STUDIP'])."/plugins.php/lernmarktplatz/market/download/".$item_id,
+                    'player_url' => $material['player_url'],
+                    'tool' => $material['tool'],
                     'structure' => $material['structure']->getArrayCopy(),
                     'license' => $material['license']
                 ),

@@ -7,6 +7,17 @@ class MarketController extends PluginController {
     function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
+        HelpBar::Get()->addPlainText(
+            _("Lernmaterialien"),
+            _("Übungszettel, Musterlösungen, Vorlesungsmitschriften oder gar Folien, selbsterstellte Lernkarteikarten oder alte     Klausuren. Das alles wird einmal erstellt und dann meist vergessen. Auf dem Lernmaterialienmarktplatz bleiben sie     erhalten. Jeder kann was hochladen und jeder kann alles herunterladen. Alle Inhalte hier sind frei verfügbar für jeden.")
+        );
+        $search_widget = new SearchWidget(PluginEngine::getURL($this->plugin, array(), "market/overview"));
+        $search_widget->addNeedle(
+            Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH,
+            "search",
+            Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH
+        );
+        Sidebar::Get()->addWidget($search_widget);
         PageLayout::setTitle(_("Lernmaterialien"));
     }
 
@@ -93,6 +104,27 @@ class MarketController extends PluginController {
         $output['materials'] = $this->render_template_as_string("market/_materials");
 
         $this->render_json($output);
+    }
+
+    public function type_action($type)
+    {
+        switch ($type) {
+            case "audio":
+                $this->materialien = LernmarktplatzMaterial::findBySQL("content_type LIKE 'audio/%'");
+                break;
+            case "video":
+                $this->materialien = LernmarktplatzMaterial::findBySQL("content_type LIKE 'video/%'");
+                break;
+            case "presentation":
+                $this->materialien = LernmarktplatzMaterial::findBySQL("content_type IN ('application/pdf', 'application/x-iwork-keynote-sffkey', 'application/vnd.apple.keynote', 'application/vnd.oasis.opendocument.presentation', 'application/vnd.oasis.opendocument.presentation-template') OR content_type LIKE 'application/vnd.openxmlformats-officedocument.presentationml.%' OR content_type LIKE 'application/vnd.ms-powerpoint%'");
+                break;
+            case "learningmodules":
+                $this->materialien = LernmarktplatzMaterial::findBySQL("player_url IS NOT NULL AND player_url != ''");
+                break;
+            default:
+                throw new Exception("Kein gültiger Typ angegeben.");
+        }
+
     }
 
     public function details_action($material_id)
@@ -249,49 +281,32 @@ class MarketController extends PluginController {
     {
         $this->material = new LernmarktplatzMaterial($material_id);
         if (Request::isPost() && Request::option("seminar_id") && $GLOBALS['perm']->have_studip_perm("autor", Request::option("seminar_id"))) {
-            //$course = new Course(Request::option("seminar_id"));
-            $query = "SELECT folder_id FROM folder WHERE range_id = ? ORDER BY name";
-            $statement = DBManager::get()->prepare($query);
-            $statement->execute(array(Request::option("seminar_id")));
-            $folder_id = $statement->fetch(PDO::FETCH_COLUMN, 0);
-            if ($folder_id && ($GLOBALS['perm']->have_studip_perm("tutor", Request::option("seminar_id")) || in_array("writable", DocumentFolder::find($folder_id)->getPermissions()))) {
-                if ($this->material['host_id']) {
-                    $path = $GLOBALS['TMP_PATH']."/tmp_download_".md5(uniqid());
-                    file_put_contents($path, file_get_contents($this->material->host->url."download/".$this->material['foreign_material_id']));
-                } else {
-                    $path = $this->material->getFilePath();
+            $course = new Course(Request::option("seminar_id"));
+
+            $already_installed = false;
+            foreach (PluginManager::getPlugins() as $plugin) {
+                $method = "lernmarktplatzInstallMaterialToCourse";
+                if (method_exists($plugin, $method)) {
+                    $already_installed = $plugin->$method($this->material, $course);
+                    //Diese Methode sollte entweder false oder eine URL zurückgegeben haben.
+                    if ($already_installed) {
+                        break;
+                    }
                 }
-                $document = StudipDocument::createWithFile($path, array(
-                    'name' => $this->material['name'],
-                    'range_id' => $folder_id,
-                    'user_id' => $GLOBALS['user']->id,
-                    'seminar_id' => Request::option("seminar_id"),
-                    'description' => $this->material['description'] ?: $this->material['short_description'],
-                    'filename' => $this->material['filename'],
-                    'filesize' => filesize($path),
-                    'author_name' => get_fullname()
-                ));
-                PageLayout::postMessage(MessageBox::success(_("Datei wurde erfolgreich kopiert.")));
-                $this->redirect(URLHelper::getURL("folder.php#anker", array(
-                    'cid' => Request::option("seminar_id"),
-                    'data' => array(
-                        'cmd' => "tree",
-                        'open' => array(
-                            $folder_id => 1,
-                            $document->getId() => 1
-                        )
-                    ),
-                    'open' => $document->getId()
-                )));
-                if ($this->material['host_id']) { //cleanup
-                    @unlink($path);
-                }
+            }
+
+            if ($already_installed) {
+                $this->redirect($already_installed);
             } else {
-                PageLayout::postMessage(MessageBox::error(_("Veranstaltung hat keinen allgemeinen Dateiordner.")));
-                $this->redirect(PluginEngine::getURL($this->plugin, array(), "market/details/".$material_id));
+                //in den Dateibereich legen:
+                $folder = Folder::findTopFolder($course->id);
+                $folder = $folder->getTypedFolder();
+                FileManager::handleFileUpload();
             }
         }
-        $this->courses = Course::findBySQL("INNER JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = ? ORDER BY seminare.mkdate DESC", array($GLOBALS['user']->id));
+        if (!$GLOBALS['perm']->have_perm("admin")) {
+            $this->courses = Course::findBySQL("INNER JOIN seminar_user USING (Seminar_id) WHERE seminar_user.user_id = ? ORDER BY seminare.mkdate DESC", array($GLOBALS['user']->id));
+        }
     }
 
     public function profile_action($external_user_id) {

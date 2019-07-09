@@ -1,9 +1,5 @@
 <h1><?= htmlReady($material['name']) ?></h1>
 
-<? if (!$material->isVideo() && $material['front_image_content_type']) : ?>
-    <img src="<?= htmlReady($material->getLogoURL()) ?>" style="display: block; max-width: 100%; max-height: 200px; height: 200px; margin-left: auto; margin-right: auto;">
-<? endif ?>
-
 <div style="text-align: center;">
     <? $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getURL($plugin, array(), "market/download/".$material->getId()) ?>
     <a class="button download_link" href="<?= htmlReady($url) ?>" title="<?= _("Download") ?>">
@@ -11,22 +7,24 @@
         <?= Icon::create("download", "info_alt")->asImg(35, array('class' => "whitebutton")) ?>
         <div class="filename"><?= htmlReady($material['filename']) ?></div>
     </a>
-    <? if ($GLOBALS['perm']->have_perm("tutor")) : ?>
-        <div>
-            <a href="<?= PluginEngine::getLink($plugin, array(), "market/add_to_course/".$material->getId()) ?>" data-dialog>
-                <?= Icon::create("seminar+move_down", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
-                <?= _("Zu Veranstaltung hinzufügen") ?>
-            </a>
-        </div>
-    <? endif ?>
 </div>
 
-<? if ($material->isVideo()) : ?>
+<? if ($material['player_url']) : ?>
+    <iframe src="<?= htmlReady($material['player_url']) ?>"
+            class="lernmarktplatz_player"
+            frameBorder="0"></iframe>
+<? elseif ($material->isVideo()) : ?>
     <video controls
             <?= $material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : "" ?>
            crossorigin="anonymous"
            src="<?= htmlReady($url) ?>"
-           style="display: block; margin-left: auto; margin-right: auto; width: 500px; max-width: 96vw;"></video>
+           class="lernmarktplatz_player"></video>
+<? elseif ($material->isPDF()) : ?>
+    <iframe src="<?= htmlReady($url) ?>"
+            frameBorder="0"
+            class="lernmarktplatz_player"></iframe>
+<? elseif ($material['front_image_content_type']) : ?>
+    <img src="<?= htmlReady($material->getLogoURL()) ?>" class="lernmarktplatz_player">
 <? endif ?>
 
 <div style="margin-top: 17px;">
@@ -244,5 +242,26 @@ if ($GLOBALS['perm']->have_perm("autor")) {
         Icon::create("add", "clickable"),
         array('data-dialog' => "1")
     );
+    $actions->addLink(
+        _("Herunterladen"),
+        $url,
+        Icon::create("download", "clickable")
+    );
+    $actions->addLink(
+        _("Zu Veranstaltung hinzufügen"),
+        PluginEngine::getURL($plugin, array(), "market/add_to_course/".$material->getId()),
+        Icon::create("seminar+move_down", "clickable"),
+        array('data-dialog' => "1")
+    );
+
+    if ($material['player_url'] || $material->isVideo() || $material->isPDF()) {
+        $actions->addLink(
+            _("Vollbild aktivieren"),
+            "#",
+            Icon::create($plugin->getPluginURL()."/assets/resize-full-screen.svg", "clickable"),
+            array('onclick' => "var p = jQuery('.lernmarktplatz_player')[0]; if (p.requestFullscreen) { p.requestFullscreen(); } else if (p.msRequestFullscreen) { p.msRequestFullscreen(); } else if (p.webkitRequestFullscreen) { p.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT); }; return false;")
+        );
+    }
+
     Sidebar::Get()->addWidget($actions);
 }

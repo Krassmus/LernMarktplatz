@@ -56,7 +56,7 @@ jQuery(document).on("change", ".lernmarktplatz_tags li input", function () {
 
 jQuery(document).on("click", ".matrix a", function () {
     jQuery(this).closest(".matrix").fadeOut();
-    jQuery(".maininfo").slideUp();
+    jQuery(".maininfo, .shortcuts").slideUp();
     jQuery("#new_ones").fadeOut();
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/market/matrixnavigation",
@@ -79,6 +79,7 @@ jQuery(document).on("click", ".breadcrumb a", function () {
     jQuery(".material_overview.mainlist").fadeOut();
     if (!jQuery(this).data("tags")) {
         jQuery("#new_ones").fadeIn();
+        jQuery(".shortcuts").slideDown();
     }
     jQuery.ajax({
         "url": STUDIP.ABSOLUTE_URI_STUDIP + "plugins.php/lernmarktplatz/market/matrixnavigation",
