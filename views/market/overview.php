@@ -2,7 +2,7 @@
     <div class="shortcuts file_select_possibilities">
         <a href="<?= PluginEngine::getLink($plugin, array(), "market/type/audio") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/audio.svg", "clickable")->asImg(50) ?>
-            <?= _("Podcasts") ?>
+            <?= _("Audio") ?>
         </a>
         <a href="<?= PluginEngine::getLink($plugin, array(), "market/type/video") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/video.svg", "clickable")->asImg(50) ?>

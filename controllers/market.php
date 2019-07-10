@@ -7,7 +7,7 @@ class MarketController extends PluginController {
     function before_filter(&$action, &$args)
     {
         parent::before_filter($action, $args);
-        HelpBar::Get()->addPlainText(
+        Helpbar::Get()->addPlainText(
             _("Lernmaterialien"),
             _("Übungszettel, Musterlösungen, Vorlesungsmitschriften oder gar Folien, selbsterstellte Lernkarteikarten oder alte     Klausuren. Das alles wird einmal erstellt und dann meist vergessen. Auf dem Lernmaterialienmarktplatz bleiben sie     erhalten. Jeder kann was hochladen und jeder kann alles herunterladen. Alle Inhalte hier sind frei verfügbar für jeden.")
         );
@@ -290,7 +290,7 @@ class MarketController extends PluginController {
             $course = new Course(Request::option("seminar_id"));
 
             $already_installed = false;
-            foreach (PluginManager::getPlugins() as $plugin) {
+            foreach (PluginManager::getInstance()->getPlugins(null) as $plugin) {
                 $method = "lernmarktplatzInstallMaterialToCourse";
                 if (method_exists($plugin, $method)) {
                     $already_installed = $plugin->$method($this->material, $course);
@@ -307,7 +307,21 @@ class MarketController extends PluginController {
                 //in den Dateibereich legen:
                 $folder = Folder::findTopFolder($course->id);
                 $folder = $folder->getTypedFolder();
-                FileManager::handleFileUpload();
+                $uploaded_files = array(
+                    'name' => array($this->material['filename']),
+                    'tmp_name' => array($this->material->getFilePath()),
+                    'size' => array(filesize($this->material->getFilePath())),
+                    'type' => array($this->material['content_type'])
+                );
+                $output = FileManager::handleFileUpload($uploaded_files, $folder, $GLOBALS['user']->id);
+                if (count($output['errors'])) {
+                    PageLayout::postError(_("Es sind Fehler beim Kopieren aufgetreten:"), $output['errors']);
+                    $this->redirect("market/details/".$material_id);
+                } else {
+                    PageLayout::postSuccess(_("Das Lernmaterial wurde kopiert."));
+                    $this->redirect(URLHelper::getURL("dispatch.php/course/files", array('cid' => $course->id)));
+                }
+
             }
         }
         if (!$GLOBALS['perm']->have_perm("admin")) {

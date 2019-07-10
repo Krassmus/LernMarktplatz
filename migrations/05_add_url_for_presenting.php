@@ -11,6 +11,7 @@ class AddUrlForPresenting extends Migration {
             ALTER TABLE lernmarktplatz_material
             ADD COLUMN `tool` VARCHAR(128) NULL AFTER `player_url`
         ");
+        SimpleORMap::expireTableScheme();
     }
 
     function down() {
