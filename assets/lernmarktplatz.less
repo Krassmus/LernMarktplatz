@@ -235,8 +235,13 @@ ul.reviews, ol.reviews, ol.comments, ul.comments {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 600px;
+    width: calc(100% - 20px);
     max-width: 96vw;
-    min-height: 400px;
+    min-height: calc(70vh);
     max-height: 100vh;
+    border: 1px solid @content-color-40;
+}
+img.lernmarktplatz_player {
+    min-height: auto;
+    width: auto;
 }

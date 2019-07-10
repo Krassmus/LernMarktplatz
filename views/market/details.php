@@ -11,8 +11,7 @@
 
 <? if ($material['player_url']) : ?>
     <iframe src="<?= htmlReady($material['player_url']) ?>"
-            class="lernmarktplatz_player"
-            frameBorder="0"></iframe>
+            class="lernmarktplatz_player"></iframe>
 <? elseif ($material->isVideo()) : ?>
     <video controls
             <?= $material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : "" ?>
@@ -21,7 +20,6 @@
            class="lernmarktplatz_player"></video>
 <? elseif ($material->isPDF()) : ?>
     <iframe src="<?= htmlReady($url) ?>"
-            frameBorder="0"
             class="lernmarktplatz_player"></iframe>
 <? elseif ($material['front_image_content_type']) : ?>
     <img src="<?= htmlReady($material->getLogoURL()) ?>" class="lernmarktplatz_player">

@@ -14,6 +14,11 @@
         <textarea name="data[description]"><?= htmlReady($material['description']) ?></textarea>
     </label>
 
+    <label>
+        <?= _("Vorschau-URL (optional)") ?>
+        <input type="text" name="data[player_url]" value="<?= htmlReady($material['player_url']) ?>">
+    </label>
+
     <div style="margin-top: 10px;">
         <?= _("Themen (am besten mindestens 5)") ?>
         <ul class="clean lernmarktplatz_tags" style="margin-top: 10px;">

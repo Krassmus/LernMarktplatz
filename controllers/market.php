@@ -108,6 +108,12 @@ class MarketController extends PluginController {
 
     public function type_action($type)
     {
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
+            Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
+        }
         switch ($type) {
             case "audio":
                 $this->materialien = LernmarktplatzMaterial::findBySQL("content_type LIKE 'audio/%'");
