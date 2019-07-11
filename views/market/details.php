@@ -1,17 +1,20 @@
 <h1><?= htmlReady($material['name']) ?></h1>
 
-<div style="text-align: center;">
-    <? $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getURL($plugin, array(), "market/download/".$material->getId()) ?>
-    <a class="button download_link" href="<?= htmlReady($url) ?>" title="<?= _("Download") ?>">
-        <?= Icon::create("download", "clickable")->asImg(35, array('class' => "blue")) ?>
-        <?= Icon::create("download", "info_alt")->asImg(35, array('class' => "whitebutton")) ?>
-        <div class="filename"><?= htmlReady($material['filename']) ?></div>
-    </a>
-</div>
+<? $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : PluginEngine::getURL($plugin, array(), "market/download/".$material->getId()) ?>
+<? if ($url && $material['filename']) : ?>
+    <div style="text-align: center;">
+        <a class="button download_link" href="<?= htmlReady($url) ?>" title="<?= _("Download") ?>">
+            <?= Icon::create("download", "clickable")->asImg(35, array('class' => "blue")) ?>
+            <?= Icon::create("download", "info_alt")->asImg(35, array('class' => "whitebutton")) ?>
+            <div class="filename"><?= htmlReady($material['filename']) ?></div>
+        </a>
+    </div>
+<? endif ?>
 
 <? if ($material['player_url']) : ?>
     <iframe src="<?= htmlReady($material['player_url']) ?>"
             class="lernmarktplatz_player"></iframe>
+    <? LernmarktplatzDownloadcounter::addCounter($material->id) ?>
 <? elseif ($material->isVideo()) : ?>
     <video controls
             <?= $material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : "" ?>
@@ -240,11 +243,21 @@ if ($GLOBALS['perm']->have_perm("autor")) {
         Icon::create("add", "clickable"),
         array('data-dialog' => "1")
     );
-    $actions->addLink(
-        _("Herunterladen"),
-        $url,
-        Icon::create("download", "clickable")
-    );
+    if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) {
+        $actions->addLink(
+            _("Bearbeiten"),
+            PluginEngine::getURL($plugin, array(), "mymaterial/edit/".$material->getId()),
+            Icon::create("edit", "clickable"),
+            array('data-dialog' => "1")
+        );
+    }
+    if ($url && $material['filename']) {
+        $actions->addLink(
+            _("Herunterladen"),
+            $url,
+            Icon::create("download", "clickable")
+        );
+    }
     $actions->addLink(
         _("Zu Veranstaltung hinzufügen"),
         PluginEngine::getURL($plugin, array(), "market/add_to_course/".$material->getId()),
@@ -257,7 +270,21 @@ if ($GLOBALS['perm']->have_perm("autor")) {
             _("Vollbild aktivieren"),
             "#",
             Icon::create($plugin->getPluginURL()."/assets/resize-full-screen.svg", "clickable"),
-            array('onclick' => "var p = jQuery('.lernmarktplatz_player')[0]; if (p.requestFullscreen) { p.requestFullscreen(); } else if (p.msRequestFullscreen) { p.msRequestFullscreen(); } else if (p.webkitRequestFullscreen) { p.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT); }; return false;")
+            array('onclick' => "var p = jQuery('.lernmarktplatz_player')[0]; 
+                                if (p.requestFullscreen) { p.requestFullscreen(); } 
+                                    else if (p.msRequestFullscreen) { p.msRequestFullscreen(); } 
+                                    else if (qr.mozRequestFullScreen) { p.mozRequestFullScreen(); }
+                                    else if (p.webkitRequestFullscreen) { p.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT); }; 
+                                return false;")
+        );
+    }
+
+    if (!$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material['user_id'] === $GLOBALS['user']->id)) {
+        $actions->addLink(
+            _("Zugriffszahlen"),
+            PluginEngine::getURL($plugin, array(), "mymaterial/statistics/".$material->getId()),
+            Icon::create("graph", "clickable"),
+            array('data-dialog' => "1")
         );
     }
 

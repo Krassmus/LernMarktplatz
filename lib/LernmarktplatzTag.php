@@ -9,9 +9,11 @@ class LernmarktplatzTag extends SimpleORMap {
             FROM (
                 SELECT tags.tag_hash, COUNT(*) AS position
                 FROM lernmarktplatz_tags_material AS tags
+                    INNER JOIN lernmarktplatz_material ON (tags.material_id = lernmarktplatz_material.material_id)
                 GROUP BY tags.tag_hash
                 ) AS best_tags
                 INNER JOIN lernmarktplatz_tags ON (best_tags.tag_hash = lernmarktplatz_tags.tag_hash)
+            WHERE position > 0
             ORDER BY position DESC
             LIMIT ".(int) $number."
         ");
@@ -35,12 +37,14 @@ class LernmarktplatzTag extends SimpleORMap {
                 SELECT tags1.tag_hash, COUNT(*) AS position
                 FROM lernmarktplatz_tags_material AS tags1
                     INNER JOIN lernmarktplatz_tags_material AS tags2 ON (tags1.material_id = tags2.material_id AND tags1.tag_hash != tags2.tag_hash)
+                    INNER JOIN lernmarktplatz_material ON (tags1.material_id = lernmarktplatz_material.material_id)
                 WHERE tags2.tag_hash NOT IN (:excluded_tags)
                     AND tags2.tag_hash = :tag_hash
                     AND tags1.tag_hash NOT IN (:excluded_tags)
                 GROUP BY tags1.tag_hash
                 ) AS best_tags
                 INNER JOIN lernmarktplatz_tags ON (best_tags.tag_hash = lernmarktplatz_tags.tag_hash)
+            WHERE position > 0
             ORDER BY position DESC
             LIMIT ".(int) $limit."
         ");

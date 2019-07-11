@@ -1,22 +1,22 @@
 <form action="<?= PluginEngine::getLink($plugin, array(), 'mymaterial/edit/'.$material->getId()) ?>" method="post" class="default" enctype="multipart/form-data">
     <label>
         <?= _("Name") ?>
-        <input type="text" name="data[name]" value="<?= htmlReady($material['name']) ?>" maxlength="64">
+        <input type="text" name="data[name]" value="<?= htmlReady($material['name'] ?: $template['name']) ?>" maxlength="64">
     </label>
 
     <label>
         <?= _("Kurzbeschreibung") ?>
-        <input type="text" name="data[short_description]" value="<?= htmlReady($material['short_description']) ?>">
+        <input type="text" name="data[short_description]" value="<?= htmlReady($material['short_description'] ?: $template['short_description']) ?>">
     </label>
 
     <label>
         <?= _("Beschreibung") ?>
-        <textarea name="data[description]"><?= htmlReady($material['description']) ?></textarea>
+        <textarea name="data[description]"><?= htmlReady($material['description'] ?: $template['description']) ?></textarea>
     </label>
 
     <label>
         <?= _("Vorschau-URL (optional)") ?>
-        <input type="text" name="data[player_url]" value="<?= htmlReady($material['player_url']) ?>">
+        <input type="text" name="data[player_url]" value="<?= htmlReady($material['player_url'] ?: $template['player_url']) ?>">
     </label>
 
     <div style="margin-top: 10px;">
@@ -28,6 +28,12 @@
                 <input type="text" name="tags[]" value="<?= htmlReady($tag['name']) ?>" style="max-width: calc(100% - 30px);">
             </li>
             <? endforeach ?>
+            <? foreach ((array) $template['tags'] as $tag) : ?>
+                <li>
+                    <?= Icon::create("topic", "info")->asImg("20px", array('class' => "text-bottom")) ?>
+                    <input type="text" name="tags[]" value="<?= htmlReady($tag) ?>" style="max-width: calc(100% - 30px);">
+                </li>
+            <? endforeach ?>
             <li>
                 <?= Icon::create("topic", "info")->asImg("20px", array('class' => "text-bottom")) ?>
                 <input type="text" name="tags[]" value="<?= htmlReady($tag['name']) ?>" style="max-width: calc(100% - 30px);">
@@ -35,15 +41,28 @@
         </ul>
     </div>
 
-    <label class="file-upload" style="margin-top: 20px;">
-        <?= _("Datei (gerne auch eine ZIP) auswählen") ?>
-        <input type="file" name="file"<? $material->isNew() ? "required" : "" ?>>
-    </label>
+    <? if ($template['tmp_file']) : ?>
+        <input type="hidden" name="tmp_file" value="<?= htmlReady($template['tmp_file']) ?>">
+        <input type="hidden" name="filename" value="<?= htmlReady($template['filename']) ?>">
+    <? else : ?>
+        <label class="file-upload" style="margin-top: 20px;">
+            <?= _("Datei (gerne auch eine ZIP) auswählen") ?>
+            <input type="file" name="file">
+        </label>
+    <? endif ?>
 
-    <label class="file-upload" style="margin-top: 20px;">
-        <?= _("Logo-Bilddatei (optional)") ?>
-        <input type="file" name="image" accept="image/*">
-    </label>
+    <? if ($template['tmp_file']) : ?>
+        <input type="hidden" name="logo_tmp_file" value="<?= htmlReady($template['logo_tmp_file']) ?>">
+    <? else : ?>
+        <label class="file-upload" style="margin-top: 20px;">
+            <?= _("Logo-Bilddatei (optional)") ?>
+            <input type="file" name="image" accept="image/*">
+        </label>
+    <? endif ?>
+
+    <? if ($template['module_id']) : ?>
+        <input type="hidden" name="module_id" value="<?= htmlReady($template['module_id']) ?>">
+    <? endif ?>
 
     <? if ($material['front_image_content_type']) : ?>
         <label>

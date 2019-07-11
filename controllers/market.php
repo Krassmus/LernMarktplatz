@@ -1,7 +1,5 @@
 <?php
 
-require_once 'app/controllers/plugin_controller.php';
-
 class MarketController extends PluginController {
 
     function before_filter(&$action, &$args)
@@ -261,7 +259,7 @@ class MarketController extends PluginController {
 
         header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
         header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
-        if ($_SERVER['HTTPS'] == "on"){
+        if ($_SERVER['HTTPS'] == "on") {
             header("Pragma: public");
             header("Cache-Control: private");
         } else {
@@ -273,6 +271,10 @@ class MarketController extends PluginController {
         header("Content-Disposition: " . ($disposition ?: "inline") . "; " . $this->encode_header_parameter('filename', $this->material['filename']));
 
         readfile_chunked($this->material->getFilePath(), $start, $end);
+
+        if (!$start) {
+            LernmarktplatzDownloadcounter::addCounter($material_id);
+        }
 
         die();
     }

@@ -5,7 +5,7 @@ class AddUrlForPresenting extends Migration {
     function up() {
         DBManager::get()->exec("
             ALTER TABLE lernmarktplatz_material
-            ADD COLUMN `player_url` VARCHAR(128) NULL AFTER `description`
+            ADD COLUMN `player_url` VARCHAR(256) NULL AFTER `description`
         ");
         DBManager::get()->exec("
             ALTER TABLE lernmarktplatz_material

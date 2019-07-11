@@ -81,6 +81,40 @@ class MymaterialController extends PluginController {
             PageLayout::postMessage(MessageBox::success(_("Lernmaterial erfolgreich gespeichert.")));
             $this->redirect("market/details/".$this->material->getId());
         }
+        if (isset($_SESSION['LernMarktplatz_CREATE_TEMPLATE'])) {
+            $this->template = $_SESSION['LernMarktplatz_CREATE_TEMPLATE'];
+            unset($_SESSION['LernMarktplatz_CREATE_TEMPLATE']);
+        }
+    }
+
+    public function statistics_action($material_id)
+    {
+        $this->material = new LernmarktplatzMaterial($material_id);
+        Pagelayout::setTitle(sprintf(_("Zugriffszahlen für %s"), $this->material['name']));
+        if (!$GLOBALS['perm']->have_perm("root") && $this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
+            throw new AccessDeniedException();
+        }
+        if (Request::get("export")) {
+            $this->counter = LernmarktplatzDownloadcounter::findBySQL("material_id = ? ORDER BY mkdate DESC", array($material_id));
+            $output = array(
+                array("Datum", "Longitude", "Latitude")
+            );
+            foreach ($this->counter as $counter) {
+                $output[] = array(
+                    date("Y-m-d H:i:s", $counter['mkdate']),
+                    $counter['longitude'],
+                    $counter['latitude']
+                );
+            }
+
+            $this->render_csv($output, "Zugriffszahlen ".$this->material['name'].".csv");
+            return;
+        }
+        $this->counter = LernmarktplatzDownloadcounter::countBySQL("material_id = ?", array($material_id));
+        $this->counter_today = LernmarktplatzDownloadcounter::countBySQL("material_id = :material_id AND mkdate >= :start", array(
+            'material_id' => $material_id,
+            'start' => mktime(0, 0, 0)
+        ));
     }
 
     protected function getFolderStructure($folder) {

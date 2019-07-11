@@ -312,11 +312,68 @@ class EndpointsController extends PluginController {
      */
     public function download_action($material_id)
     {
+        while (ob_get_level()) {
+            ob_end_clean();
+        }
+        page_close();
         $this->material = new LernmarktplatzMaterial($material_id);
-        $this->set_content_type($this->material['content_type']);
-        $this->response->add_header('Content-Disposition', 'inline;filename="' . addslashes($this->material['filename']) . '"');
-        $this->response->add_header('Content-Length', filesize($this->material->getFilePath()));
-        $this->render_text(file_get_contents($this->material->getFilePath()));
+
+        $filesize = filesize($this->material->getFilePath());
+        header("Accept-Ranges: bytes");
+        $start = 0;
+        $end = $filesize - 1;
+        $length = $filesize;
+        if (isset($_SERVER['HTTP_RANGE'])) {
+            $c_start = $start;
+            $c_end   = $end;
+            list(, $range) = explode('=', $_SERVER['HTTP_RANGE'], 2);
+            if (mb_strpos($range, ',') !== false) {
+                header('HTTP/1.1 416 Requested Range Not Satisfiable');
+                header("Content-Range: bytes $start-$end/$filesize");
+                exit;
+            }
+            if ($range[0] == '-') {
+                $c_start = $filesize - mb_substr($range, 1);
+            } else {
+                $range  = explode('-', $range);
+                $c_start = $range[0];
+                $c_end   = (isset($range[1]) && is_numeric($range[1])) ? $range[1] : $filesize;
+            }
+            $c_end = ($c_end > $end) ? $end : $c_end;
+            if ($c_start > $c_end || $c_start > $filesize - 1 || $c_end >= $filesize) {
+                header('HTTP/1.1 416 Requested Range Not Satisfiable');
+                header("Content-Range: bytes $start-$end/$filesize");
+                exit;
+            }
+            $start  = $c_start;
+            $end    = $c_end;
+            $length = $end - $start + 1;
+            header('HTTP/1.1 206 Partial Content');
+            header("Content-Range: bytes $start-$end/$filesize");
+        }
+
+        header("Content-Length: $length");
+
+        header("Expires: Mon, 12 Dec 2001 08:00:00 GMT");
+        header("Last-Modified: " . gmdate ("D, d M Y H:i:s") . " GMT");
+        if ($_SERVER['HTTPS'] == "on") {
+            header("Pragma: public");
+            header("Cache-Control: private");
+        } else {
+            header("Pragma: no-cache");
+            header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+        }
+        header("Cache-Control: post-check=0, pre-check=0", false);
+        header("Content-Type: ".$this->material['content_type']);
+        header("Content-Disposition: inline; " . $this->encode_header_parameter('filename', $this->material['filename']));
+
+        readfile_chunked($this->material->getFilePath(), $start, $end);
+
+        if (!$start) {
+            LernmarktplatzDownloadcounter::addCounter($material_id);
+        }
+
+        die();
     }
 
     /**
