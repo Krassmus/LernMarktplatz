@@ -73,12 +73,14 @@
     <? endif ?>
 
     <? if ($material->isNew()) : ?>
-        <div style="margin-top: 20px;">
-            <?= sprintf(
-                _("Ich erkläre mich bereit, dass meine Lernmaterialien unter der %s Lizenz an alle Nutzer freigegeben werden. Ich bestätige zudem, dass ich das Recht habe, diese Dateien frei zu veröffentlichen, weil entweder ich selbst sie angefertigt habe, oder sie von anderen Quellen mit ähnlicher Lizenz stammen."),
-                '<a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank">'.Icon::create("link-extern", "clickable")->asImg("20px", array('class' => "text-bottom")).' CC BY SA 3.0</a>'
-            ) ?>
-        </div>
+        <? if (!Config::get()->LERNMARKTPLATZ_DISABLE_LICENSE) : ?>
+            <div style="margin-top: 20px;">
+                <?= sprintf(
+                    _("Ich erkläre mich bereit, dass meine Lernmaterialien unter der %s Lizenz an alle Nutzer freigegeben werden. Ich bestätige zudem, dass ich das Recht habe, diese Dateien frei zu veröffentlichen, weil entweder ich selbst sie angefertigt habe, oder sie von anderen Quellen mit ähnlicher Lizenz stammen."),
+                    '<a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank">'.Icon::create("link-extern", "clickable")->asImg("20px", array('class' => "text-bottom")).' CC BY SA 3.0</a>'
+                ) ?>
+            </div>
+        <? endif ?>
         <? if ($template['redirect_url']) : ?>
             <input type="hidden" name="redirect_url" value="<?= htmlReady($template['redirect_url']) ?>">
         <? endif ?>

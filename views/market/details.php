@@ -104,15 +104,17 @@
 </div>
 
 
-<div class="license" style="text-align: center; margin-top: 20px;">
-    <?= _("Lizenz:") ?>
-    <a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank">
-        <img src="<?= $plugin->getPluginURL()."/assets/cc-by-sa.svg" ?>" width="80px">
-    </a>
-    <a href="<?= PluginEngine::getLink($plugin, array(), "market/licenseinfo") ?>" data-dialog>
-        <?= _("Was heißt das?") ?>
-    </a>
-</div>
+<? if (!Config::get()->LERNMARKTPLATZ_DISABLE_LICENSE) : ?>
+    <div class="license" style="text-align: center; margin-top: 20px;">
+        <?= _("Lizenz:") ?>
+        <a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank">
+            <img src="<?= $plugin->getPluginURL()."/assets/cc-by-sa.svg" ?>" width="80px">
+        </a>
+        <a href="<?= PluginEngine::getLink($plugin, array(), "market/licenseinfo") ?>" data-dialog>
+            <?= _("Was heißt das?") ?>
+        </a>
+    </div>
+<? endif ?>
 
 <div style="text-align: center;">
     <? if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) : ?>
