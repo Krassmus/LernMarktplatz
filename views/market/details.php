@@ -33,7 +33,7 @@
 </div>
 
 
-<? if ($material->isFolder()) : ?>
+<? if ($material->isFolder() && !$material['player_url']) : ?>
     <h2><?= _("Verzeichnisstruktur") ?></h2>
     <ol class="lernmarktplatz structure">
         <? foreach ($material['structure'] as $filename => $file) : ?>

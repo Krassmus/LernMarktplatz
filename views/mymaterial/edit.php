@@ -43,6 +43,7 @@
 
     <? if ($template['tmp_file']) : ?>
         <input type="hidden" name="tmp_file" value="<?= htmlReady($template['tmp_file']) ?>">
+        <input type="hidden" name="mime_type" value="<?= htmlReady($template['mime_type']) ?>">
         <input type="hidden" name="filename" value="<?= htmlReady($template['filename']) ?>">
     <? else : ?>
         <label class="file-upload" style="margin-top: 20px;">
@@ -78,6 +79,9 @@
                 '<a href="https://creativecommons.org/licenses/by-sa/3.0/de/" target="_blank">'.Icon::create("link-extern", "clickable")->asImg("20px", array('class' => "text-bottom")).' CC BY SA 3.0</a>'
             ) ?>
         </div>
+        <? if ($template['redirect_url']) : ?>
+            <input type="hidden" name="redirect_url" value="<?= htmlReady($template['redirect_url']) ?>">
+        <? endif ?>
     <? endif ?>
 
     <div data-dialog-button>

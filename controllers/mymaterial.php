@@ -49,7 +49,7 @@ class MymaterialController extends PluginController {
                 if (in_array($this->material['content_type'], array("application/x-zip-compressed", "application/zip", "application/x-zip"))) {
                     $tmp_folder = $GLOBALS['TMP_PATH']."/temp_folder_".md5(uniqid());
                     mkdir($tmp_folder);
-                    unzip_file($_FILES['file']['tmp_name'], $tmp_folder);
+                    \Studip\ZipArchive::extractToPath($_FILES['file']['tmp_name'], $tmp_folder);
                     $this->material['structure'] = $this->getFolderStructure($tmp_folder);
                     rmdirr($tmp_folder);
                 } else {
@@ -57,10 +57,27 @@ class MymaterialController extends PluginController {
                 }
                 $this->material['filename'] = $_FILES['file']['name'];
                 move_uploaded_file($_FILES['file']['tmp_name'], $this->material->getFilePath());
+            } elseif(Request::get("tmp_file")) {
+                $this->material['content_type'] = Request::get("mime_type") ?: get_mime_type(Request::get("tmp_file"));
+
+                if (in_array($this->material['content_type'], array("application/x-zip-compressed", "application/zip", "application/x-zip"))) {
+                    $tmp_folder = $GLOBALS['TMP_PATH']."/temp_folder_".md5(uniqid());
+                    mkdir($tmp_folder);
+                    \Studip\ZipArchive::extractToPath(Request::get("tmp_file"), $tmp_folder);
+                    $this->material['structure'] = $this->getFolderStructure($tmp_folder);
+                    rmdirr($tmp_folder);
+                } else {
+                    $this->material['structure'] = null;
+                }
+                $this->material['filename'] = Request::get("filename");
+                move_uploaded_file(Request::get("tmp_file"), $this->material->getFilePath());
             }
             if ($_FILES['image']['tmp_name']) {
                 $this->material['front_image_content_type'] = $_FILES['image']['type'];
                 move_uploaded_file($_FILES['image']['tmp_name'], $this->material->getFrontImageFilePath());
+            } elseif (Request::get("logo_tmp_file")) {
+                $this->material['front_image_content_type'] = get_mime_type(Request::get("logo_tmp_file"));
+                move_uploaded_file(Request::get("logo_tmp_file"), $this->material->getFrontImageFilePath());
             }
             if (Request::get("delete_front_image")) {
                 $this->material['front_image_content_type'] = null;
@@ -79,7 +96,15 @@ class MymaterialController extends PluginController {
             $this->material->pushDataToIndexServers();
 
             PageLayout::postMessage(MessageBox::success(_("Lernmaterial erfolgreich gespeichert.")));
-            $this->redirect("market/details/".$this->material->getId());
+
+            if (Request::get("redirect_url")) {
+                $this->redirect(URLHelper::getURL(Request::get("redirect_url"), array(
+                    'material_id' => $this->material->getId(),
+                    'url' => PluginEngine::getURL($this->plugin, array(), "market/details/".$this->material->getId())
+                )));
+            } else {
+                $this->redirect("market/details/" . $this->material->getId());
+            }
         }
         if (isset($_SESSION['LernMarktplatz_CREATE_TEMPLATE'])) {
             $this->template = $_SESSION['LernMarktplatz_CREATE_TEMPLATE'];
