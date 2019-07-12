@@ -77,7 +77,7 @@ class MymaterialController extends PluginController {
                 move_uploaded_file($_FILES['image']['tmp_name'], $this->material->getFrontImageFilePath());
             } elseif (Request::get("logo_tmp_file")) {
                 $this->material['front_image_content_type'] = get_mime_type(Request::get("logo_tmp_file"));
-                move_uploaded_file(Request::get("logo_tmp_file"), $this->material->getFrontImageFilePath());
+                copy(Request::get("logo_tmp_file"), $this->material->getFrontImageFilePath());
             }
             if (Request::get("delete_front_image")) {
                 $this->material['front_image_content_type'] = null;
