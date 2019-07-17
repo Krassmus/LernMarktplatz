@@ -81,7 +81,7 @@
         <div>
             <div class="author_name">
                 <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $user['username'])) ?>">
-                    <?= htmlReady($user->getFullName()) ?>
+                    <?= htmlReady($user ? $user->getFullName() : _("unbekannt")) ?>
                 </a>
             </div>
             <div class="author_host">(<?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>)</div>
