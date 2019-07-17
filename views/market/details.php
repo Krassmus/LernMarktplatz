@@ -272,12 +272,7 @@ if ($GLOBALS['perm']->have_perm("autor")) {
             _("Vollbild aktivieren"),
             "#",
             Icon::create($plugin->getPluginURL()."/assets/resize-full-screen.svg", "clickable"),
-            array('onclick' => "var p = jQuery('.lernmarktplatz_player')[0]; 
-                                if (p.requestFullscreen) { p.requestFullscreen(); } 
-                                    else if (p.msRequestFullscreen) { p.msRequestFullscreen(); } 
-                                    else if (qr.mozRequestFullScreen) { p.mozRequestFullScreen(); }
-                                    else if (p.webkitRequestFullscreen) { p.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT); }; 
-                                return false;")
+            array('onclick' => "STUDIP.Lernmarktplatz.requestFullscreen();")
         );
     }
 

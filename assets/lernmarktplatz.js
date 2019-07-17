@@ -34,6 +34,18 @@ STUDIP.Lernmarktplatz = {
             jQuery("[name=comment]").val('');
         }
         return false;
+    },
+    'requestFullscreen': function () {
+        var player = jQuery('.lernmarktplatz_player')[0];
+        if (player.requestFullscreen) {
+            player.requestFullscreen();
+        } else if (player.msRequestFullscreen) {
+            player.msRequestFullscreen();
+        } else if (player.mozRequestFullScreen) {
+            player.mozRequestFullScreen();
+        } else if (player.webkitRequestFullscreen) {
+            player.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
     }
 };
 

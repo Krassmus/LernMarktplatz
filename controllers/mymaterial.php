@@ -142,6 +142,49 @@ class MymaterialController extends PluginController {
         ));
     }
 
+    /**
+     * Render given data as csv, data is assumed to be utf-8.
+     * The first row of data may contain column titles.
+     *
+     * @param array $data       data as two dimensional array
+     * @param string $filename  download file name (optional)
+     * @param string $delimiter field delimiter char (optional)
+     * @param string $enclosure field enclosure char (optional)
+     */
+    public function render_csv($data, $filename = null, $delimiter = ';', $enclosure = '"')
+    {
+        $this->set_content_type('text/csv; charset=UTF-8');
+
+        $output = fopen('php://temp', 'rw');
+        fputs($output, "\xEF\xBB\xBF");
+
+        foreach ($data as $row) {
+            fputcsv($output, $row, $delimiter, $enclosure);
+        }
+
+        rewind($output);
+        $csv_data = stream_get_contents($output);
+        fclose($output);
+
+        if (isset($filename)) {
+            $this->response->add_header('Content-Disposition', 'attachment; ' . $this->encode_header_parameter('filename', $filename));
+        }
+
+        $this->response->add_header('Content-Length', strlen($csv_data));
+
+        return $this->render_text($csv_data);
+    }
+
+    protected function encode_header_parameter($name, $value) {
+        if (preg_match('/[\200-\377]/', $value)) {
+            // use RFC 5987 encoding (ext-parameter)
+            return $name . "*=UTF-8''" . rawurlencode($value);
+        } else {
+            // use RFC 2616 encoding (quoted-string)
+            return $name . '="' . addslashes($value) . '"';
+        }
+    }
+
     protected function getFolderStructure($folder) {
         $structure = array();
         foreach (scandir($folder) as $file) {
