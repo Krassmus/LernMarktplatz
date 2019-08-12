@@ -104,8 +104,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
         $config['has_many']['reviews'] = array(
             'class_name' => 'LernmarktplatzReview',
             'order_by' => 'ORDER BY mkdate DESC',
-            'on_delete' => 'delete',
-            'on_store' => 'store',
+            'on_delete' => 'delete'
         );
         $config['serialized_fields']['structure'] = 'JSONArrayObject';
         parent::configure($config);
@@ -220,6 +219,11 @@ class LernmarktplatzMaterial extends SimpleORMap {
     public function isVideo()
     {
         return stripos($this['content_type'], "video") === 0;
+    }
+
+    public function isAudio()
+    {
+        return stripos($this['content_type'], "audio") === 0;
     }
 
     public function isPDF()

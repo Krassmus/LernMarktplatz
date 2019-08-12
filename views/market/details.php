@@ -17,10 +17,22 @@
     <? LernmarktplatzDownloadcounter::addCounter($material->id) ?>
 <? elseif ($material->isVideo()) : ?>
     <video controls
-            <?= $material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : "" ?>
+        <?= $material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : "" ?>
            crossorigin="anonymous"
            src="<?= htmlReady($url) ?>"
            class="lernmarktplatz_player"></video>
+<? elseif ($material->isAudio()) : ?>
+    <div>
+        <a href="<?= htmlReady($url) ?>" onClick="var player = jQuery('#audioplayer')[0]; if (player.paused == false) { player.pause(); } else { player.play(); }; return false;">
+            <img src="<?= htmlReady($material->getLogoURL()) ?>" class="lernmarktplatz_player">
+        </a>
+    </div>
+    <div style="text-align: center;">
+        <audio controls
+               id="audioplayer"
+               crossorigin="anonymous"
+               src="<?= htmlReady($url) ?>"></audio>
+    </div>
 <? elseif ($material->isPDF()) : ?>
     <iframe src="<?= htmlReady($url) ?>"
             class="lernmarktplatz_player"></iframe>
