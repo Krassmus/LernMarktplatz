@@ -9,7 +9,7 @@ class MarketController extends PluginController {
             _("Lernmaterialien"),
             _("Übungszettel, Musterlösungen, Vorlesungsmitschriften oder gar Folien, selbsterstellte Lernkarteikarten oder alte     Klausuren. Das alles wird einmal erstellt und dann meist vergessen. Auf dem Lernmaterialienmarktplatz bleiben sie     erhalten. Jeder kann was hochladen und jeder kann alles herunterladen. Alle Inhalte hier sind frei verfügbar für jeden.")
         );
-        $search_widget = new SearchWidget(PluginEngine::getURL($this->plugin, array(), "market/overview"));
+        $search_widget = new SearchWidget(PluginEngine::getURL($this->plugin, array(), "market/search"));
         $search_widget->addNeedle(
             Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH,
             "search",
@@ -50,8 +50,6 @@ class MarketController extends PluginController {
                 $tag_subtags_number
             );
             $this->materialien = LernmarktplatzMaterial::findByTagHash($tag_to_search_for);
-        } elseif(Request::get("search")) {
-            $this->materialien = LernmarktplatzMaterial::findByText(Request::get("search"));
         } elseif(Request::get("tag")) {
             $this->materialien = LernmarktplatzMaterial::findByTag(Request::get("tag"));
         } else {
@@ -97,33 +95,6 @@ class MarketController extends PluginController {
         $output['materials'] = $this->render_template_as_string("market/_materials");
 
         $this->render_json($output);
-    }
-
-    public function type_action($type)
-    {
-        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
-            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
-            : "";
-        if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
-            Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
-        }
-        switch ($type) {
-            case "audio":
-                $this->materialien = LernmarktplatzMaterial::findBySQL("content_type LIKE 'audio/%'");
-                break;
-            case "video":
-                $this->materialien = LernmarktplatzMaterial::findBySQL("content_type LIKE 'video/%'");
-                break;
-            case "presentation":
-                $this->materialien = LernmarktplatzMaterial::findBySQL("content_type IN ('application/pdf', 'application/x-iwork-keynote-sffkey', 'application/vnd.apple.keynote', 'application/vnd.oasis.opendocument.presentation', 'application/vnd.oasis.opendocument.presentation-template') OR content_type LIKE 'application/vnd.openxmlformats-officedocument.presentationml.%' OR content_type LIKE 'application/vnd.ms-powerpoint%'");
-                break;
-            case "learningmodules":
-                $this->materialien = LernmarktplatzMaterial::findBySQL("player_url IS NOT NULL AND player_url != ''");
-                break;
-            default:
-                throw new Exception("Kein gültiger Typ angegeben.");
-        }
-
     }
 
     public function search_action()
