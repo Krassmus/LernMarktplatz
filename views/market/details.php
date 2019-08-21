@@ -71,6 +71,34 @@
     </div>
 <? endif ?>
 
+<? if ($material['difficulty_start'] != 1 || $material['difficulty_end'] != 12) : ?>
+    <div style="margin-top: 13px;">
+        <?= _("Niveau") ?>
+        <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: grey;">
+            <div><?= _("Kindergarten") ?></div>
+            <div><?= _("Experte") ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <? for ($i = 1; $i <= 12; $i++) : ?>
+                <div><?= ($i < 10 ? "&nbsp;" : "").$i ?></div>
+            <? endfor ?>
+        </div>
+        <div id="difficulty_slider" style="margin-left: 5px; margin-right: 9px;"></div>
+
+        <script>
+            jQuery(function () {
+                jQuery("#difficulty_slider").slider({
+                    range: true,
+                    min: 1,
+                    max: 12,
+                    disabled: true,
+                    values: [<?= htmlReady($material['difficulty_start']) ?>, <?= htmlReady($material['difficulty_end']) ?>]
+                });
+            });
+        </script>
+    </div>
+<? endif ?>
+
 <h2><?= _("Zum Autor") ?></h2>
 <div class="author_information">
     <? if ($material['host_id']) : ?>

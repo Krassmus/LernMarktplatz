@@ -1,22 +1,22 @@
 <? if (!Request::get("tags") && !Request::get("search") && !Request::get("tag")) : ?>
     <div class="shortcuts file_select_possibilities">
-        <a href="<?= PluginEngine::getLink($plugin, array(), "market/type/audio") ?>">
+        <a href="<?= PluginEngine::getLink($plugin, array('type' => "audio"), "market/search") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/audio.svg", "clickable")->asImg(50) ?>
             <?= _("Audio") ?>
         </a>
-        <a href="<?= PluginEngine::getLink($plugin, array(), "market/type/video") ?>">
+        <a href="<?= PluginEngine::getLink($plugin, array('type' => "video"), "market/type/video") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/video.svg", "clickable")->asImg(50) ?>
             <?= _("Videos") ?>
         </a>
-        <a href="<?= PluginEngine::getLink($plugin, array(), "market/type/presentation") ?>">
+        <a href="<?= PluginEngine::getLink($plugin, array('type' => "presentation"), "market/search") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/presentation.svg", "clickable")->asImg(50) ?>
             <?= _("Folien") ?>
         </a>
-        <a href="<?= PluginEngine::getLink($plugin, array(), "market/type/learningmodules") ?>">
+        <a href="<?= PluginEngine::getLink($plugin, array('type' => "learningmodules"), "market/search") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/eLearning.svg", "clickable")->asImg(50) ?>
             <?= _("Lernmodule") ?>
         </a>
-        <a href="<?= PluginEngine::getLink($plugin, array('search' => "%"), "market/overview") ?>">
+        <a href="<?= PluginEngine::getLink($plugin, array('search' => "%"), "market/search") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/dateien.svg", "clickable")->asImg(50) ?>
             <?= _("Alles") ?>
         </a>
@@ -38,16 +38,15 @@
         <?= MessageBox::info(_("Keine Materialien gefunden")) ?>
     <? endif ?>
 <? elseif ($materialien) : ?>
+
+    <?= $this->render_partial("market/_searcharea.php") ?>
+
     <ul class="material_overview mainlist">
         <?= $this->render_partial("market/_materials.php", compact("material", "plugin")) ?>
     </ul>
 <? else : ?>
-    <form action="<?= PluginEngine::getLink($plugin, array(), "market/overview") ?>" method="GET" style="text-align: center; margin: 30px;">
-        <div>
-            <input type="text" name="search" value="" style="line-height: 130%; display: inline-block; border: 1px solid #28497c; vertical-align: middle; padding: 5px 5px; font-size: 14px;" placeholder="<?= htmlReady(Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH) ?>">
-            <?= \Studip\Button::create(_("Suchen")) ?>
-        </div>
-    </form>
+
+    <?= $this->render_partial("market/_searcharea.php") ?>
 
     <? if (count($best_nine_tags)) : ?>
         <div class="material_navigation">

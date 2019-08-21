@@ -1,15 +1,22 @@
 <table class="default">
     <thead>
     <tr>
+        <th width="20px"></th>
         <th><?= _("Material") ?></th>
         <th><?= _("Bewertung") ?></th>
-        <th></th>
+        <th><?= _("Downloads") ?></th>
+        <th class="actions"><?= _("Aktion") ?></th>
     </tr>
     </thead>
     <tbody>
     <? $starwidth = "20px" ?>
     <? foreach ($materialien as $material) : ?>
         <tr>
+            <td>
+                <? if ($material['draft']) : ?>
+                    <?= Icon::create("lock-locked", "info")->asImg(20, ['class' => "text-bottom"]) ?>
+                <? endif ?>
+            </td>
             <td>
                 <a href="<?= PluginEngine::getLink($plugin, array(), "market/details/".$material->getId()) ?>">
                     <?= htmlReady($material['name']) ?>
@@ -37,6 +44,11 @@
                 <? endif ?>
             </td>
             <td>
+                <a href="<?= PluginEngine::getLink($plugin, array(), "mymaterial/statistics/".$material->getId()) ?>" data-dialog>
+                    <?= LernmarktplatzDownloadcounter::countBySQL("material_id = ?", array($material->getId())) ?>
+                </a>
+            </td>
+            <td class="actions">
                 <? if ($material['user_id'] === $GLOBALS['user']->id) : ?>
                     <a href="<?= PluginEngine::getLink($plugin, array(), "mymaterial/edit/".$material->getId()) ?>" data-dialog title="<?= _("Lernmaterial bearbeiten") ?>">
                         <?= Icon::create("edit", "clickable")->asImg(20) ?>

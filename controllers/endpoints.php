@@ -312,11 +312,15 @@ class EndpointsController extends PluginController {
      */
     public function download_action($material_id)
     {
+        $this->material = new LernmarktplatzMaterial($material_id);
+        if ($this->material['draft']) {
+            throw AccessDeniedException();
+        }
+
         while (ob_get_level()) {
             ob_end_clean();
         }
         page_close();
-        $this->material = new LernmarktplatzMaterial($material_id);
 
         $filesize = filesize($this->material->getFilePath());
         header("Accept-Ranges: bytes");

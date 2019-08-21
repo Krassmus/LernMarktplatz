@@ -4,7 +4,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
 
     static public function findAll()
     {
-        return self::findBySQL("1=1");
+        return self::findBySQL("draft = '0'");
     }
 
     static public function findMine($user_id = null)
@@ -22,6 +22,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 INNER JOIN lernmarktplatz_tags_material USING (material_id)
                 INNER JOIN lernmarktplatz_tags USING (tag_hash)
             WHERE lernmarktplatz_tags.name = :tag
+                AND lernmarktplatz_material.draft = '0'
             GROUP BY lernmarktplatz_material.material_id
             ORDER BY lernmarktplatz_material.mkdate DESC
         ");
@@ -42,10 +43,13 @@ class LernmarktplatzMaterial extends SimpleORMap {
             FROM lernmarktplatz_material
                 LEFT JOIN lernmarktplatz_tags_material USING (material_id)
                 LEFT JOIN lernmarktplatz_tags USING (tag_hash)
-            WHERE lernmarktplatz_material.name LIKE :text
-                OR description LIKE :text
-                OR short_description LIKE :text
-                OR lernmarktplatz_tags.name LIKE :text
+            WHERE (
+                    lernmarktplatz_material.name LIKE :text
+                    OR description LIKE :text
+                    OR short_description LIKE :text
+                    OR lernmarktplatz_tags.name LIKE :text
+                )
+                AND lernmarktplatz_material.draft = '0'
             GROUP BY lernmarktplatz_material.material_id
             ORDER BY lernmarktplatz_material.mkdate DESC
         ");
@@ -66,7 +70,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
         if ($tag) {
             self::fetchRemoteSearch($tag['name'], true);
         }
-        return self::findBySQL("INNER JOIN lernmarktplatz_tags_material USING (material_id) WHERE lernmarktplatz_tags_material.tag_hash = ?", array($tag_hash));
+        return self::findBySQL("INNER JOIN lernmarktplatz_tags_material USING (material_id) WHERE lernmarktplatz_tags_material.tag_hash = ? AND draft = '0'", array($tag_hash));
     }
 
     static public function getFileDataPath() {

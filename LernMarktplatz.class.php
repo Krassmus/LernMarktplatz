@@ -9,6 +9,7 @@ require_once __DIR__."/lib/LernmarktplatzReview.php";
 require_once __DIR__."/lib/LernmarktplatzComment.php";
 require_once __DIR__."/lib/LernmarktplatzLog.php";
 require_once __DIR__."/lib/LernmarktplatzDownloadcounter.php";
+require_once __DIR__."/lib/SQLQuery.php";
 
 //These two HTTP-headers are non-conformant custom HTTP-headers for requests
 $GLOBALS['LERNMARKTPLATZ_HEADER_PUBLIC_KEY_HASH'] = "Publickey-Hash";    //MD5-hash of the armored public key of the server
@@ -24,19 +25,19 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
                 ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
                 : "";
             if (Navigation::hasItem($main_navigation)) {
-                $topicon = new Navigation(_("Lernmaterialien"), PluginEngine::getURL($this, array(), "market/overview"));
+                $topicon = new Navigation(Config::get()->LERNMARKTPLATZ_TITLE, PluginEngine::getURL($this, array(), "market/overview"));
                 if (!$main_navigation) {
                     $topicon->setImage(Icon::create('service', 'navigation'));
                 }
                 Navigation::addItem($main_navigation . "/lernmarktplatz", $topicon);
-                Navigation::addItem($main_navigation . "/lernmarktplatz/overview", new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "market/overview")));
+                Navigation::addItem($main_navigation . "/lernmarktplatz/overview", new Navigation(Config::get()->LERNMARKTPLATZ_TITLE, PluginEngine::getURL($this, array(), "market/overview")));
                 if ($GLOBALS['perm']->have_perm("autor")) {
                     Navigation::addItem($main_navigation . "/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
                 }
             }
         }
         if ($GLOBALS['perm']->have_perm("root")) {
-            $tab = new Navigation(_("Lernmarktplatz"), PluginEngine::getURL($this, array(), "admin/hosts"));
+            $tab = new Navigation(Config::get()->LERNMARKTPLATZ_TITLE, PluginEngine::getURL($this, array(), "admin/hosts"));
             Navigation::addItem("/admin/config/lernmarktplatz", $tab);
         }
         if (UpdateInformation::isCollecting()
@@ -156,7 +157,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      * @return null|Navigation with title and image
      */
     public function getFileSelectNavigation() {
-        $nav = new Navigation(_("Lernmaterialien"));
+        $nav = new Navigation(Config::get()->LERNMARKTPLATZ_TITLE);
         $nav->setImage(Icon::create('service', 'clickable'));
         return $nav;
     }

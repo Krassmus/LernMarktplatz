@@ -15,6 +15,12 @@
     </label>
 
     <label>
+        <input type="hidden" name="data[draft]" value="0">
+        <input type="checkbox" name="data[draft]" value="1"<?= $material['draft'] ? " checked" : "" ?>>
+        <?= _("Entwurf (nicht veröffentlicht)") ?>
+    </label>
+
+    <label>
         <?= _("Vorschau-URL (optional)") ?>
         <input type="text" name="data[player_url]" value="<?= htmlReady($material['player_url'] ?: $template['player_url']) ?>">
     </label>
@@ -39,6 +45,39 @@
                 <input type="text" name="tags[]" value="<?= htmlReady($tag['name']) ?>" style="max-width: calc(100% - 30px);">
             </li>
         </ul>
+    </div>
+
+    <div style="margin-top: 13px;">
+        <?= _("Niveau") ?>
+
+        <input type="hidden" id="difficulty_start" name="data[difficulty_start]" value="<?= htmlReady($material['difficulty_start']) ?>">
+        <input type="hidden" id="difficulty_end" name="data[difficulty_end]" value="<?= htmlReady($material['difficulty_end']) ?>">
+
+        <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: grey;">
+            <div><?= _("Kindergarten") ?></div>
+            <div><?= _("Experte") ?></div>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <? for ($i = 1; $i <= 12; $i++) : ?>
+                <div><?= ($i < 10 ? "&nbsp;" : "").$i ?></div>
+            <? endfor ?>
+        </div>
+        <div id="difficulty_slider_edit" style="margin-left: 5px; margin-right: 9px;"></div>
+
+        <script>
+            jQuery(function () {
+                jQuery("#difficulty_slider_edit").slider({
+                    range: true,
+                    min: 1,
+                    max: 12,
+                    values: [jQuery("#difficulty_start").val(), jQuery("#difficulty_end").val()],
+                    change: function (event, ui) {
+                        jQuery("#difficulty_start").val(ui.values[0]);
+                        jQuery("#difficulty_end").val(ui.values[1]);
+                    }
+                });
+            });
+        </script>
     </div>
 
     <? if ($template['tmp_file']) : ?>

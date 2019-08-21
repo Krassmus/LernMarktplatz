@@ -29,11 +29,6 @@ class MarketController extends PluginController {
         $tag_matrix_entries_number = 9;
         $tag_subtags_number = 6;
 
-        if (Request::get("disable_maininfo")) {
-            UserConfig::get($GLOBALS['user']->id)->store("LERNMARKTPLATZ_DISABLE_MAININFO", 1);
-            $this->redirect("market/overview");
-        }
-
         if (Request::get("tags")) {
             $tags = $this->tag_history = explode(",", Request::get("tags"));
             $this->without_tags = array();
@@ -62,7 +57,7 @@ class MarketController extends PluginController {
         } else {
             $this->best_nine_tags = LernmarktplatzTag::findBest($tag_matrix_entries_number);
         }
-        $this->new_ones = LernmarktplatzMaterial::findBySQL("1=1 ORDER BY mkdate DESC LIMIT 3");
+        $this->new_ones = LernmarktplatzMaterial::findBySQL("draft = '0' ORDER BY mkdate DESC LIMIT 3");
     }
 
     public function matrixnavigation_action()
@@ -128,6 +123,62 @@ class MarketController extends PluginController {
             default:
                 throw new Exception("Kein gültiger Typ angegeben.");
         }
+
+    }
+
+    public function search_action()
+    {
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
+            Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
+        }
+        if (Request::get("search") || Request::get("type") || Request::get("difficulty")) {
+            $search = \Lernmarktplatz\SQLQuery::table("lernmarktplatz_material", "lernmarktplatz_material")
+                ->where("draft = '0'")
+                ->orderBy("mkdate DESC");
+            if (Request::get("type")) {
+                switch (Request::get("type")) {
+                    case "audio":
+                        $search->where("content_type LIKE 'audio/%'");
+                        break;
+                    case "video":
+                        $search->where("content_type LIKE 'video/%'");
+                        break;
+                    case "presentation":
+                        $search->where("content_type IN ('application/pdf', 'application/x-iwork-keynote-sffkey', 'application/vnd.apple.keynote', 'application/vnd.oasis.opendocument.presentation', 'application/vnd.oasis.opendocument.presentation-template') OR content_type LIKE 'application/vnd.openxmlformats-officedocument.presentationml.%' OR content_type LIKE 'application/vnd.ms-powerpoint%'");
+                        break;
+                    case "learningmodules":
+                        $search->where("player_url IS NOT NULL AND player_url != ''");
+                        break;
+                    default:
+                        throw new Exception("Kein gültiger Typ angegeben.");
+                }
+            }
+            if (Request::get("search")) {
+                //Tags
+                $search->where(
+                    "textsearch",
+                    "(name LIKE :search OR description LIKE :search OR short_description LIKE :search)",
+                    array('search' => '%'.Request::get("search").'%')
+                );
+            }
+            if (Request::get("difficulty")) {
+                $difficulty = explode(",", Request::get("difficulty"));
+                $search->where(
+                    "difficulty",
+                    "((difficulty_start <= :difficulty_start AND difficulty_end >= :difficulty_start) OR (difficulty_start <= :difficulty_end AND difficulty_end >= :difficulty_end) OR (difficulty_start <= :difficulty_start AND difficulty_end >= :difficulty_end) OR (difficulty_start >= :difficulty_start AND difficulty_end <= :difficulty_end))",
+                    array('difficulty_start' => $difficulty[0], 'difficulty_end' => $difficulty[1])
+                );
+            }
+
+            $this->materialien = $search->fetchAll("LernmarktplatzMaterial");
+        }
+    }
+
+    public function adjust_filter_action()
+    {
 
     }
 
