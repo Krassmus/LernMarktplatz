@@ -145,6 +145,8 @@ class MarketController extends PluginController {
             }
 
             $this->materialien = $search->fetchAll("LernmarktplatzMaterial");
+        } else {
+            $this->redirect("market/overview");
         }
     }
 
