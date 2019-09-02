@@ -237,11 +237,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
 
     protected function getFileEnding()
     {
-        if (strpos(".", $this['filename']) !== false) {
-            return strtolower(substr($this['filename'], strpos(".", $this['filename'])));
-        } else {
-            return "";
-        }
+        return pathinfo($this["filename"], PATHINFO_EXTENSION);
     }
 
     public function isPresentation()
