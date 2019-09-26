@@ -164,6 +164,29 @@ class MarketController extends PluginController {
             Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         }
         $this->material = new LernmarktplatzMaterial($material_id);
+
+        //OpenGraph tags:
+        PageLayout::addHeadElement("meta", array('og:title' => $this->material['name']));
+
+        $base = URLHelper::setBaseURL($GLOBALS['ABSOLUTE_URI_STUDIP']);
+        PageLayout::addHeadElement("meta", array('og:url' => PluginEngine::getLink($this->plugin, array(), "market/details/".$this->material->getId())));
+        PageLayout::addHeadElement("meta", array('og:description' => $this->material['short_description']));
+        PageLayout::addHeadElement("meta", array('og:image' => $this->material->getLogoURL()));
+        if ($this->material->isVideo()) {
+            PageLayout::addHeadElement("meta", array('og:type' => "video"));
+            $url = $this->material['host_id'] ? $this->material->host->url."download/".$this->material['foreign_material_id'] : URLHelper::getURL("plugins.php/lernmarktplatz/market/download/".$this->material->getId());
+            PageLayout::addHeadElement("meta", array('og:video' => $url));
+            PageLayout::addHeadElement("meta", array('og:video:type' => $this->material['content_type']));
+        } elseif($this->material->isAudio()) {
+            PageLayout::addHeadElement("meta", array('og:type' => "audio"));
+            $url = $this->material['host_id'] ? $this->material->host->url."download/".$this->material['foreign_material_id'] : URLHelper::getURL("plugins.php/lernmarktplatz/market/download/".$this->material->getId());
+            PageLayout::addHeadElement("meta", array('og:audio' => $url));
+            PageLayout::addHeadElement("meta", array('og:audio:type' => $this->material['content_type']));
+        } else {
+            PageLayout::addHeadElement("meta", array('og:type' => "article"));
+        }
+        URLHelper::setBaseURL($base);
+
         if ($this->material['host_id']) {
             $success = $this->material->fetchData();
             if ($success === false) {
@@ -177,6 +200,17 @@ class MarketController extends PluginController {
         }
         $this->material['rating'] = $this->material->calculateRating();
         $this->material->store();
+    }
+
+    public function embed_action($material_id)
+    {
+        $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
+            ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
+            : "";
+        if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
+            Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
+        }
+        $this->material = new LernmarktplatzMaterial($material_id);
     }
 
     public function review_action($material_id = null)

@@ -61,6 +61,39 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             }
             UpdateInformation::setInformation("Lernmarktplatz.update", $output);
         }
+        StudipFormat::addStudipMarkup('oerembedder','\[oermaterial\](.*?)(?=\s|$)', null, 'LernMarktplatz::embedOERMaterial', 'links');
+    }
+
+    static public function embedOERMaterial($markup, $matches, $contents)
+    {
+        $id = $matches[1];
+        $material = LernmarktplatzMaterial::find($id);
+        $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : URLHelper::getURL("plugins.php/lernmarktplatz/market/download/".$material->getId());
+        if ($material['player_url']) {
+            LernmarktplatzDownloadcounter::addCounter($material->id);
+            return "<iframe src=\"". htmlReady($material['player_url']). "\" style=\"width: 100%; height: 70vh; border: none;\"></iframe>";
+        } elseif ($material->isVideo()) {
+            return "<video controls ".($material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : ""). "
+               crossorigin=\"anonymous\"
+               src=\"". htmlReady($url) ."\"
+               style=\"width: 100%; height: 70vh; border: none;\"></video>";
+        } elseif ($material->isAudio()) {
+            return "<div>
+                        <a href=\"". htmlReady($url) ."\" onClick=\"var player = jQuery('#audioplayer')[0]; if (player.paused == false) { player.pause(); } else { player.play(); }; return false;\">
+                            <img src=\"". htmlReady($material->getLogoURL()) ."\" class=\"lernmarktplatz_player\">
+                        </a>
+                    </div>
+                    <div style=\"text-align: center;\">
+                        <audio controls
+                               id=\"audioplayer\"
+                               crossorigin=\"anonymous\"
+                               src=\"". htmlReady($url) ."\"></audio>";
+        } elseif ($material->isPDF()) {
+            return "<iframe src=\"". htmlReady($url) ."\" style=\"width: 100%; height: 70vh; border: none;\"></iframe>";
+        } else {
+            return '<a href="'.htmlReady($url).'">'.Icon::create("service", "clickable")->asImg(16, array('class' => "text-bottom")).htmlReady($material['name']).'</a>';
+        }
+        return $material['name'];
     }
 
     function getPluginActivityTables() {

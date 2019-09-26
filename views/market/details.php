@@ -4,8 +4,8 @@
 <? if ($url && $material['filename']) : ?>
     <div style="text-align: center;">
         <a class="button download_link" href="<?= htmlReady($url) ?>" title="<?= _("Download") ?>">
-            <?= Icon::create("download", "clickable")->asImg(35, array('class' => "blue")) ?>
-            <?= Icon::create("download", "info_alt")->asImg(35, array('class' => "whitebutton")) ?>
+            <?= Icon::create("download", "clickable")->asImg(23, array('class' => "blue")) ?>
+            <?= Icon::create("download", "info_alt")->asImg(23, array('class' => "whitebutton")) ?>
             <div class="filename"><?= htmlReady($material['filename']) ?></div>
         </a>
     </div>
@@ -315,6 +315,12 @@ if ($GLOBALS['perm']->have_perm("autor")) {
             array('onclick' => "STUDIP.Lernmarktplatz.requestFullscreen();")
         );
     }
+    $actions->addLink(
+        _("Teilen und einbetten"),
+        PluginEngine::getURL($plugin, array(), "market/embed/".$material->getId()),
+        Icon::create("code", "clickable"),
+        array('data-dialog' => "1")
+    );
 
     if (!$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material['user_id'] === $GLOBALS['user']->id)) {
         $actions->addLink(
