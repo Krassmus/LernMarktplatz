@@ -4,7 +4,7 @@
             <?= Icon::create($plugin->getPluginURL()."/assets/audio.svg", "clickable")->asImg(50) ?>
             <?= _("Audio") ?>
         </a>
-        <a href="<?= PluginEngine::getLink($plugin, array('type' => "video"), "market/type/video") ?>">
+        <a href="<?= PluginEngine::getLink($plugin, array('type' => "video"), "market/search") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/video.svg", "clickable")->asImg(50) ?>
             <?= _("Videos") ?>
         </a>

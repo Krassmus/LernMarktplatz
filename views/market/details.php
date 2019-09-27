@@ -312,7 +312,7 @@ if ($GLOBALS['perm']->have_perm("autor")) {
             _("Vollbild aktivieren"),
             "#",
             Icon::create($plugin->getPluginURL()."/assets/resize-full-screen.svg", "clickable"),
-            array('onclick' => "STUDIP.Lernmarktplatz.requestFullscreen();")
+            array('onclick' => "STUDIP.Lernmarktplatz.requestFullscreen('.lernmarktplatz_player');")
         );
     }
     $actions->addLink(

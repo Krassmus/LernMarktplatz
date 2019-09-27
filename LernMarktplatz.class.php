@@ -61,6 +61,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             }
             UpdateInformation::setInformation("Lernmarktplatz.update", $output);
         }
+        $this->addStylesheet("assets/lernmarktplatz.less");
+        PageLayout::addScript($this->getPluginURL()."/assets/lernmarktplatz.js");
         StudipFormat::addStudipMarkup('oerembedder','\[oermaterial\](.*?)(?=\s|$)', null, 'LernMarktplatz::embedOERMaterial', 'links');
     }
 
@@ -69,16 +71,52 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
         $id = $matches[1];
         $material = LernmarktplatzMaterial::find($id);
         $url = $material['host_id'] ? $material->host->url."download/".$material['foreign_material_id'] : URLHelper::getURL("plugins.php/lernmarktplatz/market/download/".$material->getId());
-        if ($material['player_url']) {
-            LernmarktplatzDownloadcounter::addCounter($material->id);
-            return "<iframe src=\"". htmlReady($material['player_url']). "\" style=\"width: 100%; height: 70vh; border: none;\"></iframe>";
+
+        $actions = ActionMenu::get();
+        if ($material['filename']) {
+            $actions->addLink(
+                $url,
+                sprintf(_("Download %s"), $material['name']),
+                Icon::create("download", "clickable"),
+                []
+            );
+        }
+        $actions->addLink(
+            URLHelper::getURL("plugins.php/lernmarktplatz/market/details/".$id),
+            _("Quelle anzeigen"),
+            Icon::create("service", "clickable"),
+            []
+        );
+        $right_link = '<div style="text-align: right;">';
+        $right_link .= '<a href="'.URLHelper::getLink("plugins.php/lernmarktplatz/market/details/".$id).'">'.Icon::create("service", "clickable")->asImg(16, array('class' => "text-bottom")).htmlReady($material['name']).'</a>';
+
+
+        if ($material['player_url'] || $material->isPDF()) {
+            if ($material['player_url']) {
+                LernmarktplatzDownloadcounter::addCounter($material->id);
+                $url = $material['player_url'];
+            }
+            $htmlid = "oercampus_".$material->id."_".uniqid();
+            $output = "<iframe id='".$htmlid."' src=\"". htmlReady($url). "\" style=\"width: 100%; height: 70vh; border: none;\"></iframe>";
+            $actions->addLink(
+                "#",
+                _("Vollbild"),
+                Icon::create(PluginManager::getInstance()->getPlugin("LernMarktplatz")->getPluginURL()."/assets/resize-full-screen.svg"),
+                ['onClick' => "STUDIP.Lernmarktplatz.requestFullscreen('#".$htmlid."'); return false;"]
+            );
+            $right_link .= $actions->render();
+            $right_link .= '</div>';
+            $output .= $right_link;
+            return $output;
         } elseif ($material->isVideo()) {
-            return "<video controls ".($material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : ""). "
+            $output = "<video controls ".($material['front_image_content_type'] ? 'poster="'.htmlReady($material->getLogoURL()).'"' : ""). "
                crossorigin=\"anonymous\"
                src=\"". htmlReady($url) ."\"
                style=\"width: 100%; height: 70vh; border: none;\"></video>";
+            $output .= $right_link;
+            return $output;
         } elseif ($material->isAudio()) {
-            return "<div>
+            $output = "<div>
                         <a href=\"". htmlReady($url) ."\" onClick=\"var player = jQuery('#audioplayer')[0]; if (player.paused == false) { player.pause(); } else { player.play(); }; return false;\">
                             <img src=\"". htmlReady($material->getLogoURL()) ."\" class=\"lernmarktplatz_player\">
                         </a>
@@ -88,10 +126,13 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
                                id=\"audioplayer\"
                                crossorigin=\"anonymous\"
                                src=\"". htmlReady($url) ."\"></audio>";
-        } elseif ($material->isPDF()) {
-            return "<iframe src=\"". htmlReady($url) ."\" style=\"width: 100%; height: 70vh; border: none;\"></iframe>";
+            $output .= $right_link;
+            return $output;
         } else {
-            return '<a href="'.htmlReady($url).'">'.Icon::create("service", "clickable")->asImg(16, array('class' => "text-bottom")).htmlReady($material['name']).'</a>';
+            $output = '<a href="'.htmlReady($url).'">'.Icon::create("service", "clickable")->asImg(16, array('class' => "text-bottom")).htmlReady($material['name']).'</a>';
+
+            $output .= $actions->render();
+            return $output;
         }
         return $material['name'];
     }
@@ -118,13 +159,6 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             )
         );
     }
-
-    public function perform($unconsumed_path) {
-        $this->addStylesheet("assets/lernmarktplatz.less");
-        PageLayout::addScript($this->getPluginURL()."/assets/lernmarktplatz.js");
-        parent::perform($unconsumed_path);
-    }
-
 
     public function get_file_icon($ext) {
         $extension = strtolower($ext);
