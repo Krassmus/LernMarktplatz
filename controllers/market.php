@@ -9,17 +9,22 @@ class MarketController extends PluginController {
             _("Lernmaterialien"),
             _("Übungszettel, Musterlösungen, Vorlesungsmitschriften oder gar Folien, selbsterstellte Lernkarteikarten oder alte     Klausuren. Das alles wird einmal erstellt und dann meist vergessen. Auf dem Lernmaterialienmarktplatz bleiben sie     erhalten. Jeder kann was hochladen und jeder kann alles herunterladen. Alle Inhalte hier sind frei verfügbar für jeden.")
         );
-        $search_widget = new SearchWidget(PluginEngine::getURL($this->plugin, array(), "market/search"));
-        $search_widget->addNeedle(
-            Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH,
-            "search",
-            Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH
-        );
-        Sidebar::Get()->addWidget($search_widget);
+        if ($GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS)) {
+            $search_widget = new SearchWidget(PluginEngine::getURL($this->plugin, array(), "market/search"));
+            $search_widget->addNeedle(
+                Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH,
+                "search",
+                Config::get()->LERNMARKTPLATZ_PLACEHOLDER_SEARCH
+            );
+            Sidebar::Get()->addWidget($search_widget);
+        }
         PageLayout::setTitle(_("Lernmaterialien"));
     }
 
     public function overview_action() {
+        if (!$GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS)) {
+            throw new AccessDeniedException();
+        }
         $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
             ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
             : "";
