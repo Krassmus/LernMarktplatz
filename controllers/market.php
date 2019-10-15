@@ -67,6 +67,9 @@ class MarketController extends PluginController {
     {
         $tag_matrix_entries_number = 9;
         $tag_subtags_number = 6;
+        if (!$GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS)) {
+            throw new AccessDeniedException();
+        }
 
         if (!Request::get("tags")) {
             $this->topics = LernmarktplatzTag::findBest($tag_matrix_entries_number);
@@ -104,6 +107,9 @@ class MarketController extends PluginController {
 
     public function search_action()
     {
+        if (!$GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS)) {
+            throw new AccessDeniedException();
+        }
         $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
             ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
             : "";
@@ -157,7 +163,9 @@ class MarketController extends PluginController {
 
     public function adjust_filter_action()
     {
-
+        if (!$GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS)) {
+            throw new AccessDeniedException();
+        }
     }
 
     public function details_action($material_id)
@@ -215,11 +223,15 @@ class MarketController extends PluginController {
         if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
             Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         }
+        
         $this->material = new LernmarktplatzMaterial($material_id);
     }
 
     public function review_action($material_id = null)
     {
+        if (!$GLOBALS['perm']->have_perm("autor")) {
+            throw new AccessDeniedException();
+        }
         $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
             ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
             : "";
@@ -252,7 +264,7 @@ class MarketController extends PluginController {
             Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         }
         $this->review = new LernmarktplatzReview($review_id);
-        if (Request::isPost() && Request::get("comment")) {
+        if (Request::isPost() && $GLOBALS['perm']->have_perm("autor") && Request::get("comment")) {
             $comment = new LernmarktplatzComment();
             $comment['review_id'] = $review_id;
             $comment['comment'] = Request::get("comment");
@@ -264,7 +276,7 @@ class MarketController extends PluginController {
     public function comment_action($review_id)
     {
         $this->review = new LernmarktplatzReview($review_id);
-        if (Request::isPost() && Request::get("comment")) {
+        if (Request::isPost() && $GLOBALS['perm']->have_perm("autor") && Request::get("comment")) {
             $this->comment = new LernmarktplatzComment();
             $this->comment['review_id'] = $review_id;
             $this->comment['comment'] = Request::get("comment");
@@ -350,6 +362,9 @@ class MarketController extends PluginController {
 
     public function add_to_course_action($material_id)
     {
+        if (!$GLOBALS['perm']->have_perm("autor")) {
+            throw new AccessDeniedException();
+        }
         $this->material = new LernmarktplatzMaterial($material_id);
         if (Request::isPost() && Request::option("seminar_id") && $GLOBALS['perm']->have_studip_perm("autor", Request::option("seminar_id"))) {
             $course = new Course(Request::option("seminar_id"));

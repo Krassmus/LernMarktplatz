@@ -277,8 +277,10 @@
 
 <?
 Sidebar::Get()->setImage($plugin->getPluginURL()."/assets/sidebar-service.png");
+
+$actions = new ActionsWidget();
+$GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS);
 if ($GLOBALS['perm']->have_perm("autor")) {
-    $actions = new ActionsWidget();
     $actions->addLink(
         _("Eigenes Lernmaterial hochladen"),
         PluginEngine::getURL($plugin, array(), "mymaterial/edit"),
@@ -293,43 +295,45 @@ if ($GLOBALS['perm']->have_perm("autor")) {
             array('data-dialog' => "1")
         );
     }
-    if ($url && $material['filename']) {
-        $actions->addLink(
-            _("Herunterladen"),
-            $url,
-            Icon::create("download", "clickable")
-        );
-    }
+}
+if ($url && $material['filename']) {
+    $actions->addLink(
+        _("Herunterladen"),
+        $url,
+        Icon::create("download", "clickable")
+    );
+}
+if ($GLOBALS['perm']->have_perm("autor")) {
     $actions->addLink(
         _("Zu Veranstaltung hinzufügen"),
-        PluginEngine::getURL($plugin, array(), "market/add_to_course/".$material->getId()),
+        PluginEngine::getURL($plugin, array(), "market/add_to_course/" . $material->getId()),
         Icon::create("seminar+move_down", "clickable"),
         array('data-dialog' => "1")
     );
+}
 
-    if ($material['player_url'] || $material->isVideo() || $material->isPDF()) {
-        $actions->addLink(
-            _("Vollbild aktivieren"),
-            "#",
-            Icon::create($plugin->getPluginURL()."/assets/resize-full-screen.svg", "clickable"),
-            array('onclick' => "STUDIP.Lernmarktplatz.requestFullscreen('.lernmarktplatz_player');")
-        );
-    }
+if ($material['player_url'] || $material->isVideo() || $material->isPDF()) {
     $actions->addLink(
-        _("Teilen und einbetten"),
-        PluginEngine::getURL($plugin, array(), "market/embed/".$material->getId()),
-        Icon::create("code", "clickable"),
+        _("Vollbild aktivieren"),
+        "#",
+        Icon::create($plugin->getPluginURL()."/assets/resize-full-screen.svg", "clickable"),
+        array('onclick' => "STUDIP.Lernmarktplatz.requestFullscreen('.lernmarktplatz_player');")
+    );
+}
+$actions->addLink(
+    _("Teilen und einbetten"),
+    PluginEngine::getURL($plugin, array(), "market/embed/".$material->getId()),
+    Icon::create("code", "clickable"),
+    array('data-dialog' => "1")
+);
+
+if (!$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material['user_id'] === $GLOBALS['user']->id)) {
+    $actions->addLink(
+        _("Zugriffszahlen"),
+        PluginEngine::getURL($plugin, array(), "mymaterial/statistics/".$material->getId()),
+        Icon::create("graph", "clickable"),
         array('data-dialog' => "1")
     );
-
-    if (!$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material['user_id'] === $GLOBALS['user']->id)) {
-        $actions->addLink(
-            _("Zugriffszahlen"),
-            PluginEngine::getURL($plugin, array(), "mymaterial/statistics/".$material->getId()),
-            Icon::create("graph", "clickable"),
-            array('data-dialog' => "1")
-        );
-    }
-
-    Sidebar::Get()->addWidget($actions);
 }
+
+Sidebar::Get()->addWidget($actions);
