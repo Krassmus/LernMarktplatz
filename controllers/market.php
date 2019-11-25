@@ -223,7 +223,7 @@ class MarketController extends PluginController {
         if (Navigation::hasItem($main_navigation."/lernmarktplatz/overview")) {
             Navigation::activateItem($main_navigation."/lernmarktplatz/overview");
         }
-        
+
         $this->material = new LernmarktplatzMaterial($material_id);
     }
 
