@@ -55,7 +55,7 @@
 
         <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: grey;">
             <div><?= _("Kindergarten") ?></div>
-            <div><?= _("Experte") ?></div>
+            <div><?= _("Aktuelle Forschung") ?></div>
         </div>
         <div style="display: flex; justify-content: space-between;">
             <? for ($i = 1; $i <= 12; $i++) : ?>
