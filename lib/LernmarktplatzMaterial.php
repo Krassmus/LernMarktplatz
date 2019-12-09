@@ -328,57 +328,11 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 }
 
                 //user:
-                $old_user_ids = $this->users->pluck("user_id");
-                $current_user_ids = [];
-                foreach ($data['users'] as $index => $userdata) {
-                    $userhost = LernmarktplatzHost::findOneBySQL("url = ?", [$userdata['host_url']]);
-                    if ($userhost->isMe()) {
-                        $user = User::find($userdata['user_id']);
-                        $materialuser = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND user_id = ? AND external_contact = '0'", [$this->getId(), $user->getId()]);
-                        if (!$materialuser) {
-                            $materialuser = new LernmarktplatzMaterialUser();
-                            $materialuser['user_id'] = $user->getId();
-                            $materialuser['material_id'] = $this->getId();
-                            $materialuser['external_contact'] = 0;
-                        }
-                        $materialuser['position'] = $index + 1;
-                        $materialuser->store();
-                        $current_user_ids[] = $user->getId();
-                    } else {
-                        $user = LernmarktplatzUser::findOneBySQL("foreign_user_id = ? AND host_id = ?", [$userdata['user_id'], $userhost->getId()]);
-                        if (!$user) {
-                            $user = new LernmarktplatzUser();
-                            $user['foreign_user_id'] = $userdata['user_id'];
-                            $user['host_id'] = $userhost->getId();
-                        }
-                        $user['name'] = $userdata['name'];
-                        $user['avatar'] = $userdata['avatar'] ?: null;
-                        $user['description'] = $userdata['description'] ?: null;
-                        $user->store();
-
-                        $materialuser = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND user_id = ? AND external_contact = '1'", [$this->getId(), $user->getId()]);
-                        if (!$materialuser) {
-                            $materialuser = new LernmarktplatzMaterialUser();
-                            $materialuser['user_id'] = $user->getId();
-                            $materialuser['material_id'] = $this->getId();
-                            $materialuser['external_contact'] = 1;
-
-                        }
-                        $materialuser['position'] = $index + 1;
-                        $materialuser->store();
-                        $current_user_ids[] = $user->getId();
-                    }
-                }
-                foreach (array_diff($old_user_ids, $current_user_ids) as $deletable_user_id) {
-                    LernmarktplatzMaterialUser::deleteBySQL("material_id = ? AND user_id = ?", [$this->getId(), $deletable_user_id]);
-                }
-
-
+                $this->setUsers($data['users']);
 
                 //material:
                 $material_data = $data['data'];
                 unset($material_data['material_id']);
-                unset($material_data['user_id']);
                 unset($material_data['mkdate']);
                 $this->setData($material_data);
                 $this->store();
@@ -435,6 +389,53 @@ class LernmarktplatzMaterial extends SimpleORMap {
             }
         }
         return true;
+    }
+
+    public function setUsers($data) {
+        $old_user_ids = $this->users->pluck("user_id");
+        $current_user_ids = [];
+        foreach ($data as $index => $userdata) {
+            $userhost = LernmarktplatzHost::findOneBySQL("url = ?", [$userdata['host_url']]);
+            if ($userhost->isMe()) {
+                $user = User::find($userdata['user_id']);
+                $materialuser = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND user_id = ? AND external_contact = '0'", [$this->getId(), $user->getId()]);
+                if (!$materialuser) {
+                    $materialuser = new LernmarktplatzMaterialUser();
+                    $materialuser['user_id'] = $user->getId();
+                    $materialuser['material_id'] = $this->getId();
+                    $materialuser['external_contact'] = 0;
+                }
+                $materialuser['position'] = $index + 1;
+                $materialuser->store();
+                $current_user_ids[] = $user->getId();
+            } else {
+                $user = LernmarktplatzUser::findOneBySQL("foreign_user_id = ? AND host_id = ?", [$userdata['user_id'], $userhost->getId()]);
+                if (!$user) {
+                    $user = new LernmarktplatzUser();
+                    $user['foreign_user_id'] = $userdata['user_id'];
+                    $user['host_id'] = $userhost->getId();
+                }
+                $user['name'] = $userdata['name'];
+                $user['avatar'] = $userdata['avatar'] ?: null;
+                $user['description'] = $userdata['description'] ?: null;
+                $user->store();
+
+                $materialuser = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND user_id = ? AND external_contact = '1'", [$this->getId(), $user->getId()]);
+                if (!$materialuser) {
+                    $materialuser = new LernmarktplatzMaterialUser();
+                    $materialuser['user_id'] = $user->getId();
+                    $materialuser['material_id'] = $this->getId();
+                    $materialuser['external_contact'] = 1;
+
+                }
+                $materialuser['position'] = $index + 1;
+                $materialuser->store();
+                $current_user_ids[] = $user->getId();
+            }
+        }
+        foreach (array_diff($old_user_ids, $current_user_ids) as $deletable_user_id) {
+            LernmarktplatzMaterialUser::deleteBySQL("material_id = ? AND user_id = ?", [$this->getId(), $deletable_user_id]);
+        }
     }
 
     public function calculateRating() {

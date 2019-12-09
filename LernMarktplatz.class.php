@@ -141,10 +141,10 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
     function getPluginActivityTables() {
         return array(
             array(
-                'table' => "lernmarktplatz_material",
+                'table' => "lernmarktplatz_material_users",
                 'user_id_column' => "user_id",
                 'date_column' => "mkdate",
-                'where' => "host_id IS NULL"
+                'where' => "external_contact = '0'"
             ),
             array(
                 'table' => "lernmarktplatz_reviews",
@@ -212,7 +212,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
             $template->set_attribute("plugin", $this);
             $template->set_attribute("materialien", $materialien);
             $template->set_attribute("title", _("Lernmaterialien"));
-            $template->set_attribute("icon_url", Icon::create("service", "clickable")->asImagePath());
+            $template->set_attribute("icon_url", Icon::create("service", "info")->asImagePath());
             return $template;
         } else {
             return null;
