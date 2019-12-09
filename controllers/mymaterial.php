@@ -31,7 +31,7 @@ class MymaterialController extends PluginController {
     public function edit_action($material_id = null) {
         $this->material = new LernmarktplatzMaterial($material_id);
         Pagelayout::setTitle($this->material->isNew() ? _("Neues Material hochladen") : _("Material bearbeiten"));
-        if ($this->material['user_id'] && $this->material['user_id'] !== $GLOBALS['user']->id) {
+        if (!$this->material->isMine() && !$GLOBALS['perm']->have_perm("root")) {
             throw new AccessDeniedException();
         }
         if (Request::submitted("delete") && Request::isPost()) {
@@ -40,8 +40,8 @@ class MymaterialController extends PluginController {
             PageLayout::postMessage(MessageBox::success(_("Ihr Material wurde gelöscht.")));
             $this->redirect("market/overview");
         } elseif (Request::isPost()) {
-            $was_new = $this->material->setData(Request::getArray("data"));
-            $this->material['user_id'] = $GLOBALS['user']->id;
+            $was_new = $this->material->isNew();
+            $this->material->setData(Request::getArray("data"));
             $this->material['host_id'] = null;
             $this->material['license'] = "CC BY 4.0";
             if ($_FILES['file']['tmp_name']) {
@@ -84,6 +84,32 @@ class MymaterialController extends PluginController {
             }
             $this->material->store();
 
+            if ($was_new) {
+                $materialuser = new LernmarktplatzMaterialUser();
+                $materialuser['material_id'] = $this->material->getId();
+                $materialuser['user_id'] = $GLOBALS['user']->id;
+                $materialuser['external_contact'] = 0;
+                $materialuser['position'] = 1;
+                $materialuser->store();
+            }
+            foreach (Request::getArray("remove_users") as $index => $user) {
+                if (!$index && count(Request::getArray("remove_users") === count($this->material->users))) {
+                    continue;
+                }
+                list($external, $user_id) = explode("_", $user);
+                LernmarktplatzMaterialUser::deleteBySQL("user_id = ? AND material_id = ? AND external_contact = ?", [$user_id, $this->material->getId(), $external]);
+            }
+            if (Request::get("new_user")) {
+                list($external, $user_id) = explode("_", Request::get("new_user"));
+                $materialuser = new LernmarktplatzMaterialUser();
+                $materialuser['user_id'] = $user_id;
+                $materialuser['material_id'] = $this->material->getId();
+                $materialuser['external_contact'] = $external;
+                $materialuser['position'] = count($this->material->users) + 1;
+                $materialuser->store();
+            }
+
+
             //Topics:
             $topics = Request::getArray("tags");
             foreach ($topics as $key => $topic) {
@@ -110,6 +136,18 @@ class MymaterialController extends PluginController {
             $this->template = $_SESSION['LernMarktplatz_CREATE_TEMPLATE'];
             unset($_SESSION['LernMarktplatz_CREATE_TEMPLATE']);
         }
+
+        $this->usersearch = new SQLSearch("
+            SELECT DISTINCT CONCAT('0_', auth_user_md5.user_id), CONCAT(auth_user_md5.Nachname, ', ', auth_user_md5.Vorname, ' (', auth_user_md5.username, ')') 
+            FROM auth_user_md5 LEFT JOIN user_info ON (user_info.user_id = auth_user_md5.user_id) 
+            WHERE (CONCAT(auth_user_md5.Vorname, ' ', auth_user_md5.Nachname) LIKE REPLACE(:input, ' ', '% ') 
+                OR CONCAT(auth_user_md5.Nachname, ' ', auth_user_md5.Vorname) LIKE REPLACE(:input, ' ', '% ') 
+                OR CONCAT(auth_user_md5.Nachname, ', ', auth_user_md5.Vorname) LIKE :input 
+                OR auth_user_md5.username LIKE :input) AND " . get_vis_query() . "
+            UNION SELECT CONCAT('1_', name), name
+            FROM lernmarktplatz_user
+            WHERE name LIKE :input
+        ");
     }
 
     public function statistics_action($material_id)

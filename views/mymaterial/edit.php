@@ -1,4 +1,7 @@
-<form action="<?= PluginEngine::getLink($plugin, array(), 'mymaterial/edit/'.$material->getId()) ?>" method="post" class="default" enctype="multipart/form-data">
+<form action="<?= PluginEngine::getLink($plugin, array(), 'mymaterial/edit/'.$material->getId()) ?>"
+      method="post"
+      class="default oercampus_editmaterial"
+      enctype="multipart/form-data">
     <label>
         <?= _("Name") ?>
         <input type="text" name="data[name]" value="<?= htmlReady($material['name'] ?: $template['name']) ?>" maxlength="64">
@@ -24,6 +27,50 @@
         <?= _("Vorschau-URL (optional)") ?>
         <input type="text" name="data[player_url]" value="<?= htmlReady($material['player_url'] ?: $template['player_url']) ?>">
     </label>
+
+    <? if (!$material->isNew()) : ?>
+    <div style="margin-top: 10px;">
+        <?= _("Autoren") ?>
+        <ul class="clean autoren" style="margin-top: 10px;">
+            <? foreach ($material->users as $materialuser) : ?>
+                <li>
+                    <? if ($materialuser['external_contact']) : ?>
+                        <? $user = $materialuser['lernmarktplatzuser'] ?>
+                        <? $image = $user['avatar'] ?>
+                        <label>
+                            <? if (count($material->users) > 1) : ?>
+                                <input type="checkbox" name="remove_users[]" value="1_<?= htmlReady($user->getId()) ?>">
+                            <? endif ?>
+                            <div>
+                                <span class="avatar" style="background-image: url('<?= $image ?>');"></span>
+                                <span class="author_name">
+                                    <?= htmlReady($user['name']) ?>
+                                </span>
+                            </div>
+                        </label>
+                    <? else : ?>
+                        <? $user = User::find($materialuser['user_id']) ?>
+                        <? $image = Avatar::getAvatar($materialuser['user_id'])->getURL(Avatar::SMALL) ?>
+                        <label>
+                            <? if (count($material->users) > 1) : ?>
+                                <input type="checkbox" name="remove_users[]" value="0_<?= htmlReady($user->getId()) ?>">
+                            <? endif ?>
+                            <div>
+                                <span class="avatar" style="background-image: url('<?= $image ?>');"></span>
+                                <span class="author_name">
+                                    <?= htmlReady($user ? $user->getFullName() : _("unbekannt")) ?>
+                                </span>
+                            </div>
+                        </label>
+                    <? endif ?>
+                </li>
+            <? endforeach ?>
+            <li>
+                <?= QuickSearch::get("new_user", $usersearch)->render() ?>
+            </li>
+        </ul>
+    </div>
+    <? endif ?>
 
     <div style="margin-top: 10px;">
         <?= _("Themen (am besten mindestens 5)") ?>

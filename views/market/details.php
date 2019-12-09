@@ -100,48 +100,52 @@
 <? endif ?>
 
 <h2><?= _("Zum Autor") ?></h2>
-<div class="author_information">
-    <? if ($material['host_id']) : ?>
-        <? $user = $material['host_id'] ? LernmarktplatzUser::find($material['user_id']) : User::find($material['user_id']) ?>
-        <? $image = $material['host_id'] ? $user['avatar'] : Avatar::getAvatar($material['user_id']) ?>
-        <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
-        <div>
-            <div class="author_name">
-                <a href="<?= PluginEngine::getLink($plugin, array(), "market/profile/".$user->getId()) ?>">
-                    <?= htmlReady($user['name']) ?>
-                </a>
+<ul class="author_information clean">
+    <? foreach ($material->users as $materialuser) : ?>
+    <li>
+        <? if ($materialuser['external_contact']) : ?>
+            <? $user = $materialuser['lernmarktplatzuser'] ?>
+            <? $image = $user['avatar'] ?>
+            <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
+            <div>
+                <div class="author_name">
+                    <a href="<?= PluginEngine::getLink($plugin, array(), "market/profile/".$user->getId()) ?>">
+                        <?= htmlReady($user['name']) ?>
+                    </a>
+                </div>
+                <div class="author_host">(<?= htmlReady($user->host->name) ?>)</div>
+                <div class="description"><?= formatReady($user['description']) ?></div>
             </div>
-            <div class="author_host">(<?= htmlReady($material->host->name) ?>)</div>
-            <div class="description"><?= formatReady($user['description']) ?></div>
-        </div>
-    <? else : ?>
-        <? $user = User::find($material['user_id']) ?>
-        <? $image = Avatar::getAvatar($material['user_id'])->getURL(Avatar::MEDIUM) ?>
-        <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
-        <div>
-            <div class="author_name">
-                <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $user['username'])) ?>">
-                    <?= htmlReady($user ? $user->getFullName() : _("unbekannt")) ?>
-                </a>
-            </div>
-            <div class="author_host">(<?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>)</div>
-            <div class="description"><?
-                $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
-                if ($user_description_datafield) {
-                    $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($user['user_id'], $user_description_datafield->getId()));
-                    echo $datafield_entry && $datafield_entry['content'] ? formatReady($datafield_entry['content']) : "";
+        <? else : ?>
+            <? $user = User::find($materialuser['user_id']) ?>
+            <? $image = Avatar::getAvatar($materialuser['user_id'])->getURL(Avatar::MEDIUM) ?>
+            <div class="avatar" style="background-image: url('<?= $image ?>');"></div>
+            <div>
+                <div class="author_name">
+                    <a href="<?= URLHelper::getLink("dispatch.php/profile", array('username' => $user['username'])) ?>">
+                        <?= htmlReady($user ? $user->getFullName() : _("unbekannt")) ?>
+                    </a>
+                </div>
+                <div class="author_host">(<?= htmlReady(Config::get()->UNI_NAME_CLEAN) ?>)</div>
+                <div class="description"><?
+                    $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
+                    if ($user_description_datafield) {
+                        $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($user['user_id'], $user_description_datafield->getId()));
+                        echo $datafield_entry && $datafield_entry['content'] ? formatReady($datafield_entry['content']) : "";
 
-                    if ($material['user_id'] === $GLOBALS['user']->id) : ?>
-                        <a href="<?= URLHelper::getLink("dispatch.php/settings/details#datafields_".$user_description_datafield->getId()) ?>" title="<?= _("Text bearbeiten") ?>">
-                            <?= Icon::create("edit", "clickable")->asImg(20, array('class' => "text-bottom")) ?>
-                        </a>
-                    <? endif;
-                }
-                ?>
+                        if ($materialuser['user_id'] === $GLOBALS['user']->id) : ?>
+                            <a href="<?= URLHelper::getLink("dispatch.php/settings/details#datafields_".$user_description_datafield->getId()) ?>" title="<?= _("Text bearbeiten") ?>">
+                                <?= Icon::create("edit", "clickable")->asImg(20, array('class' => "text-bottom")) ?>
+                            </a>
+                        <? endif;
+                    }
+                    ?>
+                </div>
             </div>
-        </div>
-    <? endif ?>
-</div>
+        <? endif ?>
+    </li>
+    <? endforeach ?>
+</ul>
 
 
 <? if (!Config::get()->LERNMARKTPLATZ_DISABLE_LICENSE) : ?>
@@ -157,7 +161,7 @@
 <? endif ?>
 
 <div style="text-align: center;">
-    <? if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) : ?>
+    <? if (!$material['host_id'] && $material->isMine()) : ?>
         <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "mymaterial/edit/".$material->getId()), array('data-dialog' => "1")) ?>
         <form action="<?= PluginEngine::getLink($plugin, array(), "mymaterial/edit/".$material->getId()) ?>" method="post" style="display: inline;">
             <?= \Studip\Button::create(_("Löschen"), "delete", array('value' => 1, 'onclick' => "return window.confirm('"._("Wirklich löschen?")."');")) ?>
@@ -170,7 +174,7 @@
 <div>
     <div style="text-align: center;">
         <? if ($material['rating'] === null) : ?>
-            <? if (($material['host_id'] || ($material['user_id'] !== $GLOBALS['user']->id)) && $GLOBALS['perm']->have_perm("autor")) : ?>
+            <? if (!$material->isMine() && $GLOBALS['perm']->have_perm("autor")) : ?>
                 <a style="opacity: 0.3;" title="<?= $GLOBALS['perm']->have_perm("autor") ? _("Geben Sie die erste Bewertung ab.") : _("Noch keine bewertung abgegeben.") ?>" href="<?= PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()) ?>" data-dialog>
             <? endif ?>
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
@@ -178,11 +182,11 @@
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
             <?= Icon::create($plugin->getPluginURL()."/assets/star.svg")->asImg(50) ?>
-            <? if (($material['host_id'] || ($material['user_id'] !== $GLOBALS['user']->id)) && $GLOBALS['perm']->have_perm("autor")) : ?>
+            <? if (!$material->isMine() && $GLOBALS['perm']->have_perm("autor")) : ?>
                 </a>
             <? endif ?>
         <? else : ?>
-            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+            <? if (!$material->isMine() && $GLOBALS['perm']->have_perm("autor")) : ?>
                 <a href="<?= PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()) ?>" data-dialog title="<?= sprintf(_("%s von 5 Sternen"), round($material['rating'] / 2, 1)) ?>">
             <? endif ?>
             <? $material['rating'] = round($material['rating'], 1) / 2 ?>
@@ -196,7 +200,7 @@
             <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(50) ?>
             <? $v = $material['rating'] >= 4.75 ? 3 : ($material['rating'] >= 4.25 ? 2 : "") ?>
             <?= Icon::create($plugin->getPluginURL()."/assets/star$v.svg")->asImg(50) ?>
-            <? if ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id) : ?>
+            <? if (!$material->isMine() && $GLOBALS['perm']->have_perm("autor")) : ?>
                 </a>
             <? endif ?>
         <? endif ?>
@@ -254,7 +258,7 @@
                                 <?= Icon::create("comment", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                                 <?= sprintf(_("%s Kommentare dazu"), count($review->comments)) ?>
                             </a>
-                        <? elseif (($material['user_id'] === $GLOBALS['user']->id) && $GLOBALS['perm']->have_perm("autor")) : ?>
+                        <? elseif ($material->isMine()) : ?>
                             <a href="<?= PluginEngine::getLink($plugin, array(), "market/discussion/".$review->getId()) ?>">
                                 <?= Icon::create("comment", "clickable")->asImg(16, array('class' => "text-bottom")) ?>
                                 <?= _("Dazu einen Kommentar schreiben") ?>
@@ -267,7 +271,7 @@
     </ul>
 
     <div style="text-align: center;">
-        <? if ($GLOBALS['perm']->have_perm("autor") && ($material['host_id'] || $material['user_id'] !== $GLOBALS['user']->id)) : ?>
+        <? if (!$material->isMine() && $GLOBALS['perm']->have_perm("autor")) : ?>
             <?= \Studip\LinkButton::create(_("Review schreiben"), PluginEngine::getLink($plugin, array(), 'market/review/' . $material->getId()), array('data-dialog' => 1)) ?>
         <? endif ?>
     </div>
@@ -287,7 +291,7 @@ if ($GLOBALS['perm']->have_perm("autor")) {
         Icon::create("add", "clickable"),
         array('data-dialog' => "1")
     );
-    if (!$material['host_id'] && $material['user_id'] === $GLOBALS['user']->id) {
+    if (!$material['host_id'] && $material->isMine()) {
         $actions->addLink(
             _("Bearbeiten"),
             PluginEngine::getURL($plugin, array(), "mymaterial/edit/".$material->getId()),
@@ -327,7 +331,7 @@ $actions->addLink(
     array('data-dialog' => "1")
 );
 
-if (!$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material['user_id'] === $GLOBALS['user']->id)) {
+if (!$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material->isMine())) {
     $actions->addLink(
         _("Zugriffszahlen"),
         PluginEngine::getURL($plugin, array(), "mymaterial/statistics/".$material->getId()),

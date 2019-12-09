@@ -138,8 +138,10 @@ article.contentbox {
 }
 
 .author_information {
-    display: flex;
-    > .avatar {
+    > li {
+        display: flex;
+    }
+    .avatar {
         background-position: center center;
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -244,4 +246,25 @@ ul.reviews, ol.reviews, ol.comments, ul.comments {
     max-height: 100vh;
     border: 1px solid @content-color-40;
     background: white;
+}
+
+.oercampus_editmaterial {
+    .autoren {
+        input[type=checkbox] {
+            display: none;
+        }
+        input[type=checkbox]:checked + div {
+            text-decoration: line-through;
+        }
+        .avatar {
+            display: inline-block;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            width: 20px;
+            min-width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    }
 }

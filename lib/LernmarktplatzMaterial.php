@@ -10,7 +10,7 @@ class LernmarktplatzMaterial extends SimpleORMap {
     static public function findMine($user_id = null)
     {
         $user_id || $user_id = $GLOBALS['user']->id;
-        return self::findBySQL("user_id = ? AND host_id IS NULL ORDER BY mkdate DESC", array($user_id));
+        return self::findBySQL("INNER JOIN `lernmarktplatz_material_users` USING (material_id) WHERE `lernmarktplatz_material_users`.user_id = ? AND external_contact = '0' ORDER BY mkdate DESC", array($user_id));
     }
 
     static public function findByTag($tag_name)
@@ -109,6 +109,10 @@ class LernmarktplatzMaterial extends SimpleORMap {
             'class_name' => 'LernmarktplatzReview',
             'order_by' => 'ORDER BY mkdate DESC',
             'on_delete' => 'delete'
+        );
+        $config['has_many']['users'] = array(
+            'class_name' => 'LernmarktplatzMaterialUser',
+            'order_by' => 'ORDER BY position ASC'
         );
         $config['serialized_fields']['structure'] = 'JSONArrayObject';
         parent::configure($config);
@@ -286,16 +290,10 @@ class LernmarktplatzMaterial extends SimpleORMap {
         unset($data['data']['id']);
         unset($data['data']['user_id']);
         unset($data['data']['host_id']);
-        $user_description_datafield = DataField::find(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")) ?: DataField::findOneBySQL("name = ?", array(get_config("LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD")));
-        if ($user_description_datafield) {
-            $datafield_entry = DatafieldEntryModel::findOneBySQL("range_id = ? AND datafield_id = ?", array($this['user_id'], $user_description_datafield->getId()));
+        $data['users'] = array();
+        foreach ($this->users as $materialuser) {
+            $data['users'][] = $materialuser->getJSON();
         }
-        $data['user'] = array(
-            'user_id' => $this['user_id'],
-            'name' => get_fullname($this['user_id']),
-            'avatar' => Avatar::getAvatar($this['user_id'])->getURL(Avatar::NORMAL),
-            'description' => $datafield_entry ? $datafield_entry['content'] : null
-        );
         $data['topics'] = array();
         foreach ($this->getTopics() as $tag) {
             if ($tag['name']) {
@@ -330,16 +328,52 @@ class LernmarktplatzMaterial extends SimpleORMap {
                 }
 
                 //user:
-                $user = LernmarktplatzUser::findOneBySQL("foreign_user_id = ? AND host_id = ?", array($data['user']['user_id'], $host->getId()));
-                if (!$user) {
-                    $user = new LernmarktplatzUser();
-                    $user['foreign_user_id'] = $data['user']['user_id'];
-                    $user['host_id'] = $host->getId();
+                $old_user_ids = $this->users->pluck("user_id");
+                $current_user_ids = [];
+                foreach ($data['users'] as $index => $userdata) {
+                    $userhost = LernmarktplatzHost::findOneBySQL("url = ?", [$userdata['host_url']]);
+                    if ($userhost->isMe()) {
+                        $user = User::find($userdata['user_id']);
+                        $materialuser = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND user_id = ? AND external_contact = '0'", [$this->getId(), $user->getId()]);
+                        if (!$materialuser) {
+                            $materialuser = new LernmarktplatzMaterialUser();
+                            $materialuser['user_id'] = $user->getId();
+                            $materialuser['material_id'] = $this->getId();
+                            $materialuser['external_contact'] = 0;
+                        }
+                        $materialuser['position'] = $index + 1;
+                        $materialuser->store();
+                        $current_user_ids[] = $user->getId();
+                    } else {
+                        $user = LernmarktplatzUser::findOneBySQL("foreign_user_id = ? AND host_id = ?", [$userdata['user_id'], $userhost->getId()]);
+                        if (!$user) {
+                            $user = new LernmarktplatzUser();
+                            $user['foreign_user_id'] = $userdata['user_id'];
+                            $user['host_id'] = $userhost->getId();
+                        }
+                        $user['name'] = $userdata['name'];
+                        $user['avatar'] = $userdata['avatar'] ?: null;
+                        $user['description'] = $userdata['description'] ?: null;
+                        $user->store();
+
+                        $materialuser = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND user_id = ? AND external_contact = '1'", [$this->getId(), $user->getId()]);
+                        if (!$materialuser) {
+                            $materialuser = new LernmarktplatzMaterialUser();
+                            $materialuser['user_id'] = $user->getId();
+                            $materialuser['material_id'] = $this->getId();
+                            $materialuser['external_contact'] = 1;
+
+                        }
+                        $materialuser['position'] = $index + 1;
+                        $materialuser->store();
+                        $current_user_ids[] = $user->getId();
+                    }
                 }
-                $user['name'] = $data['user']['name'];
-                $user['avatar'] = $data['user']['avatar'] ?: null;
-                $user['description'] = $data['user']['description'] ?: null;
-                $user->store();
+                foreach (array_diff($old_user_ids, $current_user_ids) as $deletable_user_id) {
+                    LernmarktplatzMaterialUser::deleteBySQL("material_id = ? AND user_id = ?", [$this->getId(), $deletable_user_id]);
+                }
+
+
 
                 //material:
                 $material_data = $data['data'];
@@ -418,5 +452,11 @@ class LernmarktplatzMaterial extends SimpleORMap {
             return $rating = null;
         }
         return $rating;
+    }
+
+    public function isMine()
+    {
+        $user = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND external_contact = '0' AND user_id = ?", [$this->getId(), $GLOBALS['user']->id]);
+        return $user ? true : false;
     }
 }

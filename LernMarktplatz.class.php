@@ -2,6 +2,7 @@
 
 require_once __DIR__."/lib/LernmarktplatzIdentity.php";
 require_once __DIR__."/lib/LernmarktplatzHost.php";
+require_once __DIR__."/lib/LernmarktplatzMaterialUser.php";
 require_once __DIR__."/lib/LernmarktplatzUser.php";
 require_once __DIR__."/lib/LernmarktplatzMaterial.php";
 require_once __DIR__."/lib/LernmarktplatzTag.php";

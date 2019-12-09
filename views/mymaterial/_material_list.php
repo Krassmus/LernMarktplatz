@@ -49,7 +49,7 @@
                 </a>
             </td>
             <td class="actions">
-                <? if ($material['user_id'] === $GLOBALS['user']->id) : ?>
+                <? if ($material->isMine()) : ?>
                     <a href="<?= PluginEngine::getLink($plugin, array(), "mymaterial/edit/".$material->getId()) ?>" data-dialog title="<?= _("Lernmaterial bearbeiten") ?>">
                         <?= Icon::create("edit", "clickable")->asImg(20) ?>
                     </a>
