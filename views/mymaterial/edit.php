@@ -30,8 +30,8 @@
 
     <? if (!$material->isNew()) : ?>
     <div style="margin-top: 10px;">
-        <?= _("Autoren") ?>
-        <ul class="clean autoren" style="margin-top: 10px;">
+        <h4><?= _("Autoren") ?></h4>
+        <ul class="clean autoren<?= count($material->users) > 1 ? " multiple" : "" ?>" style="margin-top: 10px;">
             <? foreach ($material->users as $materialuser) : ?>
                 <li>
                     <? if ($materialuser['external_contact']) : ?>
@@ -46,6 +46,9 @@
                                 <span class="author_name">
                                     <?= htmlReady($user['name']) ?>
                                 </span>
+                                <? if (count($material->users) > 1) : ?>
+                                    <?= Icon::create("trash", "clickable")->asImg(16, ['class' => "text-bottom", 'title' => _("Person als Autor entfernen.")]) ?>
+                                <? endif ?>
                             </div>
                         </label>
                     <? else : ?>
@@ -60,6 +63,9 @@
                                 <span class="author_name">
                                     <?= htmlReady($user ? $user->getFullName() : _("unbekannt")) ?>
                                 </span>
+                                <? if (count($material->users) > 1) : ?>
+                                    <?= Icon::create("trash", "clickable")->asImg(16, ['class' => "text-bottom", 'title' => _("Person als Autor entfernen.")]) ?>
+                                <? endif ?>
                             </div>
                         </label>
                     <? endif ?>

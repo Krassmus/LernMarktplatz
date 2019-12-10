@@ -147,7 +147,7 @@ class MymaterialController extends PluginController {
             UNION SELECT CONCAT('1_', name), name
             FROM lernmarktplatz_user
             WHERE name LIKE :input
-        ");
+        ", _("Person hinzufügen"), "user_id");
     }
 
     public function statistics_action($material_id)
