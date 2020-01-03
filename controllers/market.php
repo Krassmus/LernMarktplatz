@@ -61,6 +61,15 @@ class MarketController extends PluginController {
             $this->best_nine_tags = LernmarktplatzTag::findBest($tag_matrix_entries_number);
         }
         $this->new_ones = LernmarktplatzMaterial::findBySQL("draft = '0' ORDER BY mkdate DESC LIMIT 3");
+
+        $statement = DBManager::get()->prepare("
+            SELECT 1
+            FROM lernmarktplatz_abo
+            WHERE user_id = ?
+                AND material_id IS NULL
+        ");
+        $statement->execute(array($GLOBALS['user']->id));
+        $this->abo = (bool) $statement->fetch(PDO::FETCH_COLUMN, 0);
     }
 
     public function matrixnavigation_action()
@@ -417,6 +426,40 @@ class MarketController extends PluginController {
         $this->materials = LernmarktplatzMaterial::findBySQL("user_id = ? AND host_id IS NOT NULL ORDER BY mkdate DESC", array(
             $external_user_id
         ));
+    }
+
+    public function abo_action()
+    {
+        $statement = DBManager::get()->prepare("
+            SELECT 1
+            FROM lernmarktplatz_abo
+            WHERE user_id = ?
+                AND material_id IS NULL
+        ");
+        $statement->execute(array($GLOBALS['user']->id));
+        $this->abo = (bool) $statement->fetch(PDO::FETCH_COLUMN, 0);
+        if (Request::isPost()) {
+            if (Request::get("abo")) {
+                $statement = DBManager::get()->prepare("
+                    INSERT IGNORE INTO lernmarktplatz_abo
+                    SET user_id = ?,
+                        material_id = NULL
+                ");
+                $statement->execute(array($GLOBALS['user']->id));
+                PageLayout::postSuccess(_("Erfolgreich abonniert."));
+            } else {
+                $statement = DBManager::get()->prepare("
+                    DELETE
+                    FROM lernmarktplatz_abo
+                    WHERE user_id = ?
+                        AND (material_id IS NULL OR material_id = '')
+                ");
+                $statement->execute(array($GLOBALS['user']->id));
+                PageLayout::postSuccess(_("Abgemeldet von Neuigkeiten."));
+            }
+
+            $this->redirect("market/overview");
+        }
     }
 
     protected function getFolderStructure($folder) {

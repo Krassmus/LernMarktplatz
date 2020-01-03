@@ -91,6 +91,8 @@ class MymaterialController extends PluginController {
                 $materialuser['external_contact'] = 0;
                 $materialuser['position'] = 1;
                 $materialuser->store();
+
+                $this->material->notifyFollowersAboutNewMaterial();
             }
             foreach (Request::getArray("remove_users") as $index => $user) {
                 if (!$index && count(Request::getArray("remove_users") === count($this->material->users))) {
@@ -108,6 +110,8 @@ class MymaterialController extends PluginController {
                 $materialuser['position'] = count($this->material->users) + 1;
                 $materialuser->store();
             }
+
+
 
 
             //Topics:

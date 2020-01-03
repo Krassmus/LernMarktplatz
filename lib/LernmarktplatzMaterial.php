@@ -460,4 +460,48 @@ class LernmarktplatzMaterial extends SimpleORMap {
         $user = LernmarktplatzMaterialUser::findOneBySQL("material_id = ? AND external_contact = '0' AND user_id = ?", [$this->getId(), $GLOBALS['user']->id]);
         return $user ? true : false;
     }
+
+    public function notifyFollowersAboutNewMaterial()
+    {
+        $statement = DBManager::get()->prepare("
+            SELECT DISTINCT auth_user_md5.username
+            FROM lernmarktplatz_abo
+                INNER JOIN auth_user_md5 USING (user_id)
+            WHERE material_id IS NULL
+                AND user_id != ?
+        ");
+        $statement->execute(array($GLOBALS['user']->id));
+        $usernames = $statement->fetchAll(PDO::FETCH_COLUMN, 0);
+        $messsaging = new messaging();
+        $subject = sprintf(_("Neues Material im %s"), Config::get()->LERNMARKTPLATZ_TITLE);
+        if ($this->users[0]) {
+            $user_name = $this->users[0]['external_contact']
+                ? $this->users[0]['lernmarktplatzuser']['name']
+                : User::find($this->users[0]['user_id'])->getFullname();
+        } else {
+            $user_name = _("unbekannt");
+        }
+        $oldbase = URLHelper::setBaseURL($GLOBALS['ABSOLUTE_URI_STUDIP']);
+        $message = sprintf(
+            _("%s hat soeben ein neues Material auf dem %s zur verfügung gestellt. Viel Spaß! \n\n %s"),
+            $user_name,
+            Config::get()->LERNMARKTPLATZ_TITLE,
+            URLHelper::getURL("plugins.php/lernmarktplatz/market/details/".$this->getId())
+        );
+        URLHelper::setBaseURL($oldbase);
+        $messsaging->insert_message(
+            $message,
+            $usernames,
+            '____%system%____',
+            '',
+            '',
+            '',
+            '',
+            $subject,
+            '',
+            'normal',
+            array(Config::get()->LERNMARKTPLATZ_TITLE),
+            false
+        );
+    }
 }

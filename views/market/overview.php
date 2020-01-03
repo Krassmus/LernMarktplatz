@@ -84,5 +84,11 @@ if ($GLOBALS['perm']->have_perm("autor")) {
         Icon::create("add", "clickable"),
         array('data-dialog' => "1")
     );
+    $actions->addLink(
+        $abo ? _("Neuigkeiten abbestellen") : _("Neuigkeiten abonnieren"),
+        PluginEngine::getURL($plugin, array(), "market/abo"),
+        $abo ? Icon::create("rss+decline", "clickable") : Icon::create("rss", "clickable"),
+        array('data-dialog' => "1")
+    );
     Sidebar::Get()->addWidget($actions);
 }
