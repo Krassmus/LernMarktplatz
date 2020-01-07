@@ -161,8 +161,10 @@
 <? endif ?>
 
 <div style="text-align: center;">
-    <? if (!$material['host_id'] && $material->isMine()) : ?>
-        <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "mymaterial/edit/".$material->getId()), array('data-dialog' => "1")) ?>
+    <? if (!$material['host_id'] && ($material->isMine() || $GLOBALS['perm']->have_perm("root"))) : ?>
+        <? if ($material->isMine()) : ?>
+            <?= \Studip\LinkButton::create(_("Bearbeiten"), PluginEngine::getURL($plugin, array(), "mymaterial/edit/".$material->getId()), array('data-dialog' => "1")) ?>
+        <? endif ?>
         <form action="<?= PluginEngine::getLink($plugin, array(), "mymaterial/edit/".$material->getId()) ?>" method="post" style="display: inline;">
             <?= \Studip\Button::create(_("Löschen"), "delete", array('value' => 1, 'onclick' => "return window.confirm('"._("Wirklich löschen?")."');")) ?>
         </form>
