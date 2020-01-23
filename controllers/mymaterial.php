@@ -2,7 +2,8 @@
 
 require_once 'app/controllers/plugin_controller.php';
 
-class MymaterialController extends PluginController {
+class MymaterialController extends PluginController
+{
 
     function before_filter(&$action, &$args)
     {
@@ -10,7 +11,8 @@ class MymaterialController extends PluginController {
         PageLayout::setTitle(_("Lernmaterialien"));
     }
 
-    public function overview_action() {
+    public function overview_action()
+    {
         $main_navigation = Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION !== "/"
             ? Config::get()->LERNMARKTPLATZ_MAIN_NAVIGATION
             : "";
@@ -28,10 +30,11 @@ class MymaterialController extends PluginController {
     }
 
 
-    public function edit_action($material_id = null) {
+    public function edit_action($material_id = null)
+    {
         $this->material = new LernmarktplatzMaterial($material_id);
         Pagelayout::setTitle($this->material->isNew() ? _("Neues Material hochladen") : _("Material bearbeiten"));
-        if (!$this->material->isMine() && !$GLOBALS['perm']->have_perm("root")) {
+        if ($material_id && !$this->material->isMine() && !$GLOBALS['perm']->have_perm("root")) {
             throw new AccessDeniedException();
         }
         if (Request::submitted("delete") && Request::isPost()) {
@@ -217,7 +220,8 @@ class MymaterialController extends PluginController {
         return $this->render_text($csv_data);
     }
 
-    protected function encode_header_parameter($name, $value) {
+    protected function encode_header_parameter($name, $value)
+    {
         if (preg_match('/[\200-\377]/', $value)) {
             // use RFC 5987 encoding (ext-parameter)
             return $name . "*=UTF-8''" . rawurlencode($value);
@@ -227,7 +231,8 @@ class MymaterialController extends PluginController {
         }
     }
 
-    protected function getFolderStructure($folder) {
+    protected function getFolderStructure($folder)
+    {
         $structure = array();
         foreach (scandir($folder) as $file) {
             if (!in_array($file, array(".", ".."))) {
