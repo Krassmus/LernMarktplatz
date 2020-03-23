@@ -9,7 +9,7 @@ class AddAbo extends Migration
               `user_id` varchar(32) NOT NULL DEFAULT '',
               `material_id` varchar(32) DEFAULT NULL,
               UNIQUE KEY `user_id` (`user_id`,`material_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
         ");
     }
 

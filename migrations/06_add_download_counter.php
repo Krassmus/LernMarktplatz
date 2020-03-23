@@ -11,7 +11,7 @@ class AddDownloadCounter extends Migration {
                 `latitude` double DEFAULT NULL,
                 `mkdate` int(11) DEFAULT NULL,
                 PRIMARY KEY (`counter_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC;
         ");
         Config::get()->create(
             "LERNMARKTPLATZ_GEOLOCATOR_API",

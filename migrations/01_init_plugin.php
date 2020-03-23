@@ -17,7 +17,7 @@ class InitPlugin extends Migration {
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` bigint(20) NOT NULL,
                 UNIQUE KEY `url` (`url`)
-            ) ENGINE=InnoDB
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `lernmarktplatz_material` (
@@ -36,7 +36,7 @@ class InitPlugin extends Migration {
                 `license` VARCHAR( 64 ) NOT NULL DEFAULT 'CC BY SA 3.0',
                 `chdate` bigint(20) NOT NULL,
                 `mkdate` int(11) NOT NULL
-            ) ENGINE=InnoDB
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
 
         DBManager::get()->exec("
@@ -46,14 +46,14 @@ class InitPlugin extends Migration {
                 UNIQUE KEY `unique_tags` (`material_id`,`tag_hash`),
                 KEY `tag_hash` (`tag_hash`),
                 KEY `material_id` (`material_id`)
-            ) ENGINE=InnoDB
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `lernmarktplatz_tags` (
                 `tag_hash` varchar(32) NOT NULL,
                 `name` varchar(64) NOT NULL,
                 PRIMARY KEY (`tag_hash`)
-            ) ENGINE=InnoDB
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
         DBManager::get()->exec("
             CREATE TABLE IF NOT EXISTS `lernmarktplatz_user` (
@@ -69,7 +69,7 @@ class InitPlugin extends Migration {
                 UNIQUE KEY `unique_users` (`foreign_user_id`,`host_id`),
                 KEY `foreign_user_id` (`foreign_user_id`),
                 KEY `host_id` (`host_id`)
-            ) ENGINE=InnoDB
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
 
         DBManager::get()->exec("
@@ -89,7 +89,7 @@ class InitPlugin extends Migration {
                 KEY `foreign_review_id` (`foreign_review_id`),
                 KEY `user_id` (`user_id`),
                 KEY `host_id` (`host_id`)
-            ) ENGINE=InnoDB
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
 
         DBmanager::get()->exec("
@@ -107,7 +107,7 @@ class InitPlugin extends Migration {
                 KEY `foreign_comment_id` (`foreign_comment_id`),
                 KEY `host_id` (`host_id`),
                 KEY `user_id` (`user_id`)
-            ) ENGINE=InnoDB
+            ) ENGINE=InnoDB ROW_FORMAT=DYNAMIC
         ");
 
         DBManager::get()->exec("
@@ -122,7 +122,7 @@ class InitPlugin extends Migration {
                 chdate = UNIX_TIMESTAMP(),
                 `type` = 'textarea',
                 typeparam = '',
-                description = 'Geben Sie eine kurze Beschreibung für Sich ab, die auf Ihrem Profil im Lernmarktplatz sichtbar ist.'
+                description = 'Geben Sie eine kurze Beschreibung fÃ¼r Sich ab, die auf Ihrem Profil im Lernmarktplatz sichtbar ist.'
         ");
         Config::get()->create(
             "LERNMARKTPLATZ_USER_DESCRIPTION_DATAFIELD",

@@ -13,7 +13,7 @@ class AddMultipleOwners extends Migration
                 `chdate` int(11) NOT NULL,
                 `mkdate` int(11) NOT NULL,
                 PRIMARY KEY (`material_id`,`user_id`,`external_contact`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+            ) ENGINE=InnoDB;
         ");
         DBManager::get()->exec("
             INSERT INTO `lernmarktplatz_material_users` (`material_id`, `user_id`, `external_contact`, `position`, `chdate`, `mkdate`)
@@ -21,7 +21,7 @@ class AddMultipleOwners extends Migration
             FROM `lernmarktplatz_material`
         ");
         DBManager::get()->exec("
-            ALTER TABLE `lernmarktplatz_material` 
+            ALTER TABLE `lernmarktplatz_material`
             DROP COLUMN `user_id`
         ");
     }

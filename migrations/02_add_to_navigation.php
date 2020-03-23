@@ -10,7 +10,7 @@ class AddToNavigation extends Migration {
                 'type' => "string",
                 'range' => "global",
                 'section' => "LERNMARKTPLATZ",
-                'description' => "Unter welchem Navigationspunkt soll der Lernmarktplatz eingeh‰ngt werden z.B. / oder /tools "
+                'description' => "Unter welchem Navigationspunkt soll der Lernmarktplatz eingeh√§ngt werden z.B. / oder /tools "
             )
         );
     }
