@@ -1,4 +1,4 @@
-<ol class="breadcrumb"<?= (is_array($tag_history) && !count($tag_history)) ? ' style="visibility: hidden;"' : "" ?>>
+<ol class="oercampus_breadcrumb"<?= (is_array($tag_history) && !count($tag_history)) ? ' style="visibility: hidden;"' : "" ?>>
     <? $breadcrump_tags = array() ?>
     <li>
         <a href="<?= PluginEngine::getLink($plugin, array(), "market/overview") ?>" data-tags="">

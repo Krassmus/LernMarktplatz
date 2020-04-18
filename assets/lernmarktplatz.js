@@ -82,7 +82,7 @@ jQuery(document).on("click", ".matrix a", function () {
         "type": "get",
         "dataType": "json",
         "success": function (output) {
-            jQuery(".breadcrumb").replaceWith(output.breadcrumb);
+            jQuery(".oercampus_breadcrumb").replaceWith(output.breadcrumb);
             jQuery(".matrix").replaceWith(output.matrix).hide().fadeIn();
             jQuery(".material_overview.mainlist").html(output.materials).hide().fadeIn();
         }
@@ -90,7 +90,7 @@ jQuery(document).on("click", ".matrix a", function () {
     return false;
 });
 
-jQuery(document).on("click", ".breadcrumb a", function () {
+jQuery(document).on("click", ".oercampus_breadcrumb a", function () {
     jQuery(".matrix").fadeOut();
     jQuery(".material_overview.mainlist").fadeOut();
     if (!jQuery(this).data("tags")) {
@@ -105,7 +105,7 @@ jQuery(document).on("click", ".breadcrumb a", function () {
         "type": "get",
         "dataType": "json",
         "success": function (output) {
-            jQuery(".breadcrumb").replaceWith(output.breadcrumb);
+            jQuery(".oercampus_breadcrumb").replaceWith(output.breadcrumb);
             jQuery(".matrix").replaceWith(output.matrix).hide().fadeIn();
             jQuery(".material_overview.mainlist").html(output.materials).hide().fadeIn();
         }
