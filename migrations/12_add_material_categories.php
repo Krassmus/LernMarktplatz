@@ -34,6 +34,7 @@ class AddMaterialCategories extends Migration
             WHERE `player_url` IS NOT NULL
                 AND `player_url` != ''
         ");
+        SimpleORMap::expireTableScheme();
     }
 
     function down()
@@ -42,5 +43,6 @@ class AddMaterialCategories extends Migration
             ALTER TABLE lernmarktplatz_material
             DROP COLUMN `category`
         ");
+        SimpleORMap::expireTableScheme();
     }
 }
