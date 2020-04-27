@@ -504,4 +504,18 @@ class LernmarktplatzMaterial extends SimpleORMap {
             false
         );
     }
+
+    public function autoDetectCategory()
+    {
+        if (substr($this['content_type'], 0, 5) === "video") {
+            return "video";
+        } elseif (substr($this['content_type'], 0, 5) === "audio") {
+            return "audio";
+        } elseif ($this['player_url']) {
+            return "elearning";
+        } elseif (in_array($this['content_type'], ['application/pdf', 'application/x-iwork-keynote-sffkey', 'application/vnd.apple.keynote', 'application/vnd.oasis.opendocument.presentation', 'application/vnd.oasis.opendocument.presentation-template']) || (stripos($this['content_type'], 'application/vnd.openxmlformats-officedocument.presentationml.') === 0) || (stripos($this['content_type'], 'application/vnd.ms-powerpoint') === 0)) {
+            return "presentation";
+        }
+        return "";
+    }
 }

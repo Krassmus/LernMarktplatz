@@ -110,6 +110,9 @@ class LernmarktplatzHost extends LernmarktplatzIdentity {
                     }
                     unset($material_data['data']['id']);
                     $material->setData($material_data['data']);
+                    if (!$material['category']) {
+                        $material['category'] = $material->autoDetectCategory();
+                    }
                     $material['host_id'] = $host->getId();
                     $material->store();
 

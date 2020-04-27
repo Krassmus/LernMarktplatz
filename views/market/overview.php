@@ -12,7 +12,7 @@
             <?= Icon::create($plugin->getPluginURL()."/assets/presentation.svg", "clickable")->asImg(50) ?>
             <?= _("Folien") ?>
         </a>
-        <a href="<?= PluginEngine::getLink($plugin, array('type' => "learningmodules"), "market/search") ?>">
+        <a href="<?= PluginEngine::getLink($plugin, array('type' => "elearning"), "market/search") ?>">
             <?= Icon::create($plugin->getPluginURL()."/assets/eLearning.svg", "clickable")->asImg(50) ?>
             <?= _("Lernmodule") ?>
         </a>

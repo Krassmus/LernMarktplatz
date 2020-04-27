@@ -130,22 +130,7 @@ class MarketController extends PluginController {
                 ->where("draft = '0'")
                 ->orderBy("mkdate DESC");
             if (Request::get("type")) {
-                switch (Request::get("type")) {
-                    case "audio":
-                        $search->where("content_type LIKE 'audio/%'");
-                        break;
-                    case "video":
-                        $search->where("content_type LIKE 'video/%'");
-                        break;
-                    case "presentation":
-                        $search->where("content_type IN ('application/pdf', 'application/x-iwork-keynote-sffkey', 'application/vnd.apple.keynote', 'application/vnd.oasis.opendocument.presentation', 'application/vnd.oasis.opendocument.presentation-template') OR content_type LIKE 'application/vnd.openxmlformats-officedocument.presentationml.%' OR content_type LIKE 'application/vnd.ms-powerpoint%'");
-                        break;
-                    case "learningmodules":
-                        $search->where("player_url IS NOT NULL AND player_url != ''");
-                        break;
-                    default:
-                        throw new Exception("Kein gültiger Typ angegeben.");
-                }
+                $search->where("search_categories", "category = :category", ['category' => Request::get("type")]);
             }
             if (Request::get("search")) {
                 //Tags

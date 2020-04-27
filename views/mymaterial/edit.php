@@ -24,6 +24,32 @@
     </label>
 
     <label>
+        <?= _("Kategorie") ?>
+        <select name="data[category]">
+            <? if ($material->isNew()) : ?>
+                <option value="auto">
+                    <?= _("Automatisch erkennen") ?>
+                </option>
+            <? endif ?>
+            <option value="audio"<?= $material['category'] === "audio" ? " selected" : "" ?>>
+                <?= _("Audio") ?>
+            </option>
+            <option value="video"<?= $material['category'] === "video" ? " selected" : "" ?>>
+                <?= _("Video") ?>
+            </option>
+            <option value="presentation"<?= $material['category'] === "presentation" ? " selected" : "" ?>>
+                <?= _("Folien") ?>
+            </option>
+            <option value="elearning"<?= $material['category'] === "elearning" ? " selected" : "" ?>>
+                <?= _("Lernmodule") ?>
+            </option>
+            <option value=""<?= !$material['category'] && !$material->isNew() ? " selected" : "" ?> title="<?= _("Fehlt eine Kategorie? Kein Problem, arbeite mit Schlagworten stattdessen. Die sind viel flexibler.") ?>">
+                <?= _("Ohne Kategorie") ?>
+            </option>
+        </select>
+    </label>
+
+    <label>
         <?= _("Vorschau-URL (optional)") ?>
         <input type="text" name="data[player_url]" value="<?= htmlReady($material['player_url'] ?: $template['player_url']) ?>">
     </label>
