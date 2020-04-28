@@ -14,12 +14,12 @@ class AddMaterialCategories extends Migration
         DBManager::get()->exec("
             UPDATE `lernmarktplatz_material`
             SET `category` = 'video'
-            WHERE SUBSTRING(`content_type`, 0, 5) = 'video'
+            WHERE SUBSTRING(`content_type`, 1, 6) = 'video/'
         ");
         DBManager::get()->exec("
             UPDATE `lernmarktplatz_material`
             SET `category` = 'audio'
-            WHERE SUBSTRING(`content_type`, 0, 5) = 'audio'
+            WHERE SUBSTRING(`content_type`, 1, 6) = 'audio/'
         ");
         DBManager::get()->exec("
             UPDATE `lernmarktplatz_material`
