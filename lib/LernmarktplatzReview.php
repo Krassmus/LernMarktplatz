@@ -25,9 +25,9 @@ class LernmarktplatzReview extends SimpleORMap {
 
     public function afterStoreCallback()
     {
-        if (!$this->material['host_id'] && $this->material['user_id'] !== $GLOBALS['user']->id && $this->isDirty()) {
+        if (!$this->material['host_id'] && !$this->material->isMine() && $this->isDirty()) {
             PersonalNotifications::add(
-                $this->material['user_id'],
+                $this->material->users->pluck("user_id"),
                 URLHelper::getURL("plugins.php/lernmarktplatz/market/details/".$this->material->getId()."#review_".$this->getId()),
                 $this->isNew()
                     ? sprintf(_("%s hat ein Review zu '%s' geschrieben."), $this['host_id'] ? LernmarktplatzUser::find($this['user_id'])->name : get_fullname($this['user_id']), $this->material['name'])
