@@ -1,6 +1,8 @@
 <? if (!Request::get("tags") && !Request::get("search") && !Request::get("tag")) : ?>
     <div class="shortcuts file_select_possibilities">
+        <? if (StudipVersion::newerThan("4.5.99")) : ?>
         <div>
+        <? endif ?>
             <a href="<?= PluginEngine::getLink($plugin, array('type' => "audio"), "market/search") ?>">
                 <?= Icon::create($plugin->getPluginURL()."/assets/audio.svg", "clickable")->asImg(50) ?>
                 <?= _("Audio") ?>
@@ -21,7 +23,9 @@
                 <?= Icon::create($plugin->getPluginURL()."/assets/dateien.svg", "clickable")->asImg(50) ?>
                 <?= _("Alles") ?>
             </a>
+        <? if (StudipVersion::newerThan("4.5.99")) : ?>
         </div>
+        <? endif ?>
     </div>
 <? endif ?>
 
