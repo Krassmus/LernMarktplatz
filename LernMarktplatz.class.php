@@ -204,7 +204,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
         return Icon::create($icon, "info");
     }
 
-    public function getHomepageTemplate($user_id) {
+    public function getHomepageTemplate($user_id)
+    {
         $materialien = LernmarktplatzMaterial::findMine($user_id);
         if (count($materialien)) {
             $template_factory = new Flexi_TemplateFactory(__DIR__."/views");
@@ -224,7 +225,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      *
      * @return null|Navigation with title and image
      */
-    public function getFileSelectNavigation() {
+    public function getFileSelectNavigation()
+    {
         $nav = new Navigation(Config::get()->LERNMARKTPLATZ_TITLE);
         $nav->setImage(Icon::create('service', 'clickable'));
         return $nav;
@@ -235,7 +237,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      *
      * @return mixed
      */
-    public function filesystemConfigurationURL() {
+    public function filesystemConfigurationURL()
+    {
         return null;
     }
 
@@ -245,7 +248,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      *
      * @return boolean
      */
-    public function isSource() {
+    public function isSource()
+    {
         return true;
     }
 
@@ -256,7 +260,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      *
      * @return boolean
      */
-    public function isPersonalFileArea() {
+    public function isPersonalFileArea()
+    {
         return false;
     }
 
@@ -268,7 +273,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      * @param null $folder_id : folder_id of folder to get or null if you want the top-folder
      * @return FolderType|Flexi_Template
      */
-    public function getFolder($folder_id = null) {
+    public function getFolder($folder_id = null)
+    {
 
     }
 
@@ -276,8 +282,43 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      * @param $file_id : The id for the file in the given filesystem of the plugin.
      * @return array : the already prepared File just like a file-upload-array
      */
-    public function getPreparedFile($file_id, $with_blob = false) {
+    public function getPreparedFile($file_id, $with_blob = false)
+    {
+        $material = LernmarktplatzMaterial::find($file_id);
+        if (!$material) {
+            return;
+        }
 
+        $url = $material['host_id']
+            ? $material->host->url."download/".$material['foreign_material_id']
+            : PluginEngine::getURL($this, array(), "market/download/".$material->getId());
+
+        $file = new FileRef();
+        $file->id           = $file_id;
+        $file->foldertype   = new VirtualFolderType();
+        $file->name         = $material['filename'];
+        $file->size         = 0;
+        $file->mime_type    = $material['content_type'];
+        $file->download_url = $url;
+        $file->mkdate       = $material['mkdate'];
+        $file->chdate       = $material['chdate'];
+        $file->content_terms_of_use_id = 'UNDEF_LICENSE';
+
+        if ($with_blob) {
+
+            $path = $GLOBALS['TMP_PATH']."/".md5(uniqid());
+            file_put_contents(
+                $path,
+                file_get_contents(
+                    $material['host_id']
+                        ? $material->host->url."download/".$material['foreign_material_id']
+                        : $material->getFilePath()
+                )
+            );
+            $file->path_to_blob = $path;
+        }
+
+        return $file;
     }
 
     /**
@@ -285,7 +326,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      *
      * @return mixed
      */
-    public function hasSearch() {
+    public function hasSearch()
+    {
         return true;
     }
 
@@ -302,7 +344,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      *
      * @return null|array(array(), ...)
      */
-    public function getSearchParameters() {
+    public function getSearchParameters()
+    {
         return array();
     }
 
@@ -314,7 +357,8 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
      * @param array $parameters : an associative array of additional search parameters as defined in getSearchParameters()
      * @return FolderType|null
      */
-    public function search($text, $parameters = []) {
+    public function search($text, $parameters = [])
+    {
         $folder = new VirtualFolderType();
         $this->materialien = LernmarktplatzMaterial::findByText($text);
         foreach ($this->materialien as $material) {

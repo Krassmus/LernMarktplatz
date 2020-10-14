@@ -21,7 +21,8 @@ class MarketController extends PluginController {
         PageLayout::setTitle(_("Lernmaterialien"));
     }
 
-    public function overview_action() {
+    public function overview_action()
+    {
         if (!$GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS)) {
             throw new AccessDeniedException();
         }
@@ -134,9 +135,19 @@ class MarketController extends PluginController {
             }
             if (Request::get("search")) {
                 //Tags
+                $search->join(
+                    "lernmarktplatz_tags_material",
+                    "lernmarktplatz_material.material_id = lernmarktplatz_tags_material.material_id",
+                    "LEFT JOIN"
+                );
+                $search->join(
+                    "lernmarktplatz_tags",
+                    "lernmarktplatz_tags_material.tag_hash = lernmarktplatz_tags.tag_hash",
+                    "LEFT JOIN"
+                );
                 $search->where(
                     "textsearch",
-                    "(name LIKE :search OR description LIKE :search OR short_description LIKE :search)",
+                    "(lernmarktplatz_material.name LIKE :search OR lernmarktplatz_material.description LIKE :search OR lernmarktplatz_material.short_description LIKE :search OR lernmarktplatz_tags.name LIKE :search)",
                     array('search' => '%'.Request::get("search").'%')
                 );
             }
