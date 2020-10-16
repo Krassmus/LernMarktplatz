@@ -9,6 +9,9 @@ class MymaterialController extends PluginController
     {
         parent::before_filter($action, $args);
         PageLayout::setTitle(_("Lernmaterialien"));
+        if (!$GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_UPLOAD_STATUS)) {
+            throw new AccessDeniedException();
+        }
     }
 
     public function overview_action()

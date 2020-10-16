@@ -284,7 +284,7 @@ Sidebar::Get()->setImage($plugin->getPluginURL()."/assets/sidebar-service.png");
 
 $actions = new ActionsWidget();
 $GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_PUBLIC_STATUS);
-if ($GLOBALS['perm']->have_perm("autor")) {
+if ($GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_UPLOAD_STATUS)) {
     $actions->addLink(
         _("Eigenes Lernmaterial hochladen"),
         PluginEngine::getURL($plugin, array(), "mymaterial/edit"),
@@ -331,7 +331,7 @@ $actions->addLink(
     array('data-dialog' => "1")
 );
 
-if (!$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material->isMine())) {
+if ($GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_UPLOAD_STATUS) && !$material['host_id'] && ($GLOBALS['perm']->have_perm("root") || $material->isMine())) {
     $actions->addLink(
         _("Zugriffszahlen"),
         PluginEngine::getURL($plugin, array(), "mymaterial/statistics/".$material->getId()),
