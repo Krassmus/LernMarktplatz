@@ -32,7 +32,7 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
                 }
                 Navigation::addItem($main_navigation . "/lernmarktplatz", $topicon);
                 Navigation::addItem($main_navigation . "/lernmarktplatz/overview", new Navigation(Config::get()->LERNMARKTPLATZ_TITLE, PluginEngine::getURL($this, array(), "market/overview")));
-                if ($GLOBALS['perm']->have_perm("autor")) {
+                if ($GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_UPLOAD_STATUS)) {
                     Navigation::addItem($main_navigation . "/lernmarktplatz/mymaterial", new Navigation(_("Meine Materialien"), PluginEngine::getURL($this, array(), "mymaterial/overview")));
                 }
             }
@@ -330,5 +330,5 @@ class LernMarktplatz extends StudIPPlugin implements SystemPlugin, HomepagePlugi
         }
         return $folder;
     }
-    
+
 }

@@ -80,12 +80,14 @@
 Sidebar::Get()->setImage($plugin->getPluginURL()."/assets/sidebar-service.png");
 if ($GLOBALS['perm']->have_perm("autor")) {
     $actions = new ActionsWidget();
-    $actions->addLink(
-        _("Eigenes Lernmaterial hochladen"),
-        PluginEngine::getURL($plugin, array(), "mymaterial/edit"),
-        Icon::create("add", "clickable"),
-        array('data-dialog' => "1")
-    );
+    if ($GLOBALS['perm']->have_perm(Config::get()->LERNMARKTPLATZ_UPLOAD_STATUS)) {
+        $actions->addLink(
+            _("Eigenes Lernmaterial hochladen"),
+            PluginEngine::getURL($plugin, array(), "mymaterial/edit"),
+            Icon::create("add", "clickable"),
+            array('data-dialog' => "1")
+        );
+    }
     $actions->addLink(
         $abo ? _("Neuigkeiten abbestellen") : _("Neuigkeiten abonnieren"),
         PluginEngine::getURL($plugin, array(), "market/abo"),
