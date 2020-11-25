@@ -128,8 +128,9 @@ class MarketController extends PluginController {
         }
         if (Request::get("search") || Request::get("type") || Request::get("difficulty")) {
             $search = \Lernmarktplatz\SQLQuery::table("lernmarktplatz_material", "lernmarktplatz_material")
-                ->where("draft = '0'")
-                ->orderBy("mkdate DESC");
+                ->where("lernmarktplatz_material.draft = '0'")
+                ->groupBy("lernmarktplatz_material.material_id")
+                ->orderBy("lernmarktplatz_material.mkdate DESC");
             if (Request::get("type")) {
                 $search->where("search_categories", "category = :category", ['category' => Request::get("type")]);
             }
