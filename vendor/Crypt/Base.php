@@ -97,7 +97,7 @@ define('CRYPT_MODE_STREAM', 5);
 
 /**#@+
  * @access private
- * @see self::Crypt_Base()
+ * @see self::__construct()
  * @internal These constants are for internal use only
  */
 /**
@@ -127,7 +127,7 @@ class Crypt_Base
     /**
      * The Encryption Mode
      *
-     * @see self::Crypt_Base()
+     * @see self::__construct()
      * @var int
      * @access private
      */
@@ -503,7 +503,7 @@ class Crypt_Base
      * @param int $mode
      * @access public
      */
-    function Crypt_Base($mode = CRYPT_MODE_CBC)
+    function __construct($mode = CRYPT_MODE_CBC)
     {
         // $mode dependent settings
         switch ($mode) {
